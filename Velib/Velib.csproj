@@ -82,6 +82,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\Cluster\ClusterGenerator.cs" />
     <Compile Include="Common\MapElementData.cs" />
     <Compile Include="Common\MapExtensions.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
@@ -101,6 +102,7 @@
       <DependentUpon>SectionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="VelibContext\Velib.cs" />
+    <Compile Include="VelibContext\VelibCluster.cs" />
     <Compile Include="VelibContext\VelibControl.cs" />
     <Compile Include="VelibContext\VelibDataSource.cs" />
   </ItemGroup>

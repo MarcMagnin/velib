@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Web.Http;
 using Velib.Common;
+using Windows.Foundation;
+using Velib.VelibContext;
+using Windows.UI.Xaml.Controls.Maps;
 
 namespace VelibContext
 {
@@ -35,6 +38,9 @@ namespace VelibContext
     {
         private static string dataURL = "https://api.jcdecaux.com/vls/v1/stations/{0}?contract=Paris&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed";
         private bool selected;
+
+        public Point MapLocation;
+
         [IgnoreDataMember]
         public bool Selected
         {
@@ -100,7 +106,12 @@ namespace VelibContext
         }
         public override bool Equals(object obj)
         {
-            return this.Number.Equals((obj as VelibModel).Number) ;
+            if (obj == null)
+            {
+                return false;
+            }
+
+            return this.Number == ((obj as VelibModel).Number) ;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
@@ -167,6 +178,14 @@ namespace VelibContext
 
             
         }
+
+        // store the offsetLocation in order to reuse it for each draw cycle
+        public Point OffsetLocation;
+        public void SetOffsetLocation(MapControl _map)
+        {
+            _map.GetOffsetFromLocation(this.Location, out OffsetLocation);
+        }
+        public VelibControl VelibControl;
 
     }
 }

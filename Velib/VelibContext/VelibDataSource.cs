@@ -100,7 +100,7 @@ namespace VelibContext
             }
         }
 
-        public static List<VelibModel> StaticVelibs;
+        public static List<VelibModel> StaticVelibs = new List<VelibModel>();
 
 
         private static async Task<List<VelibModel>> GetVelibStaticStations()

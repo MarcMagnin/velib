@@ -32,6 +32,7 @@ using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using System.Net.NetworkInformation;
 using Velib.VelibContext;
+using Velib.Common.Cluster;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -106,9 +107,8 @@ namespace Velib
             var image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/wplogo.png"));
             CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             var test = VelibDataSource.StaticVelibs;
-            MapItems.ItemsSource = Velibs;
+            //MapItems.ItemsSource = Velibs;
 
-            MapCtrl.CenterChanged += MapCtrl_CenterChanged;
             //foreach (var velib in test)
             //{
             //    await Task.Delay(TimeSpan.FromSeconds(0.0005));
@@ -147,7 +147,8 @@ namespace Velib
             // TODO: enregistrer l'état unique de la page ici.
         }
 
-     
+
+        
 
         #region Inscription de NavigationHelper
 
@@ -162,12 +163,15 @@ namespace Velib
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-
+            
             MapCtrl.Center = new Geopoint(new BasicGeoposition { Latitude = 48.8791, Longitude = 2.354 });
             MapCtrl.ZoomLevel = 15.93;
-            MapCtrl.CenterChanged +=MapCtrl_CenterChanged;
             MapCtrl.TransformOriginChanged += MapCtrl_TransformOriginChanged;
 
+            var clustergen = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
+
+
+            return;
             //.Select(keyup => searchTextBox.Text)
             //    .Where(TextIsLongEnough)
             //    .Throttle(TimeSpan.FromMilliseconds(500))
@@ -184,8 +188,6 @@ namespace Velib
             //                                                              }
             //                                                          }));
             CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-
-
             
             var mapObserver = Observable.FromEventPattern(MapCtrl, "CenterChanged");
             mapObserver
@@ -349,9 +351,12 @@ namespace Velib
         }
 
       
-        void MapCtrl_CenterChanged(MapControl sender, object args)
-        { 
-          
+        private async void AppBarButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.Default };
+            // TODO mettre une duree limite et afficher un message
+            var locationGeoPos = await gl.GetGeopositionAsync();
+            MapCtrl.Center = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
         }
 
         #endregion

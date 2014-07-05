@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Velib.VelibContext;
+using VelibContext;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -15,6 +17,32 @@ namespace Velib.Common
     /// </summary>
     public static class MapExtensions
     {
+        
+
+         public static bool IsLocationVisible(this MapControl map, Point point)
+        {
+             bool isInView;
+             Geopoint location;
+             map.GetLocationFromOffset(point, out location);
+             map.IsLocationInView(location, out isInView);
+             return isInView;
+        }
+
+
+
+         public static Point  GetOffsetLocation(this VelibModel velib,MapControl map)
+         {
+             if (velib.OffsetLocation.X == 0)
+                 map.GetOffsetFromLocation(velib.Location, out velib.OffsetLocation);
+             return velib.OffsetLocation;
+         }
+        
+
+        public static double GetDistanceTo(this Point p1, Point p2)
+        {
+            return Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+        }
+
         public static GeoboundingBox GetViewArea(this MapControl map)
         {
             Geopoint p1, p2;
