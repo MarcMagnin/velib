@@ -357,6 +357,10 @@ namespace Velib
             // TODO mettre une duree limite et afficher un message
             var locationGeoPos = await gl.GetGeopositionAsync();
             MapCtrl.Center = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
+
+
+
+
         }
 
         #endregion

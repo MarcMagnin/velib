@@ -70,6 +70,20 @@ namespace Velib.Common.Cluster
                 {
                     if (VelibDataSource.StaticVelibs == null)
                         return null;
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+
+                        Debug.WriteLine("ZoomLevel" + _map.ZoomLevel);
+                        Debug.WriteLine("mapWidth" + _map.ActualWidth);
+
+                        var mapArea = ((MapControl)x.Sender).GetViewArea();
+
+                        mapArea.NorthwestCorner.
+
+
+                    });
+                    Debug.WriteLine("ZoomLevel" + );
+
+
 
                     GeoboundingBox mapArea = null;
                     //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, ()=>((MapControl)x.Sender).GetViewArea()))
