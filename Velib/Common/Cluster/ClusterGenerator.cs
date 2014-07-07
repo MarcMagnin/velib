@@ -31,6 +31,10 @@ namespace Velib.Common.Cluster
         private CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         public ControlTemplate ItemTemplate { get; set; }
         public CancellationTokenSource cts = new CancellationTokenSource();
+
+         GeoboundingBox mapArea = null;
+                    double zoomLevel=20;
+
         public ClustersGenerator(MapControl map, ControlTemplate itemTemplate)
         {
             _map = map;
@@ -70,24 +74,26 @@ namespace Velib.Common.Cluster
                 {
                     if (VelibDataSource.StaticVelibs == null)
                         return null;
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
 
-                        Debug.WriteLine("ZoomLevel" + _map.ZoomLevel);
-                        Debug.WriteLine("mapWidth" + _map.ActualWidth);
+                    //    Debug.WriteLine("ZoomLevel" + _map.ZoomLevel);
+                    //    Debug.WriteLine("mapWidth" + _map.ActualWidth);
 
-                        var mapArea = ((MapControl)x.Sender).GetViewArea();
+                    //    var mapArea = ((MapControl)x.Sender).GetViewArea();
 
-                        mapArea.NorthwestCorner.
-
-
-                    });
-                    Debug.WriteLine("ZoomLevel" + );
+                    //    mapArea.NorthwestCorner.
 
 
+                    //});
+                    //Debug.WriteLine("ZoomLevel" + );
 
-                    GeoboundingBox mapArea = null;
+
+
                     //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, ()=>((MapControl)x.Sender).GetViewArea()))
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => mapArea = ((MapControl)x.Sender).GetViewArea());
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
+                        mapArea = _map.GetViewArea();
+                        zoomLevel = _map.ZoomLevel;
+                    });
 
                     var collection = new VelibAddRemoveCollection();
                     collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !items.Contains(t) && MapExtensions.Contains(t.Location, mapArea)).Take(20).ToList();
@@ -97,8 +103,12 @@ namespace Velib.Common.Cluster
                     //items.AddRange(collection.ToAdd);
                     collection.ToRemove = items.Where(t => !MapExtensions.Contains(t.Location, mapArea)).ToList();
 
-                    
 
+                    // precalculate the items offset (that deffer well calculation)
+                    foreach (var velib in collection.ToAdd)
+                    {
+                        velib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
+                    }
                     
 
                     return collection;
@@ -110,14 +120,6 @@ namespace Velib.Common.Cluster
                     if (x == null)
                         return;
 
-                    // precalculate the items offset (that deffer well calculation)
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        foreach (var velib in x.ToAdd)
-                        {
-                            velib.GetOffsetLocation(_map);
-                        }
-                    });
 
                     // remove out of view items
                     foreach (var velib in items.Where(t => x.ToRemove.Contains(t)).ToList())
@@ -179,6 +181,7 @@ namespace Velib.Common.Cluster
         private void AddToCollection(VelibModel velib)
         {
             bool added = false;
+            new Task(() => velib.GetAvailableBikes(dispatcher)).Start();
             // merge to other velib cluster if required
             // otherwise create a new cluster
             foreach (var allreadyAddedVelib in items)
@@ -208,7 +211,7 @@ namespace Velib.Common.Cluster
             
 
            //Task.Delay(TimeSpan.FromSeconds(0.02));   
-            await dispatcher.RunAsync(CoreDispatcherPriority.Normal,() =>
+            await dispatcher.RunAsync(CoreDispatcherPriority.Low,() =>
             {
                
                 if (_map.ZoomLevel > 16)
@@ -279,22 +282,24 @@ namespace Velib.Common.Cluster
 
                 }
 
+                
+
+                previousZoom = _map.ZoomLevel;
+
                 foreach (var velib in addRemoveCollection.ToAdd)
                 {
                     AddToCollection(velib);
                 }
-                
-
-                previousZoom = _map.ZoomLevel;
             });
 
-            
+
+       
 
             // finalise the ui cycle
             foreach (var control in velibControls.Where(c=>c.NeedRefresh))
             {
                 Task.Delay(TimeSpan.FromSeconds(0.02));
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle());
+                await dispatcher.RunAsync(CoreDispatcherPriority.High,() => control.FinaliseUiCycle());
             }
 
             foreach (var velib in items)

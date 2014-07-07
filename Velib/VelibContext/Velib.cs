@@ -13,6 +13,7 @@ using Velib.Common;
 using Windows.Foundation;
 using Velib.VelibContext;
 using Windows.UI.Xaml.Controls.Maps;
+using Windows.UI.Core;
 
 namespace VelibContext
 {
@@ -73,7 +74,7 @@ namespace VelibContext
                 if (value != this.availableBikesStr)
                 {
                     this.availableBikesStr = value;
-                    NotifyPropertyChanged();
+                    NotifyPropertyChanged("AvailableBikesStr");
                 }
             }
         }
@@ -123,7 +124,7 @@ namespace VelibContext
         }
 
 
-        public async Task GetAvailableBikes()
+        public async Task GetAvailableBikes(CoreDispatcher dispatcher)
         {
             var httpClient = new HttpClient();
             var cts = new CancellationTokenSource();
@@ -137,9 +138,12 @@ namespace VelibContext
 
                 var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
                 var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
+                await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            {
 
                 this.AvailableBikesStr = rootNode.AvailableBikes.ToString();
-                    //Velibs.Add(evt);
+                //Velibs.Add(evt);
+            });
                 httpClient.Dispose();
                 cts.Token.ThrowIfCancellationRequested();
             }

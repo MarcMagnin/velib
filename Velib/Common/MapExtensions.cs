@@ -17,26 +17,32 @@ namespace Velib.Common
     /// </summary>
     public static class MapExtensions
     {
-        
 
-         public static bool IsLocationVisible(this MapControl map, Point point)
+
+        public static bool IsLocationVisible(this MapControl map, Point point)
         {
-             bool isInView;
-             Geopoint location;
-             map.GetLocationFromOffset(point, out location);
-             map.IsLocationInView(location, out isInView);
-             return isInView;
+            bool isInView;
+            Geopoint location;
+            map.GetLocationFromOffset(point, out location);
+            map.IsLocationInView(location, out isInView);
+            return isInView;
         }
 
 
 
-         public static Point  GetOffsetLocation(this VelibModel velib,MapControl map)
-         {
-             if (velib.OffsetLocation.X == 0)
-                 map.GetOffsetFromLocation(velib.Location, out velib.OffsetLocation);
-             return velib.OffsetLocation;
-         }
-        
+        public static Point GetOffsetLocation(this VelibModel velib, MapControl map)
+        {
+            if (velib.OffsetLocation.X == 0)
+                map.GetOffsetFromLocation(velib.Location, out velib.OffsetLocation);
+            return velib.OffsetLocation;
+        }
+        public static Point GetOffsetLocation2(this VelibModel velib, BasicGeoposition origin, double zoomLevel)
+        {
+            if (velib.OffsetLocation.X == 0)
+                velib.OffsetLocation = origin.GetOffsetedLocation(velib.Location.Position, zoomLevel);
+            return velib.OffsetLocation;
+        }
+
 
         public static double GetDistanceTo(this Point p1, Point p2)
         {
@@ -58,7 +64,7 @@ namespace Velib.Common
             map.TrySetViewBoundsAsync(b, new Thickness(1.0), MapAnimationKind.Bow);
         }
 
-        public static bool Contains(Geopoint location,GeoboundingBox geoBox)
+        public static bool Contains(Geopoint location, GeoboundingBox geoBox)
         {
             return (location.Position.Longitude >= geoBox.NorthwestCorner.Longitude &&
                      location.Position.Longitude <= geoBox.SoutheastCorner.Longitude &&
@@ -74,9 +80,21 @@ namespace Velib.Common
         private const double MinLongitude = -180;
         private const double MaxLongitude = 180;
 
+
         public const double EarthRadiusInMiles = 3956.0;
         public const double EarthRadiusInKilometers = 6367.0;
         private const double radius = EarthRadiusInKilometers;
+
+        public static double Rad2deg(double rad)
+        {
+
+
+
+            return (rad / Math.PI * 180.0);
+
+
+
+        }
 
         //helper method to make reading the lambda a bit easier
         public static double ToRadian(double val) { return val * (Math.PI / 180); }
@@ -85,7 +103,7 @@ namespace Velib.Common
         /// <summary> 
         /// Calculate the distance between two geocodes. Defaults to using Kilometers. 
         /// </summary> 
-        public static double CalcDistance(BasicGeoposition loc1, BasicGeoposition loc2)
+        public static double CalcDistance(this BasicGeoposition loc1, BasicGeoposition loc2)
         {
             return CalcDistance(loc1.Latitude, loc1.Longitude, loc2.Latitude, loc2.Longitude);
         }
@@ -97,6 +115,32 @@ namespace Velib.Common
         {
             return radius * Math.Asin(Math.Min(1, Math.Sqrt((Math.Pow(Math.Sin((DiffRadian(lat1, lat2)) / 2.0), 2.0) + Math.Cos(ToRadian(lat1)) * Math.Cos(ToRadian(lat2)) * Math.Pow(Math.Sin((DiffRadian(lng1, lng2)) / 2.0), 2.0)))));
         }
+
+        private const double EARTH_RADIUS_KM = 6371;
+        public static double GetDistanceKM(this BasicGeoposition point1, BasicGeoposition point2)
+        {
+            double dLat = ToRadian(point2.Latitude - point1.Latitude);
+            double dLon = ToRadian(point2.Longitude - point1.Longitude);
+
+            double a = Math.Pow(Math.Sin(dLat / 2), 2) +
+                       Math.Cos(ToRadian(point1.Latitude)) * Math.Cos(ToRadian(point2.Latitude)) *
+                       Math.Pow(Math.Sin(dLon / 2), 2);
+
+            return EARTH_RADIUS_KM * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        }
+
+
+
+        public static double GetDistancePixel(this BasicGeoposition point1, BasicGeoposition point2, double zoomLevel)
+        {
+            // 0.1 = pixel par metres à l'échelle de zoom 20
+            // comme a chaque echelle de zoom, la carte est deux fois plus grande
+            // on calcule la GroundResolution en prenant le nb de pixel par metre à l'échelle de zoom de 20 puis on l'élève à la puissance distante zoom courant
+            // point1.GetDistanceKM(point2) * 1000 pour obtenir des metres
+            return point1.GetDistanceKM(point2) * 1000 / (0.1 * Math.Pow(2, 20 - zoomLevel));
+        }
+
+
 
 
         /// <summary>
@@ -141,7 +185,28 @@ namespace Velib.Common
             latitude = Clip(latitude, MinLatitude, MaxLatitude);
             return Math.Cos(latitude * Math.PI / 180) * 2 * Math.PI * EarthRadius / MapSize(levelOfDetail);
         }
+        public static double CalculateAngle(this BasicGeoposition loc1, BasicGeoposition loc2)
+        {
+            double dy = loc2.Latitude - loc1.Latitude;
+            double dx = (loc2.Longitude - loc1.Longitude);
+            return Math.Atan2(dy, dx);
+        }
 
-       
+
+        /// <summary>
+        /// point1 must always be at the 0,0 offseted location 
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <returns></returns>
+        public static Point GetOffsetedLocation(this BasicGeoposition point1, BasicGeoposition point2, double zoomLevel)
+        {
+            double angle = CalculateAngle(point1, point2);
+
+            double hypotenuse = point1.GetDistancePixel(point2, zoomLevel);
+            double x = Math.Cos(angle) * hypotenuse;
+            var y = Math.Sqrt(hypotenuse * hypotenuse - x * x);
+            return (new Point(x, y));
+        }
     }
 }
