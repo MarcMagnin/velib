@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls.Maps;
 using Velib.Common;
 using Windows.Devices.Geolocation;
 using Windows.UI.Core;
+using System.Threading;
 
 namespace Velib.VelibContext
 {
@@ -30,7 +31,7 @@ namespace Velib.VelibContext
         }
        
 
-        public void FinaliseUiCycle(CoreDispatcher dispatcher )
+        public void FinaliseUiCycle(CoreDispatcher dispatcher, CancellationToken token)
         {
             if (Velibs.Count == 0)
             {
@@ -42,7 +43,7 @@ namespace Velib.VelibContext
 
             if (Velibs.Count == 1)
             {
-                new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
+                new Task(() => Velibs[0].GetAvailableBikes(dispatcher, token)).Start();
                 ShowVelib();
             }
             else if(Velibs.Count > 1)
@@ -80,9 +81,21 @@ namespace Velib.VelibContext
         }
         public void ShowVelib()
         {
+            VisualStateManager.GoToState(this, "Normal", false);
             VisualStateManager.GoToState(this, "BeforeLoaded", false);
             VisualStateManager.GoToState(this, "Loaded", false);
-            VisualStateManager.GoToState(this, "ShowVelib", false);
+            
+        }
+        public void ShowVelibColor(int velibNumber)
+        {
+            if (velibNumber == -1)
+                VisualStateManager.GoToState(this, "Normal", false);
+            else if (velibNumber == 0)
+                VisualStateManager.GoToState(this, "ShowRedVelib", false);
+            else if (velibNumber < 5)
+                VisualStateManager.GoToState(this, "ShowOrangeVelib", false);
+            else if (velibNumber >= 5)
+                VisualStateManager.GoToState(this, "ShowGreenVelib", false);
         }
 
         public void Hide()

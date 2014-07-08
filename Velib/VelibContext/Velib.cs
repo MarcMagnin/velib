@@ -124,7 +124,7 @@ namespace VelibContext
         }
 
 
-        public async Task GetAvailableBikes(CoreDispatcher dispatcher)
+        public async Task GetAvailableBikes(CoreDispatcher dispatcher,CancellationToken token)
         {
             var httpClient = new HttpClient();
             var cts = new CancellationTokenSource();
@@ -135,13 +135,15 @@ namespace VelibContext
             try
             {
                 HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, Number))).AsTask(cts.Token);
-
                 var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
                 var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
                 await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {
-
-                this.AvailableBikesStr = rootNode.AvailableBikes.ToString();
+                if (this.VelibControl != null)
+                {
+                    this.VelibControl.ShowVelibColor(rootNode.AvailableBikes);
+                    this.AvailableBikesStr = rootNode.AvailableBikes.ToString();
+                }
                 //Velibs.Add(evt);
             });
                 httpClient.Dispose();

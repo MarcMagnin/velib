@@ -37,7 +37,13 @@
                                 </VisualTransition.GeneratedEasingFunction>
                             </VisualTransition>
                         </VisualStateGroup.Transitions>
-                        <VisualState x:Name="Normal"/>
+                        <VisualState x:Name="Normal">
+                    		<Storyboard>
+                        		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="0.2" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="image" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        	</Storyboard>
+                    	</VisualState>
                         <VisualState x:Name="Selected">
                             <Storyboard>
                                
@@ -73,14 +79,14 @@
                         		</DoubleAnimationUsingKeyFrames>
                         	</Storyboard>
                         </VisualState>
-                        <VisualState x:Name="ShowVelib">
+                        <VisualState x:Name="ShowGreenVelib">
                         	<Storyboard>
-                        		<ColorAnimation Duration="0" To="#CC50FB00" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy" d:IsOptimized="True"/>
                         	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowCluster">
                         	<Storyboard>
-                        		<ColorAnimation Duration="0" To="#CC7E817C" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<ColorAnimation Duration="0" To="#FF7E817C" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path" d:IsOptimized="True"/>
                         		<DoubleAnimation Duration="0" To="2" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="path" d:IsOptimized="True"/>
                         		<DoubleAnimation Duration="0" To="2" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="path" d:IsOptimized="True"/>
                         		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Canvas.Top)" Storyboard.TargetName="path">
@@ -90,6 +96,16 @@
                         				</DiscreteObjectKeyFrame.Value>
                         			</DiscreteObjectKeyFrame>
                         		</ObjectAnimationUsingKeyFrames>
+                        	</Storyboard>
+                        </VisualState>
+                        <VisualState x:Name="ShowOrangeVelib">
+                        	<Storyboard>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy1" d:IsOptimized="True"/>
+                        	</Storyboard>
+                        </VisualState>
+                        <VisualState x:Name="ShowRedVelib">
+                        	<Storyboard>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy2" d:IsOptimized="True"/>
                         	</Storyboard>
                         </VisualState>
                        
@@ -143,48 +159,72 @@
 
 
 
-                <Path x:Name="path" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#694FF900" Height="47.87" Stretch="Fill" Stroke="Black" StrokeThickness="2" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25">
-                    <Path.RenderTransform>
-                        <CompositeTransform/>
-                    </Path.RenderTransform>
+                <Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6"/>
+                <Path x:Name="path" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FF9B9B9B" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25">
+                	<Path.RenderTransform>
+                		<CompositeTransform/>
+                	</Path.RenderTransform>
                 </Path>
-				<!--Binding AvailableBikesStr}-->
-                <TextBlock Text="{Binding AvailableBikesStr}" 
-				VerticalAlignment="Center" 
-				FontSize="16" 
-				FontWeight="Bold" 
-				TextAlignment="Center" 
-				Canvas.Left="-11" Canvas.Top="-35" Width="23" 
-				IsColorFontEnabled="False" 
-				IsHitTestVisible="False" 
+
+
+<!--<Grid Visibility="{Binding SelectedFlagVisibility}" IsHitTestVisible="False" Height="30" Canvas.Left="42" Canvas.Top="-10" >
+                <Ellipse Fill="Black" Stroke="#FF09C203" Margin="0" StrokeThickness="3"/>
+                <TextBlock Height="30" 
+        			Text="{Binding pa}" VerticalAlignment="Center" 
+                    Foreground="{StaticResource PhoneAccentBrush}" Margin="6,3,6,0" HorizontalAlignment="Center"  />
+            </Grid>-->
+            	<Path x:Name="path_Copy" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FF5ECF00" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
+            		<Path.RenderTransform>
+            			<CompositeTransform/>
+            		</Path.RenderTransform>
+            	</Path>
+            	<Path x:Name="path_Copy1" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FFF5BE00" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
+            		<Path.RenderTransform>
+            			<CompositeTransform/>
+            		</Path.RenderTransform>
+            	</Path>
+            	<Path x:Name="path_Copy2" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FFCF3800" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
+            		<Path.RenderTransform>
+            			<CompositeTransform/>
+            		</Path.RenderTransform>
+            	</Path>
+<!--Binding AvailableBikesStr}-->
+            	<TextBlock x:Name="textBlock" Text="{Binding AvailableBikesStr}" 
+            		VerticalAlignment="Center" 
+            		FontSize="16" 
+            		FontWeight="Bold" 
+            		TextAlignment="Center" 
+            		Canvas.Left="-11" Canvas.Top="-35" Width="23" 
+            		IsColorFontEnabled="False" 
+            		IsHitTestVisible="False" Foreground="Black" 
 				/>
 
 
 
              
-                <Grid x:Name="stackPanel" HorizontalAlignment="Left" Background="#7F000000" Canvas.Left="-100" Canvas.Top="-80" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200" Margin="0" Visibility="Collapsed">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RenderTransform>
-                        <CompositeTransform/>
-                    </Grid.RenderTransform>
-                    <!--Source="Assets/WP8AppbarIcons/audio.png"-->
+            	<Grid x:Name="stackPanel" HorizontalAlignment="Left" Background="#7F000000" Canvas.Left="-100" Canvas.Top="-80" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200" Margin="0" Visibility="Collapsed">
+            		<Grid.ColumnDefinitions>
+            			<ColumnDefinition Width="Auto"/>
+            			<ColumnDefinition Width="*"/>
+            			<ColumnDefinition Width="Auto"/>
+            		</Grid.ColumnDefinitions>
+            		<Grid.RenderTransform>
+            			<CompositeTransform/>
+            		</Grid.RenderTransform>
+            		<!--Source="Assets/WP8AppbarIcons/audio.png"-->
                   
-                    <RichTextBlock Grid.Column="1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" IsTextSelectionEnabled="False" IsColorFontEnabled="False" Margin="3,3,0,3">
-                         <Paragraph>
-                            <Run  FontSize="10"/>
-                        </Paragraph>
-						  <Paragraph>
-						  <Run Text="Vélos disponibles :"  FontSize="12"/>
-							<Run  FontSize="15"/>
-                        </Paragraph>
-                    </RichTextBlock>
-                    <Rectangle VerticalAlignment="Center" Height="45" Width="45" HorizontalAlignment="Center" Grid.Column="3" Fill="White" Margin="3"/>
-                    <Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#7F000000" Margin="91.856,73.993,41.311,-9.121" Grid.Column="1" Width="16"/>
-                </Grid>
+            		<RichTextBlock Grid.Column="1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" HorizontalAlignment="Left" IsTextSelectionEnabled="False" IsColorFontEnabled="False" Margin="3,3,0,3">
+            			<Paragraph>
+            				<Run  FontSize="10"/>
+            			</Paragraph>
+            			<Paragraph>
+            				<Run Text="Vélos disponibles :"  FontSize="12"/>
+            				<Run  FontSize="15"/>
+            			</Paragraph>
+            		</RichTextBlock>
+            		<Rectangle VerticalAlignment="Center" Height="45" Width="45" HorizontalAlignment="Center" Grid.Column="3" Fill="White" Margin="3"/>
+            		<Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#7F000000" Margin="91.856,73.993,41.311,-9.121" Grid.Column="1" Width="16"/>
+            	</Grid>
 
 
 

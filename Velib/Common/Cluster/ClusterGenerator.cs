@@ -20,10 +20,9 @@ namespace Velib.Common.Cluster
 {
    public class ClustersGenerator
    {
-       
-
         double MAXDISTANCE = 100;
-        private readonly List<VelibControl> velibControls = new List<VelibControl>(30);
+        const int MAX_CONTROLS = 40;
+        private readonly List<VelibControl> velibControls = new List<VelibControl>(MAX_CONTROLS);
         private readonly List<VelibModel> items = new List<VelibModel>();
         private readonly List<VelibCluster> clusters = new List<VelibCluster>();
         private MapControl _map;
@@ -35,38 +34,20 @@ namespace Velib.Common.Cluster
          GeoboundingBox mapArea = null;
                     double zoomLevel=20;
 
+
         public ClustersGenerator(MapControl map, ControlTemplate itemTemplate)
         {
             _map = map;
             GenerateMapItems();
             this.ItemTemplate = itemTemplate;
             // maps event
-            //_map.ResolveCompleted += (s, e) => GeneratePushpins();
-            //_map.ViewChanged += (s, e) => GeneratePushpins();
-            //_map.ZoomLevelChanged += (s, e) => GeneratePushpins();
-            //_map.CenterChanged += (s, e) => GeneratePushpins();
             var mapObserver = Observable.FromEventPattern(map, "CenterChanged");
             mapObserver
-                //.SubscribeOn(TaskPoolScheduler.Default) //TaskPoolScheduler.Default
-                //.ObserveOn(Scheduler.Default)
-                //.Do<new Action()>()
-                //{
-                //    // Start the timer to know if user wait more than 3 seconds without results
-                //    if (!NetworkInterface.GetIsNetworkAvailable())
-                //    {
-                //        //Deployment.Current.Dispatcher.BeginInvoke(() =>
-                //        //{
-                //           // MessageBox.Show("Problème de connexion, veuillez vérifier votre couverture réseau.");
-                //        //});
-                //        return;
-                //    }
-                //    if (vm.ServiceAgent != null)
-                //    {
-                //        //vm.ServiceAgent.QueryEvents(MapMain.TargetBoundingRectangle);
-                //        vm.ServiceAgent.QueryEvts(MapMain.TargetBoundingRectangle);
+                .Do((e)=>{
 
-                //    }
-                //})
+                      cts.Cancel();
+                    cts = new CancellationTokenSource();
+                })
                 .Throttle(throttleTime)
                 // .ObserveOn(Scheduler.CurrentThread)
                 // .SubscribeOn(Scheduler.Default)
@@ -75,15 +56,14 @@ namespace Velib.Common.Cluster
                     if (VelibDataSource.StaticVelibs == null)
                         return null;
 
-                    cts.Cancel();
-                    cts = new CancellationTokenSource();
+                  
                     await dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
                         mapArea = _map.GetViewArea();
                         zoomLevel = _map.ZoomLevel;
                     });
 
                     var collection = new VelibAddRemoveCollection();
-                    collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !items.Contains(t) && MapExtensions.Contains(t.Location, mapArea)).Take(20).ToList();
+                    collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !items.Contains(t) && MapExtensions.Contains(t.Location, mapArea)).Take(MAX_CONTROLS).ToList();
                     if (items.Count > 50)
                         collection.ToAdd.Clear();
                     collection.ToRemove = items.Where(t => !MapExtensions.Contains(t.Location, mapArea)).ToList();
@@ -106,48 +86,15 @@ namespace Velib.Common.Cluster
                     if (x == null)
                         return;
 
-
-                    
-
                     RefreshView(x, cts.Token);
 
-                 
-
-                    //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    //{
-                    //    foreach (var item in x.ToRemove)
-                    //    {
-                    //        Velibs.Remove(item);
-                    //    }
-                    //});
-
-                    //foreach (var item in x.ToAdd)
-                    //{
-
-                    //    if (!Velibs.Contains(item))
-                    //    {
-                    //        await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    //        {
-                    //            Velibs.Add(item);
-                    //            item.GetAvailableBikes();
-                    //        });
-                    //    }
-
-
-                    //    await Task.Delay(TimeSpan.FromSeconds(0.02));
-                    //    if (Velibs.Count >= 50)
-                    //        break;
-                    //}
-
                 });
-            
-
         }
-        private void GenerateMapItems(int max = 30)
+        private void GenerateMapItems()
         {
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
-                 for (int i = 0; i < max; i++)
+                 for (int i = 0; i < MAX_CONTROLS; i++)
                  {
                      var item = new VelibControl();
                      item.Template = ItemTemplate;
@@ -161,7 +108,6 @@ namespace Velib.Common.Cluster
         private void AddToCollection(VelibModel velib)
         {
             bool added = false;
-            //new Task(() => velib.GetAvailableBikes(dispatcher)).Start();
             // merge to other velib cluster if required
             // otherwise create a new cluster
             foreach (var allreadyAddedVelib in items)
@@ -194,15 +140,12 @@ namespace Velib.Common.Cluster
         private async void RefreshView(VelibAddRemoveCollection addRemoveCollection, CancellationToken token)
         {
             
-
-           //Task.Delay(TimeSpan.FromSeconds(0.02));   
                 if (token.IsCancellationRequested)
                 {
-                    Debug.WriteLine("Cancelled2");
                     return;
                 }
 
-                if (zoomLevel > 16)
+                if (zoomLevel > 15)
                     MAXDISTANCE = 1;
                 else
                     MAXDISTANCE = 100;
@@ -213,6 +156,10 @@ namespace Velib.Common.Cluster
                     if (velib.VelibControl != null)
                         velib.VelibControl.RemoveVelib(velib);
                     items.Remove(velib);
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
                 }
                 
                 // refresh clusters by removing them from current cluster if required
@@ -232,10 +179,8 @@ namespace Velib.Common.Cluster
 
                             if (token.IsCancellationRequested)
                             {
-                                Debug.WriteLine("Cancelled2");
                                 return;
                             }
-                            //}
                         }
                     }
                 }
@@ -264,7 +209,6 @@ namespace Velib.Common.Cluster
                             }
                             if (token.IsCancellationRequested)
                             {
-                                Debug.WriteLine("Cancelled2");
                                 return;
                             }
                         }
@@ -282,7 +226,6 @@ namespace Velib.Common.Cluster
                     AddToCollection(velib);
                     if (token.IsCancellationRequested)
                     {
-                        Debug.WriteLine("Cancelled2");
                         return;
                     }
                 }
@@ -293,12 +236,11 @@ namespace Velib.Common.Cluster
             // finalise the ui cycle
             foreach (var control in velibControls.Where(c=>c.NeedRefresh))
             {
-                Task.Delay(TimeSpan.FromSeconds(0.05));
+                Task.Delay(TimeSpan.FromSeconds(0.03));
                 if (token.IsCancellationRequested) {
-                    Debug.WriteLine("Cancelled");
                     break;
                 }
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher));
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher,token));
             }
 
             foreach (var velib in items)
@@ -308,201 +250,6 @@ namespace Velib.Common.Cluster
                     velib.VelibControl.Location = null;
                     velib.VelibControl.OffsetLocation.X = 0;
             }
-
-
-            //    if (_map.ZoomLevel > 15)
-            //        MAXDISTANCE = 1;
-            //    else
-            //        MAXDISTANCE = 100;
-            //    foreach (var mapItem in mapItemPool.Where(t => t.Items.Count >0))
-            //    {
-            //        mapItem.Items.RemoveAll(a => addRemoveCollection.ToRemove.Contains(a));
-            //    }
-         
-            //    foreach (var mapItem in mapItemPool.Where(t => t.Items.Count >= 1))
-            //    {
-            //        // split cluster no more clusters
-            //        for (int i = 0; i < mapItem.Items.Count; i++)
-            //        {
-            //            Point locationOffset;
-            //            _map.GetOffsetFromLocation(mapItem.Items[i].Location, out locationOffset);
-            //            double distance = mapItem.MapLocation.GetDistanceTo(locationOffset);
-
-            //            if (distance > MAXDISTANCE)
-            //            {
-            //                addRemoveCollection.ToAdd.Add(mapItem.Items[i]);
-            //                mapItem.Items.Remove(mapItem.Items[i]);
-                            
-                            
-            //            }
-            //        }
-
-
-
-            //    }
-             
-            //// creation des nouveaux clusters
-            //foreach (var velib in addRemoveCollection.ToAdd)
-            //{
-            //    Point locationOffset;
-            //    _map.GetOffsetFromLocation(velib.Location, out locationOffset);
-            //    bool added = false;
-            //    foreach (var mapItem in mapItemPool.Where(t=>t.Items.Count>=1))
-            //    {
-
-            //       mapItem.MapLocation = mapItem.GetCenter(_map);
-            //       double distance = mapItem.MapLocation.GetDistanceTo(locationOffset);
-
-            //        if (distance < MAXDISTANCE)
-            //        {
-            //            mapItem.Items.Add(velib);
-            //            added = true;
-            //            break;
-            //        }
-            //    }
-            //    if (!added)
-            //    {
-            //        var mapItem = mapItemPool.First(t => t.Items.Count == 0);
-                   
-            //        mapItem.Items.Add(velib);
-            //    }
-            //}
-            //    });
-            //for (int i = 0; i < mapItemPool.Count; i++)
-            //{
-
-            //    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //    {
-            //        if (mapItemPool[i].Items.Count > 0)
-            //        {
-            //            mapItemPool[i].MapLocation = mapItemPool[i].GetCenter(_map);
-            //            Geopoint location;
-            //            _map.GetLocationFromOffset(mapItemPool[i].MapLocation, out location);
-            //            mapItemPool[i].SetValue(MapControl.LocationProperty, location) ;
-            //            //mapItemPool[i].DataContext = pushpinsToAdd[i];
-            //            if (mapItemPool[i].Items.Count > 1)
-            //            {
-            //                mapItemPool[i].ShowCluster();
-            //            }
-            //            else
-            //            {
-            //                mapItemPool[i].ShowVelib();
-            //                (mapItemPool[i].Items.First() as VelibModel).GetAvailableBikes();
-            //            }
-
-            //        }
-            //        else
-            //        {
-            //            // hide remaining map items
-            //            mapItemPool[i].Hide();
-
-            //        }
-            //    });
-            //    Task.Delay(TimeSpan.FromSeconds(0.02));
-            //}
-            // remove already present items
-            //addRemoveCollection.ToAdd.RemoveAll(a => items.Contains(a));
-            //items.AddRange(addRemoveCollection.ToAdd);
-            //items.RemoveAll(a => addRemoveCollection.ToRemove.Contains(a));
-
-            //List<VelibCluster> clusters = new List<VelibCluster>();
-            //// creation des nouveaux clusters
-            //foreach (var velib in addRemoveCollection.ToAdd)
-            //{
-            //    bool addGroup = true;
-            //    Point locationOffset;
-            //    _map.GetOffsetFromLocation((velib).Location, out locationOffset);
-
-            //    var newGroup = new VelibCluster(velib, locationOffset);
-
-            //    foreach (var pushpinToAdd in clusters)
-            //    {
-            //        double distance = pushpinToAdd.MapLocation.GetDistanceTo(newGroup.MapLocation);
-
-            //        if (distance < MAXDISTANCE)
-            //        {
-            //            pushpinToAdd.IncludeGroup(newGroup);
-            //            addGroup = false;
-            //            break;
-            //        }
-            //    }
-
-            //    if (addGroup)
-            //        clusters.Add(newGroup);
-            //}
-
-
-            //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //      {
-            //          foreach (var cluster in clusters.ToList())
-            //          {
-            //              foreach (var velib in cluster.Items.ToList())
-            //              {
-            //                  foreach (var mapItem in mapItemPool.Where(t => t.Cluster.Items.Count > 0))
-            //                  {
-            //                      if (mapItem.Cluster.Items.Contains(velib))
-            //                      {
-            //                          mapItem.alreadyHandled = true;
-            //                          cluster.Items.Remove(velib);
-            //                          if (cluster.Items.Count == 0)
-            //                          {
-            //                              clusters.Remove(cluster);
-            //                          }
-            //                          break;
-            //                        // add other velib in cluster where a velib already exist and break
-            //                      }
-            //                  }
-            //              }
-            //          }
-            //      });
-            //int j = 0;
-            //for (int i = 0; i < mapItemPool.Count; i++)
-            //{
-            //    j++;
-            //    if (mapItemPool[i].alreadyHandled)
-            //    {
-            //        mapItemPool[i].alreadyHandled = false;
-            //        j--;
-            //        continue;
-            //    }
-
-            //    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //      {
-            //          // remove controls velibs that requires to be remove
-            //        //foreach (var mapItem in mapItemPool.Where(c => c.Cluster.Items.Count > 0))
-            //        //{
-            //        //    mapItem.Cluster.Items.RemoveAll(t => addRemoveCollection.ToRemove.Contains(t));
-            //        //}
-            //          if (clusters.Count >j)
-            //          {
-
-
-            //              mapItemPool[i].SetValue(MapControl.LocationProperty, (clusters[j].GetFirstItem() as VelibModel).Location);
-            //              mapItemPool[i].DataContext = clusters[j];
-            //              mapItemPool[i].Cluster = clusters[j];
-            //              if (clusters[j].Count > 1)
-            //              {
-
-            //                  mapItemPool[i].ShowCluster();
-            //              }
-            //              else
-            //              {
-            //                  mapItemPool[i].ShowVelib();
-            //                  (clusters[j].GetFirstItem() as VelibModel).GetAvailableBikes();
-            //              }
-
-            //          }
-            //          else
-            //          {
-            //              // hide remaining map items
-            //              mapItemPool[i].Hide();
-
-            //          }
-            //      });
-            //    Task.Delay(TimeSpan.FromSeconds(0.02));
-        //}
-            
-            
             
         }
     }

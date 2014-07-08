@@ -163,7 +163,9 @@ namespace Velib
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            
+            var gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.Default };
+            gl.GetGeopositionAsync();
+
             MapCtrl.Center = new Geopoint(new BasicGeoposition { Latitude = 48.8791, Longitude = 2.354 });
             MapCtrl.ZoomLevel = 15.93;
             MapCtrl.TransformOriginChanged += MapCtrl_TransformOriginChanged;
