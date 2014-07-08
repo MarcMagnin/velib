@@ -74,22 +74,9 @@ namespace Velib.Common.Cluster
                 {
                     if (VelibDataSource.StaticVelibs == null)
                         return null;
-                    //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
 
-                    //    Debug.WriteLine("ZoomLevel" + _map.ZoomLevel);
-                    //    Debug.WriteLine("mapWidth" + _map.ActualWidth);
-
-                    //    var mapArea = ((MapControl)x.Sender).GetViewArea();
-
-                    //    mapArea.NorthwestCorner.
-
-
-                    //});
-                    //Debug.WriteLine("ZoomLevel" + );
-
-
-
-                    //await dispatcher.RunAsync(CoreDispatcherPriority.Normal, ()=>((MapControl)x.Sender).GetViewArea()))
+                    cts.Cancel();
+                    cts = new CancellationTokenSource();
                     await dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
                         mapArea = _map.GetViewArea();
                         zoomLevel = _map.ZoomLevel;
@@ -99,8 +86,6 @@ namespace Velib.Common.Cluster
                     collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !items.Contains(t) && MapExtensions.Contains(t.Location, mapArea)).Take(20).ToList();
                     if (items.Count > 50)
                         collection.ToAdd.Clear();
-                    //collection.ToAdd.RemoveAll(t=> items.Contains(t));
-                    //items.AddRange(collection.ToAdd);
                     collection.ToRemove = items.Where(t => !MapExtensions.Contains(t.Location, mapArea)).ToList();
 
 
@@ -109,6 +94,7 @@ namespace Velib.Common.Cluster
                     {
                         velib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
                     }
+
                     
 
                     return collection;
@@ -121,15 +107,9 @@ namespace Velib.Common.Cluster
                         return;
 
 
-                    // remove out of view items
-                    foreach (var velib in items.Where(t => x.ToRemove.Contains(t)).ToList())
-                    {
-                        if (velib.VelibControl != null)
-                            velib.VelibControl.RemoveVelib(velib);
-                        items.Remove(velib);
-                    }
+                    
 
-                    RefreshView(x);
+                    RefreshView(x, cts.Token);
 
                  
 
@@ -181,12 +161,12 @@ namespace Velib.Common.Cluster
         private void AddToCollection(VelibModel velib)
         {
             bool added = false;
-            new Task(() => velib.GetAvailableBikes(dispatcher)).Start();
+            //new Task(() => velib.GetAvailableBikes(dispatcher)).Start();
             // merge to other velib cluster if required
             // otherwise create a new cluster
             foreach (var allreadyAddedVelib in items)
             {
-                double distance = allreadyAddedVelib.VelibControl.GetOffsetLocation(_map).GetDistanceTo(velib.GetOffsetLocation(_map));
+                double distance = allreadyAddedVelib.VelibControl.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel).GetDistanceTo(velib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel));
                 if (distance < MAXDISTANCE)
                 {
                     allreadyAddedVelib.VelibControl.AddVelib(velib);
@@ -205,68 +185,74 @@ namespace Velib.Common.Cluster
             items.Add(velib);
         }
 
+        private void RemoveOutOfViewItems()
+        {
+
+        }
+
         double previousZoom;
-        private async void RefreshView(VelibAddRemoveCollection addRemoveCollection)
+        private async void RefreshView(VelibAddRemoveCollection addRemoveCollection, CancellationToken token)
         {
             
 
            //Task.Delay(TimeSpan.FromSeconds(0.02));   
-            await dispatcher.RunAsync(CoreDispatcherPriority.Low,() =>
-            {
-               
-                if (_map.ZoomLevel > 16)
+                if (token.IsCancellationRequested)
+                {
+                    Debug.WriteLine("Cancelled2");
+                    return;
+                }
+
+                if (zoomLevel > 16)
                     MAXDISTANCE = 1;
                 else
                     MAXDISTANCE = 100;
-
                 
-                //foreach (var velib in addRemoveCollection.ToRemove.Where)
-                //{
-                //    var searchVelib = items.FirstOrDefault(s => s.Number == velib.Number);
-                //    if (searchVelib != null && searchVelib.VelibControl != null)
-                //    {
-                //        searchVelib.VelibControl.RemoveVelib(searchVelib);
-                //    }
-                //    items.Remove(searchVelib);
-                //}
+                // remove out of view items
+                foreach (var velib in items.Where(t => addRemoveCollection.ToRemove.Contains(t)).ToList())
+                {
+                    if (velib.VelibControl != null)
+                        velib.VelibControl.RemoveVelib(velib);
+                    items.Remove(velib);
+                }
+                
                 // refresh clusters by removing them from current cluster if required
                 // and send them back to the ToAddPool to be retreated
                 // (when zoom in)
-                if (previousZoom < _map.ZoomLevel)
+                if (previousZoom < zoomLevel)
                 {
                     foreach (var control in velibControls.Where(t => t.Velibs.Count > 1))
                     {
-                        foreach (var velib in control.Velibs.Where(t => t.GetOffsetLocation(_map)
-                            .GetDistanceTo(control.GetOffsetLocation(_map)) > MAXDISTANCE).ToList())
+                        foreach (var velib in control.Velibs.Where(t => t.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel)
+                            .GetDistanceTo(control.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel)) > MAXDISTANCE).ToList())
                         {
                                 
-                            //Point locationOffset = velib.GetMapLocation(_map);
-                            //double distance = control.GetMapLocation(_map).GetDistanceTo(locationOffset);
-                            //if (distance > MAXDISTANCE)
-                            //{
-                            // add the velib the ToAdd collection to be handled again
                             addRemoveCollection.ToAdd.Add(velib);
                             items.Remove(velib);
                             control.RemoveVelib(velib);
 
+                            if (token.IsCancellationRequested)
+                            {
+                                Debug.WriteLine("Cancelled2");
+                                return;
+                            }
                             //}
                         }
                     }
                 }
                 // (when dezoom)
                 // refresh clusters clustering clusters
-                if (previousZoom > _map.ZoomLevel) { 
+                if (previousZoom > zoomLevel) { 
                     foreach (var alreadyAddedVelib in items.ToList())
                     {
                         if (alreadyAddedVelib.VelibControl == null)
                             continue;
 
-                        Point locationOffset = alreadyAddedVelib.GetOffsetLocation(_map);
+                        Point locationOffset = alreadyAddedVelib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
                         foreach (var alreadyAddedVelib2 in items.Where(t=>t.Number != alreadyAddedVelib.Number ).ToList())
                         {
                             if (alreadyAddedVelib2.VelibControl == null)
                                 continue;
-                            var loc = alreadyAddedVelib2.GetOffsetLocation(_map);
+                            var loc = alreadyAddedVelib2.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
                             double distance = loc.GetDistanceTo(locationOffset);
                             if (distance < MAXDISTANCE && alreadyAddedVelib.VelibControl != alreadyAddedVelib2.VelibControl)
                             {
@@ -276,6 +262,11 @@ namespace Velib.Common.Cluster
                                 alreadyAddedVelib2.VelibControl.RemoveVelib(alreadyAddedVelib2);
 
                             }
+                            if (token.IsCancellationRequested)
+                            {
+                                Debug.WriteLine("Cancelled2");
+                                return;
+                            }
                         }
                    
                     }
@@ -284,13 +275,17 @@ namespace Velib.Common.Cluster
 
                 
 
-                previousZoom = _map.ZoomLevel;
+                previousZoom = zoomLevel;
 
                 foreach (var velib in addRemoveCollection.ToAdd)
                 {
                     AddToCollection(velib);
+                    if (token.IsCancellationRequested)
+                    {
+                        Debug.WriteLine("Cancelled2");
+                        return;
+                    }
                 }
-            });
 
 
        
@@ -298,8 +293,12 @@ namespace Velib.Common.Cluster
             // finalise the ui cycle
             foreach (var control in velibControls.Where(c=>c.NeedRefresh))
             {
-                Task.Delay(TimeSpan.FromSeconds(0.02));
-                await dispatcher.RunAsync(CoreDispatcherPriority.High,() => control.FinaliseUiCycle());
+                Task.Delay(TimeSpan.FromSeconds(0.05));
+                if (token.IsCancellationRequested) {
+                    Debug.WriteLine("Cancelled");
+                    break;
+                }
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher));
             }
 
             foreach (var velib in items)

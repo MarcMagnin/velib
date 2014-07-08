@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 using Velib.Common;
 using Windows.Devices.Geolocation;
+using Windows.UI.Core;
 
 namespace Velib.VelibContext
 {
@@ -29,7 +30,7 @@ namespace Velib.VelibContext
         }
        
 
-        public void FinaliseUiCycle()
+        public void FinaliseUiCycle(CoreDispatcher dispatcher )
         {
             if (Velibs.Count == 0)
             {
@@ -37,13 +38,14 @@ namespace Velib.VelibContext
                 return;
             }
             this.SetValue(MapControl.LocationProperty, GetLocation());
-            this.DataContext = Velibs.First();
+            this.DataContext = Velibs.FirstOrDefault();
 
             if (Velibs.Count == 1)
             {
+                new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
                 ShowVelib();
             }
-            else
+            else if(Velibs.Count > 1)
             {
                 ShowCluster();
             }
@@ -116,7 +118,7 @@ namespace Velib.VelibContext
             return Location;
         }
 
-        // store the offsetLocation in order to reuse it for each draw cycle
+        // store the offsetLocation in order to reuse it for each draw cycC:\Users\Kobs\Source\Repos\velib2\Velib\VelibContext\VelibControl.csle
         public Point OffsetLocation;
         public Point GetOffsetLocation(MapControl _map)
         {
@@ -124,6 +126,11 @@ namespace Velib.VelibContext
             _map.GetOffsetFromLocation(this.GetLocation(), out OffsetLocation);
             return OffsetLocation;
         }
-
+        public Point GetOffsetLocation2( BasicGeoposition origin, double zoomLevel)
+        {
+            if (OffsetLocation.X == 0)
+                OffsetLocation = origin.GetOffsetedLocation(this.GetLocation().Position, zoomLevel);
+            return OffsetLocation;
+        }
     }
 }

@@ -148,9 +148,16 @@
                         <CompositeTransform/>
                     </Path.RenderTransform>
                 </Path>
-                <Grid Height="30" Width="30" Canvas.Left="-15" Canvas.Top="-42">
-                	<TextBlock Text="{Binding AvailableBikesStr}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" TextAlignment="Center"/>
-                </Grid>
+				<!--Binding AvailableBikesStr}-->
+                <TextBlock Text="{Binding AvailableBikesStr}" 
+				VerticalAlignment="Center" 
+				FontSize="16" 
+				FontWeight="Bold" 
+				TextAlignment="Center" 
+				Canvas.Left="-11" Canvas.Top="-35" Width="23" 
+				IsColorFontEnabled="False" 
+				IsHitTestVisible="False" 
+				/>
 
 
 
