@@ -165,8 +165,8 @@
                 		<CompositeTransform/>
                 	</Path.RenderTransform>
                 </Path>
-
-
+				  
+				
 <!--<Grid Visibility="{Binding SelectedFlagVisibility}" IsHitTestVisible="False" Height="30" Canvas.Left="42" Canvas.Top="-10" >
                 <Ellipse Fill="Black" Stroke="#FF09C203" Margin="0" StrokeThickness="3"/>
                 <TextBlock Height="30" 
