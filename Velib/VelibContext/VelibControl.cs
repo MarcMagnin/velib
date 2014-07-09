@@ -17,10 +17,32 @@ namespace Velib.VelibContext
 {
     public class VelibControl : ContentControl
     {
+        MapControl map;
+
+        public VelibControl(MapControl map)
+        {
+            this.map = map;
+            this.Tapped += VelibControl_Tapped;
+        }
+
+        void VelibControl_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            if (Velibs.Count > 1)
+            {
+                map.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(Velibs.Select(s => s.Location).ToList()), new Thickness(20, 20, 20, 20), MapAnimationKind.Default);
+            }
+        }
 
         public  VelibCluster Cluster = new VelibCluster();
 
         public List<VelibModel> Velibs = new List<VelibModel>();
+        public TextBlock ClusterTextBlock;
+
+        protected override void OnApplyTemplate()
+        {
+            ClusterTextBlock = GetTemplateChild("textBlockClusterNumber") as TextBlock;
+        }
+
 
         public void AddVelib(VelibModel velib)
         {
@@ -43,14 +65,29 @@ namespace Velib.VelibContext
 
             if (Velibs.Count == 1)
             {
-                new Task(() => Velibs[0].GetAvailableBikes(dispatcher, token)).Start();
-                ShowVelib();
+                new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
+                SwitchModeVelibParking();
             }
             else if(Velibs.Count > 1)
             {
+                ClusterTextBlock.Text = Velibs.Count.ToString();
                 ShowCluster();
             }
             NeedRefresh = false;
+        }
+
+        public void SwitchModeVelibParking()
+        {
+            ShowVelibStation();
+            if (Velibs[0].Loaded && MainPage.BikeMode) {
+                Velibs[0].AvailableStr = Velibs[0].AvailableBikes.ToString();
+                ShowColor(Velibs[0].AvailableBikes);
+            }
+            if (Velibs[0].Loaded && !MainPage.BikeMode)
+            {
+                Velibs[0].AvailableStr = Velibs[0].AvailableBikeStands.ToString();
+                ShowColor(Velibs[0].AvailableBikeStands);
+            }
         }
 
         public bool NeedRefresh;
@@ -75,19 +112,21 @@ namespace Velib.VelibContext
 
         public void ShowCluster()
         {
-            VisualStateManager.GoToState(this, "BeforeLoaded", false);
+            VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);
             VisualStateManager.GoToState(this, "ShowCluster", false);
         }
-        public void ShowVelib()
+        public void ShowVelibStation()
         {
-            VisualStateManager.GoToState(this, "Normal", false);
-            VisualStateManager.GoToState(this, "BeforeLoaded", false);
+            VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);
-            
+            VisualStateManager.GoToState(this, "Normal", false);
         }
-        public void ShowVelibColor(int velibNumber)
+        public void ShowColor(int velibNumber)
         {
+            if (Velibs.Count != 1)
+                return;
+
             if (velibNumber == -1)
                 VisualStateManager.GoToState(this, "Normal", false);
             else if (velibNumber == 0)
@@ -103,12 +142,6 @@ namespace Velib.VelibContext
            VisualStateManager.GoToState(this, "Hide", false);
         }
 
-        protected override void OnApplyTemplate()
-        {
-           // VisualStateManager.GoToState(this, "BeforeLoaded", false);
-            base.OnApplyTemplate();
-          
-        }
 
         public Geopoint Location;
 
@@ -117,17 +150,14 @@ namespace Velib.VelibContext
             if (Velibs.Count == 1)
                 return Location= Velibs[0].Location;
 
-            if(Location== null){
                 double x = 0;
                 double y = 0;
                 foreach (var velib in Velibs)
                 {
-
                     x += velib.Location.Position.Latitude;
                     y += velib.Location.Position.Longitude;
                 }
                 Location = new Geopoint(new BasicGeoposition { Latitude = x / Velibs.Count, Longitude = y / Velibs.Count });
-            }
             return Location;
         }
 

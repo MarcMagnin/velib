@@ -14,6 +14,7 @@ using Windows.Foundation;
 using Velib.VelibContext;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Core;
+using Velib;
 
 namespace VelibContext
 {
@@ -61,20 +62,29 @@ namespace VelibContext
             }
 
         }
+        public bool Loaded { get; set; }
+
+        [DataMember(Name = "available_bike_stands")]
+        [DefaultValue(-1)]
+        public int AvailableBikeStands { get; set; }
+
 
         [DataMember(Name = "available_bikes")]
+        [DefaultValue(-1)]
         public int AvailableBikes { get; set; }
 
-        private string availableBikesStr;
-        public string AvailableBikesStr
+
+
+        private string availableStr;
+        public string AvailableStr
         {
-            get { return availableBikesStr; }
+            get { return availableStr; }
             set
             {
-                if (value != this.availableBikesStr)
+                if (value != this.availableStr)
                 {
-                    this.availableBikesStr = value;
-                    NotifyPropertyChanged("AvailableBikesStr");
+                    this.availableStr = value;
+                    NotifyPropertyChanged("AvailableStr");
                 }
             }
         }
@@ -124,7 +134,7 @@ namespace VelibContext
         }
 
 
-        public async Task GetAvailableBikes(CoreDispatcher dispatcher,CancellationToken token)
+        public async Task GetAvailableBikes(CoreDispatcher dispatcher)
         {
             var httpClient = new HttpClient();
             var cts = new CancellationTokenSource();
@@ -137,15 +147,23 @@ namespace VelibContext
                 HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, Number))).AsTask(cts.Token);
                 var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
                 var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
+                this.Loaded = true;
+                this.AvailableBikes = rootNode.AvailableBikes;
+                this.AvailableBikeStands = rootNode.AvailableBikeStands;
                 await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-            {
-                if (this.VelibControl != null)
                 {
-                    this.VelibControl.ShowVelibColor(rootNode.AvailableBikes);
-                    this.AvailableBikesStr = rootNode.AvailableBikes.ToString();
-                }
-                //Velibs.Add(evt);
-            });
+                    if (this.VelibControl != null)
+                    {
+                        if(MainPage.BikeMode){
+                            this.VelibControl.ShowColor(rootNode.AvailableBikes);
+                            this.AvailableStr = this.AvailableBikes.ToString();
+                        }
+                        else {
+                            this.VelibControl.ShowColor(rootNode.AvailableBikeStands);
+                            this.AvailableStr = this.AvailableBikeStands.ToString();
+                        }
+                    }
+                });
                 httpClient.Dispose();
                 cts.Token.ThrowIfCancellationRequested();
             }

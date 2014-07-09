@@ -57,6 +57,21 @@ namespace Velib.Common
             return new GeoboundingBox(p1.Position, p2.Position);
         }
 
+        public static GeoboundingBox GetAreaFromLocations(List<Geopoint> geopoints)
+        {
+            var northWestLong = geopoints.Min(g => g.Position.Longitude);
+            var northWestLat = geopoints.Max(g => g.Position.Latitude);
+            var southEstLong = geopoints.Max(g => g.Position.Longitude);
+            var southEstLat = geopoints.Min(g => g.Position.Latitude);
+            return new GeoboundingBox(new BasicGeoposition()
+            {
+                Latitude = northWestLat,
+                Longitude = northWestLong
+            }, new BasicGeoposition() { Latitude = southEstLat, Longitude = southEstLong });
+        }
+
+
+
         public static void SetViewArea(this MapControl map, Geopoint p1, Geopoint p2)
         {
             var b = GeoboundingBox.TryCompute(new[] { p1.Position, p2.Position });

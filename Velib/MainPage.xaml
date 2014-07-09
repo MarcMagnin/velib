@@ -10,7 +10,7 @@
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     d:DataContext="{Binding Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}"
-    mc:Ignorable="d">
+    mc:Ignorable="d" FontFamily="Global User Interface">
 
     <Page.Resources>
         
@@ -21,7 +21,7 @@
             <Canvas x:Name="rootCanvas" Height="20" 
 				
 			
-				Width="20" RenderTransformOrigin="0.5,0.5">
+				Width="20" RenderTransformOrigin="0,0" >
                 <Canvas.RenderTransform>
                     <CompositeTransform/>
                 </Canvas.RenderTransform>
@@ -86,16 +86,17 @@
                         </VisualState>
                         <VisualState x:Name="ShowCluster">
                         	<Storyboard>
-                        		<ColorAnimation Duration="0" To="#FF7E817C" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path" d:IsOptimized="True"/>
-                        		<DoubleAnimation Duration="0" To="2" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="path" d:IsOptimized="True"/>
-                        		<DoubleAnimation Duration="0" To="2" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="1.3" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="1.3" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="path" d:IsOptimized="True"/>
                         		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Canvas.Top)" Storyboard.TargetName="path">
                         			<DiscreteObjectKeyFrame KeyTime="0">
                         				<DiscreteObjectKeyFrame.Value>
-                        					<x:Double>-69</x:Double>
+                        					<x:Double>-55</x:Double>
                         				</DiscreteObjectKeyFrame.Value>
                         			</DiscreteObjectKeyFrame>
                         		</ObjectAnimationUsingKeyFrames>
+                        		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlockClusterNumber" d:IsOptimized="True"/>
                         	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowOrangeVelib">
@@ -144,7 +145,6 @@
                                     </EasingDoubleKeyFrame>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard></VisualState>
-                    	<VisualState x:Name="BeforeLoaded"/>
                     	<VisualState x:Name="Clear"/>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
@@ -189,7 +189,7 @@
             		</Path.RenderTransform>
             	</Path>
 <!--Binding AvailableBikesStr}-->
-            	<TextBlock x:Name="textBlock" Text="{Binding AvailableBikesStr}" 
+            	<TextBlock x:Name="textBlock" Text="{Binding AvailableStr}" 
             		VerticalAlignment="Center" 
             		FontSize="16" 
             		FontWeight="Bold" 
@@ -198,7 +198,15 @@
             		IsColorFontEnabled="False" 
             		IsHitTestVisible="False" Foreground="Black" 
 				/>
-
+				<TextBlock x:Name="textBlockClusterNumber" 
+            		VerticalAlignment="Center" 
+            		FontSize="24" 
+            		FontWeight="Bold" 
+            		TextAlignment="Center" 
+            		Canvas.Left="-17" Canvas.Top="-48" Width="34" 
+            		IsColorFontEnabled="False" 
+            		IsHitTestVisible="False" Foreground="White" Opacity="0" 
+				/>
 
 
              
@@ -383,21 +391,115 @@
             </StackPanel>-->
 
         </DataTemplate>
+        <SolidColorBrush x:Key="PhoneRadioCheckBoxBrush" Color="Transparent"/>
+        <x:Double x:Key="TextStyleLargeFontSize">18.14</x:Double>
+        <FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
+        <Thickness x:Key="CheckBoxAndRadioButtonTextPaddingThickness">8,0,0,0</Thickness>
+        <x:Double x:Key="CheckBoxAndRadioButtonMinWidthSize">168</x:Double>
+        <x:Double x:Key="PhoneStrokeThickness">2.5</x:Double>
+        <Thickness x:Key="PhoneTouchTargetLargeOverhang">0,16</Thickness>
+        <Style x:Key="VelibRadioButtonStyle" TargetType="RadioButton">
+        	<Setter Property="Background" Value="{ThemeResource PhoneRadioCheckBoxBrush}"/>
+        	<Setter Property="BorderBrush" Value="{ThemeResource PhoneRadioCheckBoxBorderBrush}"/>
+        	<Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+        	<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
+        	<Setter Property="HorizontalContentAlignment" Value="Left"/>
+        	<Setter Property="VerticalContentAlignment" Value="Top"/>
+        	<Setter Property="HorizontalAlignment" Value="Left"/>
+        	<Setter Property="VerticalAlignment" Value="Top"/>
+        	<Setter Property="Padding" Value="{ThemeResource CheckBoxAndRadioButtonTextPaddingThickness}"/>
+        	<Setter Property="MinWidth" Value="{ThemeResource CheckBoxAndRadioButtonMinWidthSize}"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="RadioButton">
+        				<Grid Background="#BD060606">
+        					<VisualStateManager.VisualStateGroups>
+        						<VisualStateGroup x:Name="CommonStates">
+        							<VisualState x:Name="Normal"/>
+        							<VisualState x:Name="MouseOver"/>
+        							<VisualState x:Name="PointerOver"/>
+        							<VisualState x:Name="Pressed">
+        								<Storyboard>
+        									<PointerDownThemeAnimation Storyboard.TargetName="Container"/>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="CheckBackground">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="CheckMark">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="Disabled">
+        								<Storyboard>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke" Storyboard.TargetName="CheckBackground">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="CheckMark">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        						</VisualStateGroup>
+        						<VisualStateGroup x:Name="CheckStates">
+        							<VisualState x:Name="Checked">
+        								<Storyboard>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CheckMark">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="Unchecked"/>
+        							<VisualState x:Name="Indeterminate"/>
+        						</VisualStateGroup>
+        					</VisualStateManager.VisualStateGroups>
+        					<Grid x:Name="Container" Margin="{ThemeResource PhoneTouchTargetLargeOverhang}">
+        						<Grid.ColumnDefinitions>
+        							<ColumnDefinition Width="25.5"/>
+        							<ColumnDefinition Width="*"/>
+        						</Grid.ColumnDefinitions>
+        						<Grid VerticalAlignment="Top">
+        							<Image HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="26"/>
+        							<Ellipse x:Name="CheckBackground" Fill="{TemplateBinding Background}" HorizontalAlignment="Left" Height="25.5" IsHitTestVisible="False" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{ThemeResource PhoneStrokeThickness}" VerticalAlignment="Center" Width="25.5"/>
+        							<Ellipse x:Name="CheckMark" Fill="{ThemeResource PhoneRadioCheckBoxCheckBrush}" HorizontalAlignment="Center" Height="12.5" IsHitTestVisible="False" Visibility="Collapsed" VerticalAlignment="Center" Width="12.5"/>
+        							<TextBlock/>
+        						</Grid>
+        						<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="1" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        					</Grid>
+        				</Grid>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
     </Page.Resources>
 	<Page.BottomAppBar>
 		<CommandBar>
-			<AppBarButton Icon="Target" Click="AppBarButton_Click"/>
+			<AppBarButton Icon="Target" Click="AppBarButton_Click" Label="Location"/>
 		</CommandBar>
 	</Page.BottomAppBar>
 
     <Grid x:Name="LayoutRoot">
-        <Maps:MapControl x:Name="MapCtrl"
-                         MapTapped="MyMap_MapTapped"
-                         LandmarksVisible="False"
-			MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo"
+            
+			
+    	<Maps:MapControl x:Name="MapCtrl"
+    		MapTapped="MyMap_MapTapped"
+    		LandmarksVisible="False"
+    		MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo" FontFamily="Global User Interface"
            >
-            <!--<Maps:MapItemsControl x:Name="MapItems" ItemTemplate="{StaticResource EventPoiTemplate}" />-->
+    		<Canvas x:Name="UserLocation" Maps:MapControl.NormalizedAnchorPoint="0.5,0.5" Width="30" Height="30" Opacity="0">
+    			<Ellipse Width="24" Height="24" StrokeThickness="3" Stroke="Black" />
+    			<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
+    				Width="20" Height="20" Canvas.Left="2" Canvas.Top="2" Stroke="White" StrokeThickness="2" 
+				/>
+    		</Canvas>
+    		<!--<Maps:MapItemsControl x:Name="MapItzems" ItemTemplate="{StaticResource EventPoiTemplate}" />-->
 
-        </Maps:MapControl>
+    	</Maps:MapControl>
+            
+			
+    	<RadioButton x:Name="RadioButtonVelib" Content="Velibs" GroupName="VelibParkingSwitch" IsChecked="True" Style="{StaticResource VelibRadioButtonStyle}" Checked="RadioButtonVelib_Checked"/>
+    	<RadioButton x:Name="RadioButtonParking" Content="Parkings" GroupName="VelibParkingSwitch" Checked="RadioButtonParking_Checked" Margin="0,46,0,0"/>
     </Grid>
 </Page>

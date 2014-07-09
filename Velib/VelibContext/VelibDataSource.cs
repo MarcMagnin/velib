@@ -63,7 +63,7 @@ namespace VelibContext
                 {
 
                     evt.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition() { Latitude = evt.Position.Latitude, Longitude = evt.Position.Longitude });
-                    evt.AvailableBikesStr = evt.AvailableBikes.ToString();
+                    //evt.AvailableBikesStr = evt.AvailableBikes.ToString();
                     //Velibs.Add(evt);
                 }
                 httpClient.Dispose();
@@ -141,7 +141,7 @@ namespace VelibContext
                 {
                 
                     evt.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition() { Latitude = evt.Position.Latitude, Longitude = evt.Position.Longitude});
-                    evt.AvailableBikesStr = evt.AvailableBikes.ToString();
+                    //evt.AvailableBikesStr = evt.AvailableBikes.ToString();
                     velibs.Add(evt);
                 }
                 cts.Token.ThrowIfCancellationRequested();

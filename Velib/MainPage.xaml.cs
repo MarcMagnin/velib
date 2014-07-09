@@ -33,6 +33,8 @@ using System.Reactive.Concurrency;
 using System.Net.NetworkInformation;
 using Velib.VelibContext;
 using Velib.Common.Cluster;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -46,9 +48,11 @@ namespace Velib
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-
-
-
+        private Geolocator gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.High };
+        private Geopoint userLastLocation;
+        private ClustersGenerator clusterGenerator;
+        private CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+        public static bool BikeMode = true;
         public MainPage()
         {
             this.InitializeComponent();
@@ -103,10 +107,10 @@ namespace Velib
 
 
             //var test = await VelibDataSource.GetEventsAsync();
-            var anchorPoint = new Point(0.5, 0.5);
-            var image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/wplogo.png"));
+            
+            
             CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            var test = VelibDataSource.StaticVelibs;
+            
             //MapItems.ItemsSource = Velibs;
 
             //foreach (var velib in test)
@@ -163,16 +167,17 @@ namespace Velib
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            var gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.Default };
-            gl.GetGeopositionAsync();
 
             MapCtrl.Center = new Geopoint(new BasicGeoposition { Latitude = 48.8791, Longitude = 2.354 });
             MapCtrl.ZoomLevel = 15.93;
-            MapCtrl.TransformOriginChanged += MapCtrl_TransformOriginChanged;
 
-            var clustergen = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
+            clusterGenerator = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
 
+            gl.MovementThreshold = 5;
+            gl.ReportInterval = 1000;
+            gl.PositionChanged += gl_PositionChanged;
             
+           
         }
 
         private VelibControl previousItemTapped;
@@ -225,18 +230,59 @@ namespace Velib
             //await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => alwait dialog.ShowAsync());
         }
 
-      
+
+        private bool searchingLocation = false;
         private async void AppBarButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.Default };
-            // TODO mettre une duree limite et afficher un message
-            var locationGeoPos = await gl.GetGeopositionAsync();
-            MapCtrl.Center = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
-
-
-
-
+            if (userLastLocation == null)
+            {
+                if (searchingLocation)
+                    return;
+                searchingLocation = true;
+                var locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.Default }).GetGeopositionAsync();
+                userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
+                searchingLocation = false;
+            }
+            UserLocation.SetValue(MapControl.LocationProperty, userLastLocation);
+            UserLocation.Opacity = 1;
+            double zoom = (MapCtrl.ZoomLevel < 16)? 16 : MapCtrl.ZoomLevel;
+            MapCtrl.TrySetViewAsync(userLastLocation, zoom);
         }
+
+        async void gl_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
+        {
+            userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Longitude, Latitude = args.Position.Coordinate.Latitude });
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                UserLocation.SetValue(MapControl.LocationProperty, userLastLocation);
+                UserLocation.Opacity = 1;
+            });
+        }
+
+  
+
+        private void RadioButtonParking_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (clusterGenerator == null)
+                return;
+            BikeMode = false;
+            foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v=>v.VelibControl).ToList())
+            {
+                control.SwitchModeVelibParking();
+            }
+        }
+
+        private void RadioButtonVelib_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (clusterGenerator == null)
+                return;
+            BikeMode = true;
+            foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v => v.VelibControl).ToList())
+            {
+                control.SwitchModeVelibParking();
+            }
+        }
+
 
         #endregion
     }
