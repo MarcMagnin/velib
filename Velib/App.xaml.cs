@@ -1,4 +1,5 @@
 ﻿using Velib.Common;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +17,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage;
+using Windows.UI.Xaml.Controls.Maps;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -36,7 +39,12 @@ namespace Velib
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            
+            //this.DebugSettings.EnableRedrawRegions = true;
+            this.Resuming += App_Resuming;
         }
+
+        
 
         /// <summary>
         /// Invoqué lorsque l'application est lancée normalement par l'utilisateur final.  D'autres points d'entrée
@@ -124,6 +132,7 @@ namespace Velib
             rootFrame.Navigated -= this.RootFrame_FirstNavigated;
         }
 
+        public static ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         /// <summary>
         /// Appelé lorsque l'exécution de l'application est suspendue.  L'état de l'application est enregistré
         /// sans savoir si l'application pourra se fermer ou reprendre sans endommager
@@ -134,8 +143,19 @@ namespace Velib
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
+            localSettings.Values["PreviousMapCenterLat"] = MainPage.Map.Center.Position.Latitude;
+            localSettings.Values["PreviousMapCenterLon"] = MainPage.Map.Center.Position.Longitude;
+            localSettings.Values["PreviousMapZoom"] = MainPage.Map.ZoomLevel;
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
+        void App_Resuming(object sender, object e)
+        {
+            if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
+                MainPage.Map.ColorScheme = MapColorScheme.Dark;
+        }
+
+
+          
     }
 }

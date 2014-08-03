@@ -8,9 +8,11 @@
     xmlns:data="using:Velib.Data"
 	xmlns:controls="using:Velib.VelibContext"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
-    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
-    d:DataContext="{Binding Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}"
-    mc:Ignorable="d" FontFamily="Global User Interface">
+    mc:Ignorable="d" 
+	FontFamily="Global User Interface" 
+	
+	Width="Auto" 
+	Height="Auto" Margin="0">
 
     <Page.Resources>
         
@@ -21,7 +23,7 @@
             <Canvas x:Name="rootCanvas" Height="20" 
 				
 			
-				Width="20" RenderTransformOrigin="0,0" >
+				Width="20" RenderTransformOrigin="0,0" CacheMode="BitmapCache" >
                 <Canvas.RenderTransform>
                     <CompositeTransform/>
                 </Canvas.RenderTransform>
@@ -31,54 +33,14 @@
                     <VisualStateGroup x:Name="VisualStateGroup">
                         <VisualStateGroup.Transitions>
                             <VisualTransition GeneratedDuration="0"/>
-                            <VisualTransition From="Selected" GeneratedDuration="0:0:0.2">
-                                <VisualTransition.GeneratedEasingFunction>
-                                    <CircleEase EasingMode="EaseOut"/>
-                                </VisualTransition.GeneratedEasingFunction>
-                            </VisualTransition>
                         </VisualStateGroup.Transitions>
                         <VisualState x:Name="Normal">
                     		<Storyboard>
                         		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
-                        		<DoubleAnimation Duration="0" To="0.2" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="image" d:IsOptimized="True"/>
-                        		<DoubleAnimation Duration="0" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="image" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="0.6" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path" d:IsOptimized="True"/>
                         	</Storyboard>
                     	</VisualState>
-                        <VisualState x:Name="Selected">
-                            <Storyboard>
-                               
-                        		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="path" />
-                        		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="path" />
-                                
-                        		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="stackPanel">
-                        			<DiscreteObjectKeyFrame KeyTime="0">
-                        				<DiscreteObjectKeyFrame.Value>
-                        					<Visibility>Visible</Visibility>
-                        				</DiscreteObjectKeyFrame.Value>
-                        			</DiscreteObjectKeyFrame>
-                        		</ObjectAnimationUsingKeyFrames>
-                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="stackPanel">
-                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                        			<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
-                        				<EasingDoubleKeyFrame.EasingFunction>
-                        					<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
-                        				</EasingDoubleKeyFrame.EasingFunction>
-                        			</EasingDoubleKeyFrame>
-                        		</DoubleAnimationUsingKeyFrames>
-                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="stackPanel">
-                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                        			<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
-                        				<EasingDoubleKeyFrame.EasingFunction>
-                        					<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
-                        				</EasingDoubleKeyFrame.EasingFunction>
-                        			</EasingDoubleKeyFrame>
-                        		</DoubleAnimationUsingKeyFrames>
-                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="stackPanel">
-                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                        			<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
-                        		</DoubleAnimationUsingKeyFrames>
-                        	</Storyboard>
-                        </VisualState>
                         <VisualState x:Name="ShowGreenVelib">
                         	<Storyboard>
                         		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy" d:IsOptimized="True"/>
@@ -146,6 +108,42 @@
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard></VisualState>
                     	<VisualState x:Name="Clear"/>
+                    	<VisualState x:Name="Click">
+                    		<Storyboard>
+                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="rootCanvas">
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="0.7">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<CircleEase EasingMode="EaseOut"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<BackEase EasingMode="EaseOut" Amplitude="0.5"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    			</DoubleAnimationUsingKeyFrames>
+                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="rootCanvas">
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="0.7">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<CircleEase EasingMode="EaseOut"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<BackEase EasingMode="EaseOut" Amplitude="0.5"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    			</DoubleAnimationUsingKeyFrames>
+                    		</Storyboard>
+                    	</VisualState>
+                    	
+                    </VisualStateGroup>
+                    <VisualStateGroup x:Name="VisualStateGroup2">
+                    	<VisualStateGroup.Transitions>
+                    		<VisualTransition GeneratedDuration="0"/>
+                    	</VisualStateGroup.Transitions>
+                    	<VisualState x:Name="ShowSelected"/>
+                    	<VisualState x:Name="HideSelected"/>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
 
@@ -183,11 +181,14 @@
             			<CompositeTransform/>
             		</Path.RenderTransform>
             	</Path>
-            	<Path x:Name="path_Copy2" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FFCF3800" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
+            	<Path x:Name="path_Copy2" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FFD15122" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
             		<Path.RenderTransform>
             			<CompositeTransform/>
             		</Path.RenderTransform>
             	</Path>
+				<TextBlock x:Name="Arrow" Text="&#xE0AB;" FontSize="64" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe UI Symbol" Canvas.Left="-27" Canvas.Top="-72" IsHitTestVisible="False" Foreground="Black" Visibility="Collapsed"/>
+               
+                
 <!--Binding AvailableBikesStr}-->
             	<TextBlock x:Name="textBlock" Text="{Binding AvailableStr}" 
             		VerticalAlignment="Center" 
@@ -196,8 +197,12 @@
             		TextAlignment="Center" 
             		Canvas.Left="-11" Canvas.Top="-35" Width="23" 
             		IsColorFontEnabled="False" 
-            		IsHitTestVisible="False" Foreground="Black" 
-				/>
+            		IsHitTestVisible="False" Foreground="Black" RenderTransformOrigin="0.5,0.5" 
+				>
+            		<TextBlock.RenderTransform>
+            			<CompositeTransform/>
+            		</TextBlock.RenderTransform>
+            	</TextBlock>
 				<TextBlock x:Name="textBlockClusterNumber" 
             		VerticalAlignment="Center" 
             		FontSize="24" 
@@ -238,7 +243,12 @@
 
             </Canvas>
         </ControlTemplate>
-
+		<Storyboard x:Key="NorthIndicatorStoryboard">
+    		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="NorthIndicator" d:IsOptimized="True"/>		
+		</Storyboard>
+		<Storyboard x:Key="UserLocationStoryboard">
+		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="UserLocation" d:IsOptimized="True"/>		
+		</Storyboard>
 		<ControlTemplate x:Key="ClusterTemplate">
             <!--Maps:MapControl.NormalizedAnchorPoint="0.5,0"-->
             <Canvas x:Name="rootCanvas" Height="20" 
@@ -398,7 +408,7 @@
         <x:Double x:Key="CheckBoxAndRadioButtonMinWidthSize">168</x:Double>
         <x:Double x:Key="PhoneStrokeThickness">2.5</x:Double>
         <Thickness x:Key="PhoneTouchTargetLargeOverhang">0,16</Thickness>
-        <Style x:Key="VelibRadioButtonStyle" TargetType="RadioButton">
+        <Style x:Key="RadioButtonStyle1" TargetType="RadioButton">
         	<Setter Property="Background" Value="{ThemeResource PhoneRadioCheckBoxBrush}"/>
         	<Setter Property="BorderBrush" Value="{ThemeResource PhoneRadioCheckBoxBorderBrush}"/>
         	<Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
@@ -412,7 +422,7 @@
         	<Setter Property="Template">
         		<Setter.Value>
         			<ControlTemplate TargetType="RadioButton">
-        				<Grid Background="#BD060606">
+        				<Grid Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Disabled">
         					<VisualStateManager.VisualStateGroups>
         						<VisualStateGroup x:Name="CommonStates">
         							<VisualState x:Name="Normal"/>
@@ -446,28 +456,160 @@
         						<VisualStateGroup x:Name="CheckStates">
         							<VisualState x:Name="Checked">
         								<Storyboard>
-        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CheckMark">
-        										<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-        									</ObjectAnimationUsingKeyFrames>
+        									<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CheckBackground" d:IsOptimized="True"/>
         								</Storyboard>
         							</VisualState>
         							<VisualState x:Name="Unchecked"/>
         							<VisualState x:Name="Indeterminate"/>
         						</VisualStateGroup>
         					</VisualStateManager.VisualStateGroups>
-        					<Grid x:Name="Container" Margin="{ThemeResource PhoneTouchTargetLargeOverhang}">
+        					<Grid x:Name="Container" Margin="10">
         						<Grid.ColumnDefinitions>
-        							<ColumnDefinition Width="25.5"/>
         							<ColumnDefinition Width="*"/>
+        							<ColumnDefinition Width="Auto"/>
         						</Grid.ColumnDefinitions>
-        						<Grid VerticalAlignment="Top">
-        							<Image HorizontalAlignment="Left" Height="26" VerticalAlignment="Top" Width="26"/>
-        							<Ellipse x:Name="CheckBackground" Fill="{TemplateBinding Background}" HorizontalAlignment="Left" Height="25.5" IsHitTestVisible="False" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{ThemeResource PhoneStrokeThickness}" VerticalAlignment="Center" Width="25.5"/>
+        						<Grid>
+        							<Ellipse x:Name="CheckBackground" Fill="{TemplateBinding Background}" IsHitTestVisible="False" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{ThemeResource PhoneStrokeThickness}" Opacity="0.45"/>
         							<Ellipse x:Name="CheckMark" Fill="{ThemeResource PhoneRadioCheckBoxCheckBrush}" HorizontalAlignment="Center" Height="12.5" IsHitTestVisible="False" Visibility="Collapsed" VerticalAlignment="Center" Width="12.5"/>
-        							<TextBlock/>
+        							<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        						
+        							
         						</Grid>
-        						<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="1" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
         					</Grid>
+        				</Grid>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+        <Thickness x:Key="PhoneBorderThickness">2.5</Thickness>
+        <FontWeight x:Key="PhoneButtonFontWeight">Semibold</FontWeight>
+        <x:Double x:Key="PhoneButtonMinHeight">57.5</x:Double>
+        <x:Double x:Key="PhoneButtonMinWidth">109</x:Double>
+        <Thickness x:Key="PhoneTouchTargetOverhang">0,9.5</Thickness>
+        <Style x:Key="ToggleButtonStyle1" TargetType="ToggleButton">
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
+        	<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+        	<Setter Property="BorderThickness" Value="{ThemeResource PhoneBorderThickness}"/>
+        	<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
+        	<Setter Property="FontWeight" Value="{ThemeResource PhoneButtonFontWeight}"/>
+        	<Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+        	<Setter Property="Padding" Value="9.5,0"/>
+        	<Setter Property="MinHeight" Value="{ThemeResource PhoneButtonMinHeight}"/>
+        	
+        	<Setter Property="HorizontalAlignment" Value="Left"/>
+        	<Setter Property="VerticalAlignment" Value="Center"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="ToggleButton">
+        				<Grid Background="Transparent" Height="40">
+        					<Grid.ColumnDefinitions>
+        						<ColumnDefinition Width="*"/>
+        						<ColumnDefinition Width="*"/>
+        					</Grid.ColumnDefinitions>
+        					<VisualStateManager.VisualStateGroups>
+        						<VisualStateGroup x:Name="CommonStates">
+        							<VisualState x:Name="Normal">
+        								<Storyboard>
+        									<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CheckBackground" d:IsOptimized="True"/>
+        									<DoubleAnimation Duration="0" To="0.3" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CheckBackground1" d:IsOptimized="True"/>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="PointerOver"/>
+        							<VisualState x:Name="Pressed"/>
+        							<VisualState x:Name="Disabled"/>
+        							<VisualState x:Name="Checked">
+        								<Storyboard>
+        									<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CheckBackground1" d:IsOptimized="True"/>
+        									<DoubleAnimation Duration="0" To="0.345" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CheckBackground" d:IsOptimized="True"/>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="CheckedPointerOver"/>
+        							<VisualState x:Name="CheckedPressed"/>
+        							<VisualState x:Name="CheckedDisabled"/>
+        							<VisualState x:Name="Indeterminate"/>
+        							<VisualState x:Name="IndeterminatePointerOver"/>
+        							<VisualState x:Name="IndeterminatePressed"/>
+        							<VisualState x:Name="IndeterminateDisabled"/>
+        						</VisualStateGroup>
+        					</VisualStateManager.VisualStateGroups>
+							<Ellipse x:Name="CheckBackground" Fill="{TemplateBinding Background}" IsHitTestVisible="False" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{ThemeResource PhoneStrokeThickness}" Opacity="0.995" Width="40"/>
+        					<Image Source="Assets/velo.png" Width="26"/>
+        					<Ellipse x:Name="CheckBackground1" Fill="{TemplateBinding Background}" IsHitTestVisible="False" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="{ThemeResource PhoneStrokeThickness}" Opacity="0.45" Grid.Column="1" Width="40" Margin="7,0,0,0"/>
+        					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="P" VerticalAlignment="Center" Foreground="White" FontSize="26.667" FontFamily="Global User Interface" FontWeight="Bold" Grid.ColumnSpan="2" Grid.Column="1" Margin="8,0,0,-1"/>
+        				</Grid>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        </Style>
+        <SolidColorBrush x:Key="ButtonDisabledBackgroundThemeBrush" Color="Transparent"/>
+        <Flyout x:Key="FlyoutBase1">
+        	<Grid Height="100" Width="100"/>
+        </Flyout>
+        <Style x:Key="ButtonStyleLeftAlign" TargetType="Button">
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
+        	<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+        	<Setter Property="BorderThickness" Value="{ThemeResource PhoneBorderThickness}"/>
+        	<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
+        	<Setter Property="FontWeight" Value="{ThemeResource PhoneButtonFontWeight}"/>
+        	<Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+        	<Setter Property="HorizontalAlignment" Value="Left"/>
+        	<Setter Property="VerticalAlignment" Value="Center"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="Button">
+        				<Grid x:Name="Grid" Background="Transparent">
+        					<VisualStateManager.VisualStateGroups>
+        						<VisualStateGroup x:Name="CommonStates">
+        							<VisualStateGroup.Transitions>
+        								<VisualTransition From="Pressed" To="PointerOver">
+        									<Storyboard>
+        										<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+        									</Storyboard>
+        								</VisualTransition>
+        								<VisualTransition From="PointerOver" To="Normal">
+        									<Storyboard>
+        										<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+        									</Storyboard>
+        								</VisualTransition>
+        								<VisualTransition From="Pressed" To="Normal">
+        									<Storyboard>
+        										<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+        									</Storyboard>
+        								</VisualTransition>
+        							</VisualStateGroup.Transitions>
+        							<VisualState x:Name="Normal"/>
+        							<VisualState x:Name="PointerOver"/>
+        							<VisualState x:Name="Pressed">
+        								<Storyboard>
+        									<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        							<VisualState x:Name="Disabled">
+        								<Storyboard>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+        										<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
+        									</ObjectAnimationUsingKeyFrames>
+        								</Storyboard>
+        							</VisualState>
+        						</VisualStateGroup>
+        					</VisualStateManager.VisualStateGroups>
+        					<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+        						<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="10,20"/>
+        					</Border>
         				</Grid>
         			</ControlTemplate>
         		</Setter.Value>
@@ -475,31 +617,391 @@
         </Style>
     </Page.Resources>
 	<Page.BottomAppBar>
-		<CommandBar>
-			<AppBarButton Icon="Target" Click="AppBarButton_Click" Label="Location"/>
+		<CommandBar MinHeight="25">
+			<CommandBar.SecondaryCommands>
+				<AppBarButton Icon="Download" Label="download cities" 
+					Click="DownloadCitiesButton_Click"/>
+				<AppBarButton Label="about"/>
+			</CommandBar.SecondaryCommands>
+			<AppBarButton x:Name="FavoritsButton"  Label="Favorites" Icon="Favorite" Click="FavoritsButton_Click"/>
+			<AppBarButton x:Name="LocationButton" Click="AppBarButton_Click" Label="Location" Icon="Target" FontFamily="Global User Interface"/>
+			<AppBarButton x:Name="SearchButton" Click="SearchButton_Click" Label="Search" Icon="Find"/>
 		</CommandBar>
 	</Page.BottomAppBar>
 
-    <Grid x:Name="LayoutRoot">
-            
+    <Grid x:Name="LayoutRoot" Margin="0" Background="{x:Null}" Visibility="Visible">
+    	<FlyoutBase.AttachedFlyout>
+    		<Flyout x:Name="VelibFlyout">
+					
+					<StackPanel>
+					<Button HorizontalAlignment="Stretch" Click="FlyoutButtonDriveTo_Click" Style="{StaticResource ButtonStyleLeftAlign}">
+					
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<TextBlock HorizontalAlignment="Left" 
+						TextWrapping="Wrap" 
+						Text="&#xE102;"
+						VerticalAlignment="Center" 
+						FontFamily="Segoe UI Symbol" 
+						FontSize="32" Margin="15,0"
+						/>
+						<StackPanel Grid.Column="2" Margin="0">
+							<TextBlock Text="Drive to" FontSize="{StaticResource TextStyleExtraLargeFontSize}"/>
+							<TextBlock Text="Start a driving app" FontSize="{StaticResource TextStyleLargeFontSize}" Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"/>
+
+						</StackPanel>
+						</Grid>
+					</Button>
+					
+					<Button HorizontalAlignment="Stretch" Click="FlyoutButtonAddFavorit_Click" Style="{StaticResource ButtonStyleLeftAlign}">
+					
+						<Button.Flyout>
+							<Flyout x:Name="FavoriteFlyout">
+							
+							<StackPanel>
+							<TextBlock
+								Style="{StaticResource FlyoutPickerTitleTextBlockStyle}" FontFamily="Global User Interface" Margin="0,19,0,10" FontSize="24">
+								<Run Text="Type a name"/>
+
+							
+							</TextBlock>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<TextBox x:Name="FavoriteNameTextBox" 
+								
+									CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontFamily="Global User Interface" PlaceholderText="Favorite name" 
+									KeyUp="FavoriteNameTextBox_KeyUp" VerticalAlignment="Center" Margin="3,0"/>
+								<Button Click="FavoriteNameButtonOk_Click" Background="#FF474343" Content="Ok" Margin="0" Grid.Column="1" Style="{StaticResource SimpleButton}" FontFamily="Global User Interface">
+									
+								</Button>
+							</Grid>
+							
+					</StackPanel>
+
+							</Flyout>
+						</Button.Flyout>
+					<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="80
+								"/>
+								<ColumnDefinition/>
+							</Grid.ColumnDefinitions>
+							<TextBlock HorizontalAlignment="Left" 
+								TextWrapping="Wrap" 
+								Text="&#xE113;"
+								VerticalAlignment="Center" 
+								FontFamily="Segoe UI Symbol" 
+								FontSize="32" Margin="15,0"
+						/>
+							<StackPanel Grid.Column="2">
+								<TextBlock Text="Add to favorites" FontSize="{StaticResource TextStyleExtraLargeFontSize}"/>
+								<TextBlock Text="Store a personal location" FontSize="{StaticResource TextStyleLargeFontSize}" Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"/>
+
+							</StackPanel>
+
+						</Grid>
+
+					</Button>
+					
+					</StackPanel>
+					
+					</Flyout>
+    	</FlyoutBase.AttachedFlyout>
+    	<VisualStateManager.VisualStateGroups>
+    		<VisualStateGroup x:Name="Search">
+    			<VisualState x:Name="Normal">
+    				
+    				
+    			</VisualState>
+    			<VisualState x:Name="SearchHidden">
+    				
+    				<Storyboard>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBox.Text)" Storyboard.TargetName="SearchTextBox">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value=""/>
+    					</ObjectAnimationUsingKeyFrames>
+    				</Storyboard>
+    				
+    			</VisualState>
+    			<VisualState x:Name="SearchVisible">
+				<Storyboard>
+    					<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid" d:IsOptimized="True"/>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="grid">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<x:Boolean>True</x:Boolean>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SearchStatusTextBlock">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Visible</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SearchingProgressBar">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Collapsed</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<DoubleAnimation Duration="0" To="0.5" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GreyPanel" d:IsOptimized="True"/>
+    					
+    				</Storyboard>
+					</VisualState>
+    			<VisualState x:Name="Searching">
+    				<Storyboard>
+    					<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid" d:IsOptimized="True"/>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="grid">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<x:Boolean>True</x:Boolean>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SearchStatusTextBlock">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Visible</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Text)" Storyboard.TargetName="SearchStatusTextBlock">
+    						<DiscreteObjectKeyFrame KeyTime="0" Value="Searching..."/>
+    					</ObjectAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SearchingProgressBar">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Visible</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<DoubleAnimation Duration="0" To="0.7" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GreyPanel" d:IsOptimized="True"/>
+    				</Storyboard>
+    			</VisualState>
+    		</VisualStateGroup>
+    		<VisualStateGroup x:Name="VisualStateGroup">
+    			<VisualState x:Name="NorthIndicatorVisible">
+    				<Storyboard>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="NorthIndicator">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Visible</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="NorthIndicator">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+    					</DoubleAnimationUsingKeyFrames>
+    				</Storyboard>
+    			</VisualState>
+    			<VisualState x:Name="NorthIndicatorHidden">
+    				<Storyboard>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="NorthIndicator">
+    						<DiscreteObjectKeyFrame KeyTime="0:0:0.2">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Collapsed</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="NorthIndicator" d:IsOptimized="True"/>
+    				</Storyboard>
+    			</VisualState>
+    		</VisualStateGroup>
+    		<VisualStateGroup x:Name="VisualStateGroup1">
+    			<VisualState x:Name="SearchLocationClear"/>
+    			<VisualState x:Name="SearchLocationClick">
+    				<Storyboard>
+					
+                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="SearchLocationPoint">
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="0.85">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<CircleEase EasingMode="EaseOut"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    			</DoubleAnimationUsingKeyFrames>
+                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="SearchLocationPoint">
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="0.85">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<CircleEase EasingMode="EaseOut"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                    					<EasingDoubleKeyFrame.EasingFunction>
+                    						<BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                    					</EasingDoubleKeyFrame.EasingFunction>
+                    				</EasingDoubleKeyFrame>
+                    			</DoubleAnimationUsingKeyFrames>
+
+
+    				</Storyboard>
+    			</VisualState>
+    		</VisualStateGroup>
+    		<VisualStateGroup x:Name="VisualStateGroup2">
+    			<VisualState x:Name="SearchAddressPinShow">
+    				<Storyboard>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SearchLocationPoint">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<Visibility>Visible</Visibility>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="SearchLocationPoint">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+    							<EasingDoubleKeyFrame.EasingFunction>
+    								<BackEase EasingMode="EaseOut" Amplitude="0.7"/>
+    							</EasingDoubleKeyFrame.EasingFunction>
+    						</EasingDoubleKeyFrame>
+    					</DoubleAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="SearchLocationPoint">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+    							<EasingDoubleKeyFrame.EasingFunction>
+    								<BackEase EasingMode="EaseOut" Amplitude="0.7"/>
+    							</EasingDoubleKeyFrame.EasingFunction>
+    						</EasingDoubleKeyFrame>
+    					</DoubleAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchLocationPoint">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0.995"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+    					</DoubleAnimationUsingKeyFrames>
+    				</Storyboard>
+    			</VisualState>
+    		</VisualStateGroup>
+    	</VisualStateManager.VisualStateGroups>
 			
+    	<Canvas x:Name="SearchLocationPoint" RenderTransformOrigin="0,0" 
+		CacheMode="BitmapCache" Opacity="0.995" 
+		Maps:MapControl.NormalizedAnchorPoint="0.5,1" 
+		Visibility="Collapsed" Tapped="SearchLocationPoint_Tapped" >
+    		<Canvas.RenderTransform>
+    			<CompositeTransform/>
+    		</Canvas.RenderTransform>
+
+
+    		<Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6" IsHitTestVisible="False"/>
+    		<Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#CC000000" Width="16" Height="9.295" Canvas.Left="-8" Canvas.Top="-10" IsHitTestVisible="False"/>
+    		<Button x:Name="SearchButtonGoLocation" 
+    			Canvas.Top="-83" Width="60" Height="74" Canvas.Left="100" Background="#66000000" BorderBrush="{x:Null}" MinWidth="0" MinHeight="0" HorizontalAlignment="Center" ClickMode="Press" FontFamily="Global User Interface" Style="{StaticResource SimpleButton}" Visibility="Collapsed">
+    			<Grid>
+    				<TextBlock Text="&#xE0AB;" FontSize="64" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,9" FontFamily="Segoe UI Symbol"/>
+    			</Grid>
+
+    		</Button>
+
+
+             
+    		<Grid x:Name="stackPanel" HorizontalAlignment="Left" Background="#CC000000" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
+            		
+    			<Grid.RenderTransform>
+    				<CompositeTransform/>
+    			</Grid.RenderTransform>
+            		<!--Source="Assets/WP8AppbarIcons/audio.png"-->
+    			<TextBlock x:Name="SearchLocationText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center" Grid.Column="1" FontSize="18.667" MaxLines="3" Margin="3,0"/>
+				<TextBlock x:Name="SearchingText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center" Grid.Column="1" FontSize="18.667" MaxLines="3" Margin="3,0"/>
+    		</Grid>
+
+
+
+    	</Canvas>
+        
+
     	<Maps:MapControl x:Name="MapCtrl"
-    		MapTapped="MyMap_MapTapped"
-    		LandmarksVisible="False"
-    		MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo" FontFamily="Global User Interface"
+    		LandmarksVisible="True"
+    		MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo" FontFamily="Global User Interface" PedestrianFeaturesVisible="True" Background="{x:Null}" ManipulationMode="All" ScrollViewer.VerticalScrollBarVisibility="Disabled" Opacity="1" IsHitTestVisible="True" IsDoubleTapEnabled="True"
            >
-    		<Canvas x:Name="UserLocation" Maps:MapControl.NormalizedAnchorPoint="0.5,0.5" Width="30" Height="30" Opacity="0">
-    			<Ellipse Width="24" Height="24" StrokeThickness="3" Stroke="Black" />
-    			<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
-    				Width="20" Height="20" Canvas.Left="2" Canvas.Top="2" Stroke="White" StrokeThickness="2" 
+    		<Border x:Name="TouchPanel" ManipulationMode="All" Background="#00000000" Width="1000" Height="1000"/>
+    		<Canvas x:Name="UserLocation" 
+			Maps:MapControl.NormalizedAnchorPoint="0.5,0.5" 
+			  Width="24" Height="24" Opacity="0" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
+    			<Canvas.RenderTransform>
+    				<CompositeTransform />
+    			</Canvas.RenderTransform>
+			  
+    			<Path Data="M12.978,0.5 L24.3847,22.832 L24.3958,22.8558 C25.1051,24.4247 25.5,26.1662 25.5,28 C25.5,34.9036 19.9036,40.5 13,40.5 C6.09644,40.5 0.5,34.9036 0.5,28 C0.5,26.2741 0.849777,24.6299 1.48231,23.1344 L1.52754,23.031 z" Fill="Black" HorizontalAlignment="Center" Height="41" RenderTransformOrigin="0.5,0.286976" Stretch="Fill" Stroke="White" UseLayoutRounding="False" VerticalAlignment="Center" Width="26" Canvas.Top="-16"/>
+		<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
+			Width="20" Height="20" Stroke="White" StrokeThickness="2" Canvas.Top="2" Canvas.Left="3" 
 				/>
     		</Canvas>
+        
+
     		<!--<Maps:MapItemsControl x:Name="MapItzems" ItemTemplate="{StaticResource EventPoiTemplate}" />-->
 
     	</Maps:MapControl>
+		<Border x:Name="GreyPanel" Background="Black" Width="1000" Height="1000" IsHitTestVisible="False" ManipulationMode="None" Opacity="0"/>
+		<RadioButton x:Name="NorthIndicator" Style="{StaticResource RadioButtonStyle1}"
+			GroupName="VelibParkingSwitch" IsChecked="True"
+			Background="#BF000000" BorderBrush="{x:Null}" MinWidth="0"
+			RenderTransformOrigin="0.5,0.5"  Margin="0,50,20,0" VerticalAlignment="Top" Width="60" Height="60" HorizontalAlignment="Right" Click="NorthIndicator_Click" Padding="0" FontFamily="Global User Interface" Opacity="0" Visibility="Collapsed">
+
+			<RadioButton.RenderTransform>
+				<CompositeTransform Rotation="0"/>
+			</RadioButton.RenderTransform>
+
+			<Canvas HorizontalAlignment="Left" Height="36" Margin="0,0,0,4" VerticalAlignment="Top" Width="34">
+			
+				<TextBlock TextWrapping="Wrap" Text="N" FontSize="9.333" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+				<Path Data="M17.4019,0 L35.1106,24.9999 L17.4811,16.1482 L0,24.6166 z" Fill="#CCFFFFFF" HorizontalAlignment="Center" Height="22" Stretch="Fill" UseLayoutRounding="False" VerticalAlignment="Center" Width="22" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Canvas.Left="6.083" Canvas.Top="6.917"/>
+				<Path Data="M6.6875,12.6437 L11.5156,17.5969 L23.9688,17.5969 z M2.34375,10.05 L28.3906,17.5969 L2.34375,25.1594 L9.5625,17.5969 z" Fill="White" Height="15.109" Canvas.Left="4" RenderTransformOrigin="0.5,0.5" Stretch="Fill" Canvas.Top="11.72" UseLayoutRounding="False" Width="26.046">
+					<Path.RenderTransform>
+						<TransformGroup>
+							<ScaleTransform/>
+							<SkewTransform/>
+							<RotateTransform Angle="-90"/>
+							<TranslateTransform/>
+						</TransformGroup>
+					</Path.RenderTransform>
+				</Path>
+				
+			</Canvas>
+		</RadioButton>
+    	<Grid x:Name="grid" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0" d:IsHidden="True">
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition Width="*"/>
+    			<ColumnDefinition Width="Auto"/>
+    		</Grid.ColumnDefinitions>
+    		<ProgressBar x:Name="SearchingProgressBar" Height="10" VerticalAlignment="Top" Grid.ColumnSpan="2" Visibility="Collapsed" IsIndeterminate="True"/>
+    		<ScrollViewer x:Name="scrollViewer" VerticalAlignment="Top" Margin="10,0" >
+    			<TextBox x:Name="SearchTextBox" VerticalAlignment="Center" PlaceholderText="address" FontFamily="Global User Interface" KeyUp="AddressTextBox_KeyUp"/>
+    		</ScrollViewer>
+    		<TextBlock x:Name="SearchStatusTextBlock" HorizontalAlignment="Left" 
+    			
+    			TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Margin="10,55,0,0" IsHitTestVisible="False"/>
+    	</Grid>
             
 			
-    	<RadioButton x:Name="RadioButtonVelib" Content="Velibs" GroupName="VelibParkingSwitch" IsChecked="True" Style="{StaticResource VelibRadioButtonStyle}" Checked="RadioButtonVelib_Checked"/>
-    	<RadioButton x:Name="RadioButtonParking" Content="Parkings" GroupName="VelibParkingSwitch" Checked="RadioButtonParking_Checked" Margin="0,46,0,0"/>
+    	<RadioButton x:Name="RadioButtonVelib" Style="{StaticResource RadioButtonStyle1}"
+		GroupName="VelibParkingSwitch" IsChecked="True"
+		Background="#BF000000" BorderBrush="{x:Null}" 
+		Checked="RadioButtonVelib_Checked" MinWidth="0" Margin="16,0,68,20" VerticalAlignment="Bottom" Width="40" Height="40" HorizontalAlignment="Right" Visibility="Collapsed">
+    		<Image Source="Assets/velo.png" Margin="7,0"/>
+    	</RadioButton>
+    	<RadioButton x:Name="RadioButtonParking"
+		GroupName="VelibParkingSwitch"
+		 Checked="RadioButtonParking_Checked" 
+		 Margin="0,0,16,20" VerticalAlignment="Bottom"
+		  Style="{StaticResource RadioButtonStyle1}" 
+		  Background="#BF000000" BorderBrush="{x:Null}" MinWidth="0" Width="40" Height="40" HorizontalAlignment="Right" FontFamily="Global User Interface" Visibility="Collapsed">
+		 	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="P" VerticalAlignment="Center" Foreground="White" FontSize="26.667" FontFamily="Global User Interface" FontWeight="Bold" Margin="2,3,0,0"/>
+			</RadioButton>
+    	<ToggleButton x:Name="ToggleButtonVelibParking" 
+		   HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource ToggleButtonStyle1}" Background="#BD000000" MinWidth="0" MinHeight="0" BorderBrush="{x:Null}" FontFamily="Global User Interface" Margin="0,0,16,20" Click="ToggleButtonVelibParking_Click"/>
     </Grid>
 </Page>

@@ -1,0 +1,17 @@
+﻿<Page
+    x:Class="Velib.drawingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Velib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Canvas>
+		<Path Data="M12.978,0.5 L24.3847,22.832 L24.3958,22.8558 C25.1051,24.4247 25.5,26.1662 25.5,28 C25.5,34.9036 19.9036,40.5 13,40.5 C6.09644,40.5 0.5,34.9036 0.5,28 C0.5,26.2741 0.849777,24.6299 1.48231,23.1344 L1.52754,23.031 z" Fill="Black" HorizontalAlignment="Center" Height="41" Canvas.Left="187" RenderTransformOrigin="0.5,0.286976" Stretch="Fill" Stroke="White" Canvas.Top="292" UseLayoutRounding="False" VerticalAlignment="Center" Width="26"/>
+		<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
+			Width="20" Height="20" Canvas.Left="190" Canvas.Top="310" Stroke="White" StrokeThickness="2" 
+				/>
+	</Canvas>
+</Page>

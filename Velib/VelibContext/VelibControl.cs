@@ -25,11 +25,21 @@ namespace Velib.VelibContext
             this.Tapped += VelibControl_Tapped;
         }
 
+
+        private static VelibControl previousVelibTapped;
         void VelibControl_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (Velibs.Count > 1)
             {
                 map.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(Velibs.Select(s => s.Location).ToList()), new Thickness(20, 20, 20, 20), MapAnimationKind.Default);
+            }
+            else
+            {
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    MainPage.mainPage.SelectItem(this, false);
+                });
+                
             }
         }
 
@@ -62,7 +72,7 @@ namespace Velib.VelibContext
             }
             this.SetValue(MapControl.LocationProperty, GetLocation());
             this.DataContext = Velibs.FirstOrDefault();
-
+            this.Opacity = 1;
             if (Velibs.Count == 1)
             {
                 new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
@@ -121,6 +131,11 @@ namespace Velib.VelibContext
             VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);
             VisualStateManager.GoToState(this, "Normal", false);
+            var velib = Velibs.FirstOrDefault();
+            if(velib!= null && velib.Selected)
+                VisualStateManager.GoToState(this, "ShowSelected", true);
+            else
+                VisualStateManager.GoToState(this, "HideSelected", true);
         }
         public void ShowColor(int velibNumber)
         {
@@ -175,5 +190,6 @@ namespace Velib.VelibContext
                 OffsetLocation = origin.GetOffsetedLocation(this.GetLocation().Position, zoomLevel);
             return OffsetLocation;
         }
+
     }
 }

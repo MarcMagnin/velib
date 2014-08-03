@@ -14,6 +14,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
+using Windows.UI.Xaml.Media;
 
 
 namespace Velib.Common.Cluster
@@ -32,6 +33,8 @@ namespace Velib.Common.Cluster
         public CancellationTokenSource cts = new CancellationTokenSource();
 
         GeoboundingBox mapArea = null;
+        BasicGeoposition leftCornerLocation;
+        List<Geopoint> mapLocations = null;
         double zoomLevel=20;
         
 
@@ -55,26 +58,50 @@ namespace Velib.Common.Cluster
                 // .SubscribeOn(Scheduler.Default)
                 .Select(async x =>
                 {
+                    
                     if (VelibDataSource.StaticVelibs == null)
                         return null;
 
                   
                     await dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
-                        mapArea = _map.GetViewArea();
+                        //mapArea = _map.GetViewArea();
+                        mapLocations = _map.GetViewLocations();
+                        if (mapLocations != null)
+                            leftCornerLocation = mapLocations.First().Position;
                         zoomLevel = _map.ZoomLevel;
+
+                        // TESTING only 
+                        //velibControls[0].SetValue(MapControl.LocationProperty, new Geopoint(new BasicGeoposition()
+                        //    {
+                        //        Latitude = mapArea.NorthwestCorner.Latitude,
+                        //        Longitude = mapArea.NorthwestCorner.Longitude,
+                        //    }));
+                        //velibControls[0].ShowVelibStation();
+                        //velibControls[1].SetValue(MapControl.LocationProperty, new Geopoint(new BasicGeoposition()
+                        //{
+                        //    Latitude = mapArea.SoutheastCorner.Latitude,
+                        //    Longitude = mapArea.SoutheastCorner.Longitude,
+                        //}));
+                        //velibControls[1].ShowVelibStation();
+
                     });
+                    //return null;
+                    // that could happend is the zoom is really low and the map is turned
+                    if (mapLocations == null)
+                        return null;
 
                     var collection = new VelibAddRemoveCollection();
-                    collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !Items.Contains(t) && MapExtensions.Contains(t.Location, mapArea)).Take(MAX_CONTROLS).ToList();
+                    collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !Items.Contains(t) 
+                        && MapExtensions.Contains(mapLocations, t.Location)).Take(MAX_CONTROLS).ToList();
                     if (Items.Count > 50)
                         collection.ToAdd.Clear();
-                    collection.ToRemove = Items.Where(t => !MapExtensions.Contains(t.Location, mapArea)).ToList();
+                    collection.ToRemove = Items.Where(t => !MapExtensions.Contains(mapLocations, t.Location)).ToList();
 
 
                     // precalculate the items offset (that deffer well calculation)
                     foreach (var velib in collection.ToAdd)
                     {
-                        velib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
+                        velib.GetOffsetLocation2(leftCornerLocation, zoomLevel);
                     }
 
                     
@@ -111,7 +138,9 @@ namespace Velib.Common.Cluster
                  for (int i = 0; i < MAX_CONTROLS; i++)
                  {
                      var item = new VelibControl(_map);
+                    // item.CacheMode = new BitmapCache();
                      item.Template = ItemTemplate;
+                     item.Opacity = 0;
                      velibControls.Add(item);
                      _map.Children.Add(item);
                  }
@@ -126,7 +155,8 @@ namespace Velib.Common.Cluster
             // otherwise create a new cluster
             foreach (var allreadyAddedVelib in Items)
             {
-                double distance = allreadyAddedVelib.VelibControl.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel).GetDistanceTo(velib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel));
+                double distance = allreadyAddedVelib.VelibControl.GetOffsetLocation2(leftCornerLocation, zoomLevel)
+                    .GetDistanceTo(velib.GetOffsetLocation2(leftCornerLocation, zoomLevel));
                 if (distance < MAXDISTANCE)
                 {
                     allreadyAddedVelib.VelibControl.AddVelib(velib);
@@ -183,8 +213,8 @@ namespace Velib.Common.Cluster
                 {
                     foreach (var control in velibControls.Where(t => t.Velibs.Count > 1))
                     {
-                        foreach (var velib in control.Velibs.Where(t => t.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel)
-                            .GetDistanceTo(control.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel)) > MAXDISTANCE).ToList())
+                        foreach (var velib in control.Velibs.Where(t => t.GetOffsetLocation2(leftCornerLocation, zoomLevel)
+                            .GetDistanceTo(control.GetOffsetLocation2(leftCornerLocation, zoomLevel)) > MAXDISTANCE).ToList())
                         {
                                 
                             addRemoveCollection.ToAdd.Add(velib);
@@ -206,12 +236,12 @@ namespace Velib.Common.Cluster
                         if (alreadyAddedVelib.VelibControl == null)
                             continue;
 
-                        Point locationOffset = alreadyAddedVelib.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
+                        Point locationOffset = alreadyAddedVelib.GetOffsetLocation2(leftCornerLocation, zoomLevel);
                         foreach (var alreadyAddedVelib2 in Items.Where(t=>t.Number != alreadyAddedVelib.Number ).ToList())
                         {
                             if (alreadyAddedVelib2.VelibControl == null)
                                 continue;
-                            var loc = alreadyAddedVelib2.GetOffsetLocation2(mapArea.NorthwestCorner, zoomLevel);
+                            var loc = alreadyAddedVelib2.GetOffsetLocation2(leftCornerLocation, zoomLevel);
                             double distance = loc.GetDistanceTo(locationOffset);
                             if (distance < MAXDISTANCE && alreadyAddedVelib.VelibControl != alreadyAddedVelib2.VelibControl)
                             {
@@ -268,7 +298,7 @@ namespace Velib.Common.Cluster
         }
         public async void RequestAvailability()
         {
-            foreach (var velib in Items.ToList())
+            foreach (var velib in velibControls.Where(c=>c.Velibs.Count == 1).Select(c=>c.Velibs.FirstOrDefault()).ToList())
             {
                 velib.GetAvailableBikes(dispatcher);
             }

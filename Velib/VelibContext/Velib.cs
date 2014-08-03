@@ -65,12 +65,10 @@ namespace VelibContext
         public bool Loaded { get; set; }
 
         [DataMember(Name = "available_bike_stands")]
-        [DefaultValue(-1)]
         public int AvailableBikeStands { get; set; }
 
 
         [DataMember(Name = "available_bikes")]
-        [DefaultValue(-1)]
         public int AvailableBikes { get; set; }
 
 
@@ -147,23 +145,44 @@ namespace VelibContext
                 HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, Number))).AsTask(cts.Token);
                 var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
                 var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
-                this.Loaded = true;
+                
+                bool reload = false;
+                bool showReloadLoadAnimation = true ;
+                if (this.AvailableBikes != rootNode.AvailableBikes && MainPage.BikeMode)
+                {
+                    if(this.AvailableBikes == -1)
+                        showReloadLoadAnimation = false;
+                    reload = true;
+                }
+                if (this.AvailableBikeStands != rootNode.AvailableBikeStands && !MainPage.BikeMode) {
+                    if (this.AvailableBikes == -1)
+                        showReloadLoadAnimation = false;
+                    reload = true;
+                }
+
                 this.AvailableBikes = rootNode.AvailableBikes;
                 this.AvailableBikeStands = rootNode.AvailableBikeStands;
-                await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                {
-                    if (this.VelibControl != null)
+
+                if (reload) { 
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                     {
-                        if(MainPage.BikeMode){
-                            this.VelibControl.ShowColor(rootNode.AvailableBikes);
-                            this.AvailableStr = this.AvailableBikes.ToString();
+                        if (this.VelibControl != null)
+                        {
+                            if (showReloadLoadAnimation)
+                                this.VelibControl.ShowVelibStation();
+                            if(MainPage.BikeMode){
+                                this.VelibControl.ShowColor(rootNode.AvailableBikes);
+                                this.AvailableStr = this.AvailableBikes.ToString();
+                            }
+                            else {
+                                this.VelibControl.ShowColor(rootNode.AvailableBikeStands);
+                                this.AvailableStr = this.AvailableBikeStands.ToString();
+                            }
                         }
-                        else {
-                            this.VelibControl.ShowColor(rootNode.AvailableBikeStands);
-                            this.AvailableStr = this.AvailableBikeStands.ToString();
-                        }
-                    }
-                });
+                    
+                    });
+                }
+                this.Loaded = true;
                 httpClient.Dispose();
                 cts.Token.ThrowIfCancellationRequested();
             }

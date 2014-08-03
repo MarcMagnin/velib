@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Velib</RootNamespace>
     <AssemblyName>Velib</AssemblyName>
-    <DefaultLanguage>fr-FR</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ExpressionBlendVersion>12.0.50429.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,6 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Cluster\ClusterGenerator.cs" />
+    <Compile Include="Common\Converters\BoolToVisConverter.cs" />
     <Compile Include="Common\MapElementData.cs" />
     <Compile Include="Common\MapExtensions.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
@@ -90,7 +92,20 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SerializationExtensions.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Contracts\Contract.cs" />
+    <Compile Include="Contracts\ContractsPage.xaml.cs">
+      <DependentUpon>ContractsPage.xaml</DependentUpon>
+    </Compile>
+    <None Include="Contracts\SampleData.json" />
     <Compile Include="DataModel\SampleDataSource.cs" />
+    <Compile Include="drawingPage.xaml.cs">
+      <DependentUpon>drawingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Favorits\Favorite.cs" />
+    <Compile Include="Favorits\FavoritsPage.xaml.cs">
+      <DependentUpon>FavoritsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Favorits\FavoritsViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -101,6 +116,7 @@
     <Compile Include="SectionPage.xaml.cs">
       <DependentUpon>SectionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\ContractsViewModel.cs" />
     <Compile Include="VelibContext\Velib.cs" />
     <Compile Include="VelibContext\VelibCluster.cs" />
     <Compile Include="VelibContext\VelibControl.cs" />
@@ -113,12 +129,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\DarkGray.png" />
+    <Content Include="Assets\icons\light\appbar.next.rest.png" />
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\HubBackground.theme-dark.png" />
     <Content Include="Assets\HubBackground.theme-light.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\ombre.png" />
+    <Content Include="Assets\Pays\BE.png" />
+    <Content Include="Assets\Pays\ES.png" />
+    <Content Include="Assets\Pays\FR.png" />
+    <Content Include="Assets\Pays\JP.png" />
+    <Content Include="Assets\Pays\LT.png" />
+    <Content Include="Assets\Pays\LU.png" />
+    <Content Include="Assets\Pays\NO.png" />
+    <Content Include="Assets\Pays\RU.png" />
+    <Content Include="Assets\Pays\SE.png" />
+    <Content Include="Assets\Pays\SI.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />
     <Content Include="Assets\Square71x71Logo.scale-240.png" />
@@ -139,6 +166,18 @@
     <PRIResource Include="Strings\fr-FR\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Contracts\ContractsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="drawingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Favorits\FavoritsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +208,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="VelibContext\velibsParis.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Settings\" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

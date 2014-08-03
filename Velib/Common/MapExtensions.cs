@@ -28,7 +28,41 @@ namespace Velib.Common
             return isInView;
         }
 
+        public static bool Contains(List<Geopoint> polyPoints, Geopoint point)
+        {
+            bool inside = false;
+            Geopoint p1, p2;
 
+            //iterate each side of the polygon
+            Geopoint oldPoint = polyPoints[polyPoints.Count - 1];
+
+            foreach (Geopoint newPoint in polyPoints)
+            {
+                //order points so p1.lat <= p2.lat;
+                if (newPoint.Position.Latitude > oldPoint.Position.Latitude)
+                {
+                    p1 = oldPoint;
+                    p2 = newPoint;
+                }
+                else
+                {
+                    p1 = newPoint;
+                    p2 = oldPoint;
+                }
+
+                //test if the line is crossed and if so invert the inside flag.
+                if ((newPoint.Position.Latitude < point.Position.Latitude) == (point.Position.Latitude <= oldPoint.Position.Latitude)
+                    && (point.Position.Longitude - p1.Position.Longitude) * (p2.Position.Latitude - p1.Position.Latitude)
+                     < (p2.Position.Longitude - p1.Position.Longitude) * (point.Position.Latitude - p1.Position.Latitude))
+                {
+                    inside = !inside;
+                }
+
+                oldPoint = newPoint;
+            }
+
+            return inside;
+        }
 
         public static Point GetOffsetLocation(this VelibModel velib, MapControl map)
         {
@@ -56,6 +90,26 @@ namespace Velib.Common
             map.GetLocationFromOffset(new Point(map.ActualWidth, map.ActualHeight), out p2);
             return new GeoboundingBox(p1.Position, p2.Position);
         }
+        public static List<Geopoint> GetViewLocations(this MapControl map)
+        {
+            Geopoint p1, p2, p3, p4;
+            try
+            {
+                map.GetLocationFromOffset(new Point(0, 0), out p1);
+                map.GetLocationFromOffset(new Point(map.ActualWidth, 0), out p2);
+                map.GetLocationFromOffset(new Point(map.ActualWidth, map.ActualHeight), out p3);
+                map.GetLocationFromOffset(new Point(0, map.ActualHeight), out p4);
+                var points = new List<Geopoint>(4) { p1, p2, p3, p4 };
+                return points;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
+            
+        }
+
 
         public static GeoboundingBox GetAreaFromLocations(List<Geopoint> geopoints)
         {

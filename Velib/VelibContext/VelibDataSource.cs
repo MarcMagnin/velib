@@ -10,6 +10,9 @@ using Velib.Common;
 using Windows.Devices.Geolocation;
 using System.Reactive.Linq;
 using Windows.Storage;
+using Velib;
+using Windows.UI.Core;
+using System.Diagnostics;
 
 namespace VelibContext
 {
@@ -21,14 +24,16 @@ namespace VelibContext
 
         static VelibDataSource()
          {
-              Task.Run(
-                async () =>
-                {
-                    VelibDataSource.StaticVelibs = await GetVelibStaticStations();
-                });
+             Task.Run(
+               async () =>
+               {
+                   await ContractsViewModel.GetContractsFromHardDrive();
+                    if(MainPage.mainPage != null)
+                       MainPage.mainPage.DataSourceLoaded();
+                       
+               });
     
         }
-
 
         //private ObservableCollection<VelibModel> _velibs = new ObservableCollection<VelibModel>();
         //public ObservableCollection<VelibModel> Velibs
@@ -103,20 +108,6 @@ namespace VelibContext
         public static List<VelibModel> StaticVelibs = new List<VelibModel>();
 
 
-        private static async Task<List<VelibModel>> GetVelibStaticStations()
-        {
-                Uri dataUri = new Uri("ms-appx:///VelibContext/velibsParis.json");
-                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
-                string jsonText = await FileIO.ReadTextAsync(file);
-                var rootNode = jsonText.FromJsonString<List<VelibModel>>();
-                var velibs = new List<VelibModel>();
-                foreach (var item in rootNode)
-                {
-                    item.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition() { Latitude = item.Latitude, Longitude = item.Longitude });
-                    velibs.Add(item);
-                }
-                return velibs;
-        }
 
 
         public static IObservable<List<VelibModel>> ObservableVelibs(int id)
