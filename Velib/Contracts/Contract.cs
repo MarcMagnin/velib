@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using VelibContext;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Velib.Contracts
@@ -14,6 +15,11 @@ namespace Velib.Contracts
 
     public class Contract : INotifyPropertyChanged
     {
+        public DateTime LastUpdate;
+        public bool DirectDownloadAvailability;
+        [IgnoreDataMember]
+        public string ApiUrl;
+
         public string Name { get; set; }
         public string Pays { get; set; }
         public string Description { get; set; }
@@ -74,6 +80,27 @@ namespace Velib.Contracts
                 }
             }
         }
-        
+
+        public async virtual Task DownloadContract()
+        {
+        }
+
+        public virtual void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
+        {
+        }
+
+        public virtual Contract GetSimpleContract()
+        {
+            var contract = GetInstanceForSimpleClone();
+            contract.Name = this.Name;
+            contract.Pays = this.Pays;
+            contract.PaysImage = this.PaysImage;
+            contract.Downloaded = this.Downloaded;
+            return contract;
+        }
+
+        protected virtual Contract GetInstanceForSimpleClone(){
+            return new Contract();
+        }
     }
 }

@@ -15,6 +15,7 @@ using Velib.VelibContext;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Core;
 using Velib;
+using Velib.Contracts;
 
 namespace VelibContext
 {
@@ -38,10 +39,15 @@ namespace VelibContext
     [DataContract]
     public class VelibModel : INotifyPropertyChanged
     {
-        private static string dataURL = "https://api.jcdecaux.com/vls/v1/stations/{0}?contract=Paris&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed";
+        public bool Reload;
+        public bool OnlyColorReload;
+       
         private bool selected;
 
         public Point MapLocation;
+
+        public Contract Contract{ get; set; }
+
 
         [IgnoreDataMember]
         public bool Selected
@@ -62,6 +68,8 @@ namespace VelibContext
             }
 
         }
+
+
         public bool Loaded { get; set; }
 
         [DataMember(Name = "available_bike_stands")]
@@ -134,87 +142,8 @@ namespace VelibContext
 
         public async Task GetAvailableBikes(CoreDispatcher dispatcher)
         {
-            var httpClient = new HttpClient();
-            var cts = new CancellationTokenSource();
-
-            //Helpers.ScenarioStarted(StartButton, CancelButton, OutputField);
-            //rootPage.NotifyUser("In progress", NotifyType.StatusMessage);
-            bool failed = true;
-            try
-            {
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, Number))).AsTask(cts.Token);
-                var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
-                var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
-                
-                bool reload = false;
-                bool showReloadLoadAnimation = true ;
-                if (this.AvailableBikes != rootNode.AvailableBikes && MainPage.BikeMode)
-                {
-                    if(this.AvailableBikes == -1)
-                        showReloadLoadAnimation = false;
-                    reload = true;
-                }
-                if (this.AvailableBikeStands != rootNode.AvailableBikeStands && !MainPage.BikeMode) {
-                    if (this.AvailableBikes == -1)
-                        showReloadLoadAnimation = false;
-                    reload = true;
-                }
-
-                this.AvailableBikes = rootNode.AvailableBikes;
-                this.AvailableBikeStands = rootNode.AvailableBikeStands;
-
-                if (reload) { 
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                    {
-                        if (this.VelibControl != null)
-                        {
-                            if (showReloadLoadAnimation)
-                                this.VelibControl.ShowVelibStation();
-                            if(MainPage.BikeMode){
-                                this.VelibControl.ShowColor(rootNode.AvailableBikes);
-                                this.AvailableStr = this.AvailableBikes.ToString();
-                            }
-                            else {
-                                this.VelibControl.ShowColor(rootNode.AvailableBikeStands);
-                                this.AvailableStr = this.AvailableBikeStands.ToString();
-                            }
-                        }
-                    
-                    });
-                }
-                this.Loaded = true;
-                httpClient.Dispose();
-                cts.Token.ThrowIfCancellationRequested();
-            }
-            catch (TaskCanceledException)
-            {
-
-            }
-            catch (Exception ex)
-            {
-                failed = true;
-            }
-            finally
-            {
-                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
-            }
-            if (failed)
-            {
-                // load local sample data
-                try
-                {
-                    //Uri dataUri = new Uri("ms-appx:///DataSample/Events.json");
-                    //StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
-                    //string jsonText = await FileIO.ReadTextAsync(file);
-                    //var rootNode = jsonText.FromJsonString<EventList>();
-                    //foreach (var evt in rootNode.Events)
-                    //{
-                    //    evt.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition() { Latitude = evt.Latitude, Longitude = evt.Longitude });
-                    //    Events.Add(evt);
-                    //}
-                }
-                catch (Exception eee) { }
-            }
+            this.Contract.GetAvailableBikes(this, dispatcher);
+            
         }
         private static async Task GetDataAsync()
         {

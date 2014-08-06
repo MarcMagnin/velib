@@ -115,19 +115,16 @@ namespace Velib.Favorits
 
         private void FavoritButtonGoLocation_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var favorit = (sender as Control).DataContext as Favorite;
-            if (favorit != null)
+            var favorite = (sender as Control).DataContext as Favorite;
+            if (favorite != null)
             {
-                if (MainPage.mainPage.SearchRouteCancellationToken == null)
-                            MainPage.mainPage.SearchRouteCancellationToken = new CancellationTokenSource();
-                        else
-                            MainPage.mainPage.SearchRouteCancellationToken.Cancel();
-                        MainPage.mainPage.SearchRouteCancellationToken = new CancellationTokenSource();
-
-                        MainPage.mainPage.StopCompassAndUserLocationTracking();
-                        MainPage.mainPage.GetNearestStationRoute(favorit, MainPage.mainPage.SearchRouteCancellationToken.Token);
-                        
-
+                var destination = new Geopoint(
+                            new BasicGeoposition()
+                            {
+                                Latitude = favorite.Latitude,
+                                Longitude = favorite.Longitude
+                            });
+                MainPage.mainPage.GetRoute(destination, favorite);
                 if (this.Frame.CanGoBack)
                 {
                     this.Frame.GoBack();

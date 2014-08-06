@@ -20,10 +20,10 @@
         <!--POIs-->
 		      <ControlTemplate x:Key="VelibTemplate">
             <!--Maps:MapControl.NormalizedAnchorPoint="0.5,0"-->
-            <Canvas x:Name="rootCanvas" Height="20" 
+            <Canvas x:Name="VelibTemplateStationRootCanvas" Height="20" 
 				
 			
-				Width="20" RenderTransformOrigin="0,0" CacheMode="BitmapCache" >
+				Width="20" RenderTransformOrigin="0,0" CacheMode="BitmapCache" ManipulationMode="All" ManipulationStarting="VelibTemplateStationRootCanvas_ManipulationStarting" >
                 <Canvas.RenderTransform>
                     <CompositeTransform/>
                 </Canvas.RenderTransform>
@@ -78,8 +78,8 @@
                     <VisualStateGroup x:Name="VisualStateGroup1">
 					 <VisualState x:Name="Hide">
                         	<Storyboard>
-					 		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rootCanvas" d:IsOptimized="True"/>
-					 		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="rootCanvas">
+					 		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="VelibTemplateStationRootCanvas" d:IsOptimized="True"/>
+					 		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
 					 			<DiscreteObjectKeyFrame KeyTime="0">
 					 				<DiscreteObjectKeyFrame.Value>
 					 					<x:Boolean>False</x:Boolean>
@@ -90,7 +90,7 @@
                         </VisualState>
                     	<VisualState x:Name="Loaded">
                     		<Storyboard>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="rootCanvas">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
                                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
                                         <EasingDoubleKeyFrame.EasingFunction>
@@ -98,7 +98,7 @@
                                         </EasingDoubleKeyFrame.EasingFunction>
                                     </EasingDoubleKeyFrame>
                                 </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="rootCanvas">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
                                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
                                         <EasingDoubleKeyFrame.EasingFunction>
@@ -110,7 +110,7 @@
                     	<VisualState x:Name="Clear"/>
                     	<VisualState x:Name="Click">
                     		<Storyboard>
-                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="rootCanvas">
+                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
                     				<EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="0.7">
                     					<EasingDoubleKeyFrame.EasingFunction>
                     						<CircleEase EasingMode="EaseOut"/>
@@ -122,7 +122,7 @@
                     					</EasingDoubleKeyFrame.EasingFunction>
                     				</EasingDoubleKeyFrame>
                     			</DoubleAnimationUsingKeyFrames>
-                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="rootCanvas">
+                    			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
                     				<EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="0.7">
                     					<EasingDoubleKeyFrame.EasingFunction>
                     						<CircleEase EasingMode="EaseOut"/>
@@ -247,7 +247,11 @@
     		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="NorthIndicator" d:IsOptimized="True"/>		
 		</Storyboard>
 		<Storyboard x:Key="UserLocationStoryboard">
-		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="UserLocation" d:IsOptimized="True"/>		
+		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="UserLocation" d:IsOptimized="True">
+		<!--<DoubleAnimation.EasingFunction>
+    							<SineEase EasingMode="EaseOut"/>
+    						</DoubleAnimation.EasingFunction>-->
+		</DoubleAnimation>							
 		</Storyboard>
 		<ControlTemplate x:Key="ClusterTemplate">
             <!--Maps:MapControl.NormalizedAnchorPoint="0.5,0"-->
@@ -543,9 +547,7 @@
         	</Setter>
         </Style>
         <SolidColorBrush x:Key="ButtonDisabledBackgroundThemeBrush" Color="Transparent"/>
-        <Flyout x:Key="FlyoutBase1">
-        	<Grid Height="100" Width="100"/>
-        </Flyout>
+       
         <Style x:Key="ButtonStyleLeftAlign" TargetType="Button">
         	<Setter Property="Background" Value="Transparent"/>
         	<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
@@ -615,6 +617,19 @@
         		</Setter.Value>
         	</Setter>
         </Style>
+		
+		<SolidColorBrush x:Key="FlyoutBackgroundThemeBrushLowOpacity" Opacity="0.8" 
+		Color="{Binding Path=Color, Source={StaticResource FlyoutBackgroundThemeBrush}}"/>
+
+		<!-- Default style for Windows.UI.Xaml.Controls.FlyoutPresenter -->
+<Style x:Key="FlyoutPresenterStyle1" TargetType="FlyoutPresenter">
+
+	<Setter Property="Background" Value="{StaticResource FlyoutBackgroundThemeBrushLowOpacity}"/>
+	
+	
+	
+
+</Style>
     </Page.Resources>
 	<Page.BottomAppBar>
 		<CommandBar MinHeight="25">
@@ -631,7 +646,7 @@
 
     <Grid x:Name="LayoutRoot" Margin="0" Background="{x:Null}" Visibility="Visible">
     	<FlyoutBase.AttachedFlyout>
-    		<Flyout x:Name="VelibFlyout">
+    		<Flyout x:Name="VelibFlyout"  d:IsHidden="True" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}">
 					
 					<StackPanel>
 					<Button HorizontalAlignment="Stretch" Click="FlyoutButtonDriveTo_Click" Style="{StaticResource ButtonStyleLeftAlign}">
@@ -659,7 +674,7 @@
 					<Button HorizontalAlignment="Stretch" Click="FlyoutButtonAddFavorit_Click" Style="{StaticResource ButtonStyleLeftAlign}">
 					
 						<Button.Flyout>
-							<Flyout x:Name="FavoriteFlyout">
+							<Flyout x:Name="FavoriteFlyout" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}" d:IsHidden="True">
 							
 							<StackPanel>
 							<TextBlock
@@ -675,11 +690,9 @@
 								</Grid.ColumnDefinitions>
 								<TextBox x:Name="FavoriteNameTextBox" 
 								
-									CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" FontFamily="Global User Interface" PlaceholderText="Favorite name" 
-									KeyUp="FavoriteNameTextBox_KeyUp" VerticalAlignment="Center" Margin="3,0"/>
-								<Button Click="FavoriteNameButtonOk_Click" Background="#FF474343" Content="Ok" Margin="0" Grid.Column="1" Style="{StaticResource SimpleButton}" FontFamily="Global User Interface">
-									
-								</Button>
+									CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" PlaceholderText="Favorite name" 
+									KeyUp="FavoriteNameTextBox_KeyUp" VerticalAlignment="Center" Margin="3,0" FontFamily="Global User Interface"/>
+								<Button Click="FavoriteNameButtonOk_Click" Content="Ok" Margin="0" Grid.Column="1" Style="{StaticResource SimpleButton}" FontFamily="Global User Interface"/>
 							</Grid>
 							
 					</StackPanel>
@@ -715,10 +728,7 @@
     	</FlyoutBase.AttachedFlyout>
     	<VisualStateManager.VisualStateGroups>
     		<VisualStateGroup x:Name="Search">
-    			<VisualState x:Name="Normal">
-    				
-    				
-    			</VisualState>
+    			<VisualState x:Name="Normal"/>
     			<VisualState x:Name="SearchHidden">
     				
     				<Storyboard>
@@ -791,29 +801,22 @@
     		<VisualStateGroup x:Name="VisualStateGroup">
     			<VisualState x:Name="NorthIndicatorVisible">
     				<Storyboard>
-    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="NorthIndicator">
-    						<DiscreteObjectKeyFrame KeyTime="0">
-    							<DiscreteObjectKeyFrame.Value>
-    								<Visibility>Visible</Visibility>
-    							</DiscreteObjectKeyFrame.Value>
-    						</DiscreteObjectKeyFrame>
-    					</ObjectAnimationUsingKeyFrames>
     					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="NorthIndicator">
     						<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
     						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
     						<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
     					</DoubleAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="NorthIndicator">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<x:Boolean>True</x:Boolean>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
     				</Storyboard>
     			</VisualState>
     			<VisualState x:Name="NorthIndicatorHidden">
     				<Storyboard>
-    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="NorthIndicator">
-    						<DiscreteObjectKeyFrame KeyTime="0:0:0.2">
-    							<DiscreteObjectKeyFrame.Value>
-    								<Visibility>Collapsed</Visibility>
-    							</DiscreteObjectKeyFrame.Value>
-    						</DiscreteObjectKeyFrame>
-    					</ObjectAnimationUsingKeyFrames>
     					<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="NorthIndicator" d:IsOptimized="True"/>
     				</Storyboard>
     			</VisualState>
@@ -853,91 +856,110 @@
     			</VisualState>
     		</VisualStateGroup>
     		<VisualStateGroup x:Name="VisualStateGroup2">
-    			<VisualState x:Name="SearchAddressPinShow">
+    			<VisualState x:Name="SearchAddressPinSearching">
     				<Storyboard>
-    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SearchLocationPoint">
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchingText">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+    					</DoubleAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SearchingText">
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-30"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0">
+    							<EasingDoubleKeyFrame.EasingFunction>
+    								<CircleEase EasingMode="EaseOut"/>
+    							</EasingDoubleKeyFrame.EasingFunction>
+    						</EasingDoubleKeyFrame>
+    					</DoubleAnimationUsingKeyFrames>
+    					<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchLocationText" d:IsOptimized="True"/>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.FontFamily)" Storyboard.TargetName="SearchingText">
     						<DiscreteObjectKeyFrame KeyTime="0">
     							<DiscreteObjectKeyFrame.Value>
-    								<Visibility>Visible</Visibility>
+    								<FontFamily>Global User Interface</FontFamily>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    						<DiscreteObjectKeyFrame KeyTime="0:0:0.2">
+    							<DiscreteObjectKeyFrame.Value>
+    								<FontFamily>Global User Interface</FontFamily>
     							</DiscreteObjectKeyFrame.Value>
     						</DiscreteObjectKeyFrame>
     					</ObjectAnimationUsingKeyFrames>
-    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="SearchLocationPoint">
-    						<EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+    					
+    					
+    					
+    				</Storyboard>
+    			</VisualState>
+    			<VisualState x:Name="SearchAddressPinSearchedFinished">
+    				<Storyboard>
+    					<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchingText" d:IsOptimized="True"/>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchLocationText">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+    					</DoubleAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SearchLocationText">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="-30"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
     							<EasingDoubleKeyFrame.EasingFunction>
-    								<BackEase EasingMode="EaseOut" Amplitude="0.7"/>
+    								<CircleEase EasingMode="EaseOut"/>
+    							</EasingDoubleKeyFrame.EasingFunction>
+    						</EasingDoubleKeyFrame>
+    					</DoubleAnimationUsingKeyFrames>
+    					
+    				</Storyboard>
+    			</VisualState>
+    		</VisualStateGroup>
+    		<VisualStateGroup x:Name="VisualStateGroup3">
+    			<VisualState x:Name="SearchLocationShow">
+    				<Storyboard>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchLocationPoint">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+    					</DoubleAnimationUsingKeyFrames>
+    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="SearchLocationPoint">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0.85"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+    							<EasingDoubleKeyFrame.EasingFunction>
+    								<BackEase EasingMode="EaseOut" Amplitude="0.5"/>
     							</EasingDoubleKeyFrame.EasingFunction>
     						</EasingDoubleKeyFrame>
     					</DoubleAnimationUsingKeyFrames>
     					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="SearchLocationPoint">
-    						<EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+    						<EasingDoubleKeyFrame KeyTime="0" Value="0.85"/>
+    						<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
     							<EasingDoubleKeyFrame.EasingFunction>
-    								<BackEase EasingMode="EaseOut" Amplitude="0.7"/>
+    								<BackEase EasingMode="EaseOut" Amplitude="0.5"/>
     							</EasingDoubleKeyFrame.EasingFunction>
     						</EasingDoubleKeyFrame>
     					</DoubleAnimationUsingKeyFrames>
-    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SearchLocationPoint">
-    						<EasingDoubleKeyFrame KeyTime="0" Value="0.995"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
-    					</DoubleAnimationUsingKeyFrames>
+    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="SearchLocationPoint">
+    						<DiscreteObjectKeyFrame KeyTime="0">
+    							<DiscreteObjectKeyFrame.Value>
+    								<x:Boolean>True</x:Boolean>
+    							</DiscreteObjectKeyFrame.Value>
+    						</DiscreteObjectKeyFrame>
+    					</ObjectAnimationUsingKeyFrames>
     				</Storyboard>
     			</VisualState>
+    			<VisualState x:Name="SearchLocationHide"/>
     		</VisualStateGroup>
     	</VisualStateManager.VisualStateGroups>
 			
-    	<Canvas x:Name="SearchLocationPoint" RenderTransformOrigin="0,0" 
-		CacheMode="BitmapCache" Opacity="0.995" 
-		Maps:MapControl.NormalizedAnchorPoint="0.5,1" 
-		Visibility="Collapsed" Tapped="SearchLocationPoint_Tapped" >
-    		<Canvas.RenderTransform>
-    			<CompositeTransform/>
-    		</Canvas.RenderTransform>
-
-
-    		<Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6" IsHitTestVisible="False"/>
-    		<Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#CC000000" Width="16" Height="9.295" Canvas.Left="-8" Canvas.Top="-10" IsHitTestVisible="False"/>
-    		<Button x:Name="SearchButtonGoLocation" 
-    			Canvas.Top="-83" Width="60" Height="74" Canvas.Left="100" Background="#66000000" BorderBrush="{x:Null}" MinWidth="0" MinHeight="0" HorizontalAlignment="Center" ClickMode="Press" FontFamily="Global User Interface" Style="{StaticResource SimpleButton}" Visibility="Collapsed">
-    			<Grid>
-    				<TextBlock Text="&#xE0AB;" FontSize="64" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,9" FontFamily="Segoe UI Symbol"/>
-    			</Grid>
-
-    		</Button>
-
-
-             
-    		<Grid x:Name="stackPanel" HorizontalAlignment="Left" Background="#CC000000" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
-            		
-    			<Grid.RenderTransform>
-    				<CompositeTransform/>
-    			</Grid.RenderTransform>
-            		<!--Source="Assets/WP8AppbarIcons/audio.png"-->
-    			<TextBlock x:Name="SearchLocationText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center" Grid.Column="1" FontSize="18.667" MaxLines="3" Margin="3,0"/>
-				<TextBlock x:Name="SearchingText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center" Grid.Column="1" FontSize="18.667" MaxLines="3" Margin="3,0"/>
-    		</Grid>
-
-
-
-    	</Canvas>
-        
-
     	<Maps:MapControl x:Name="MapCtrl"
     		LandmarksVisible="True"
-    		MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo" FontFamily="Global User Interface" PedestrianFeaturesVisible="True" Background="{x:Null}" ManipulationMode="All" ScrollViewer.VerticalScrollBarVisibility="Disabled" Opacity="1" IsHitTestVisible="True" IsDoubleTapEnabled="True"
+    		MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo" FontFamily="Global User Interface" PedestrianFeaturesVisible="True" Background="{x:Null}" ManipulationMode="All" ScrollViewer.VerticalScrollBarVisibility="Disabled" Opacity="1" IsHitTestVisible="True" IsDoubleTapEnabled="False"
            >
     		<Border x:Name="TouchPanel" ManipulationMode="All" Background="#00000000" Width="1000" Height="1000"/>
     		<Canvas x:Name="UserLocation" 
-			Maps:MapControl.NormalizedAnchorPoint="0.5,0.5" 
-			  Width="24" Height="24" Opacity="0" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
+    			Maps:MapControl.NormalizedAnchorPoint="0.5,0.5" 
+    			Width="26" Height="24" Opacity="0" 
+    			RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
     			<Canvas.RenderTransform>
-    				<CompositeTransform />
+    				<CompositeTransform Rotation="0"/>
     			</Canvas.RenderTransform>
 			  
     			<Path Data="M12.978,0.5 L24.3847,22.832 L24.3958,22.8558 C25.1051,24.4247 25.5,26.1662 25.5,28 C25.5,34.9036 19.9036,40.5 13,40.5 C6.09644,40.5 0.5,34.9036 0.5,28 C0.5,26.2741 0.849777,24.6299 1.48231,23.1344 L1.52754,23.031 z" Fill="Black" HorizontalAlignment="Center" Height="41" RenderTransformOrigin="0.5,0.286976" Stretch="Fill" Stroke="White" UseLayoutRounding="False" VerticalAlignment="Center" Width="26" Canvas.Top="-16"/>
-		<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
-			Width="20" Height="20" Stroke="White" StrokeThickness="2" Canvas.Top="2" Canvas.Left="3" 
+    			<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
+    				Width="20" Height="20" Stroke="White" StrokeThickness="2" Canvas.Top="2" Canvas.Left="3" 
 				/>
     		</Canvas>
         
@@ -945,11 +967,49 @@
     		<!--<Maps:MapItemsControl x:Name="MapItzems" ItemTemplate="{StaticResource EventPoiTemplate}" />-->
 
     	</Maps:MapControl>
-		<Border x:Name="GreyPanel" Background="Black" Width="1000" Height="1000" IsHitTestVisible="False" ManipulationMode="None" Opacity="0"/>
+			
+    	<Canvas x:Name="SearchLocationPoint" RenderTransformOrigin="0,0" 
+		 Opacity="0" 
+		Maps:MapControl.NormalizedAnchorPoint="0.5,1" Tapped="SearchLocationPoint_Tapped" Margin="0" IsHitTestVisible="False" ManipulationStarting="SearchLocationPoint_ManipulationStarting" ManipulationMode="All" >
+    		<Canvas.RenderTransform>
+    			<CompositeTransform/>
+    		</Canvas.RenderTransform>
+
+
+    		<Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6" IsHitTestVisible="False"/>
+    		<Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#CC000000" Width="16" Height="9.295" Canvas.Left="-8" Canvas.Top="-10" IsHitTestVisible="False"/>
+
+
+             
+    		<Grid HorizontalAlignment="Left" Background="#CC000000" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
+            		
+    			<Grid.RenderTransform>
+    				<CompositeTransform/>
+    			</Grid.RenderTransform>
+            		
+    			<TextBlock x:Name="SearchLocationText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center"  FontSize="18.667" MaxLines="3" Margin="3,0" RenderTransformOrigin="0.5,0.5" Foreground="White">
+    				<TextBlock.RenderTransform>
+    					<CompositeTransform/>
+    				</TextBlock.RenderTransform>
+    			</TextBlock>
+    			<TextBlock x:Name="SearchingText" HorizontalAlignment="Center" TextWrapping="Wrap" 
+    				Text="Searching..." VerticalAlignment="Center" FontSize="18.667" 
+					RenderTransformOrigin="0.5,0.5" Foreground="White">
+    				<TextBlock.RenderTransform>
+    					<CompositeTransform/>
+    				</TextBlock.RenderTransform>
+    			</TextBlock>
+    		</Grid>
+
+
+
+    	</Canvas>
+        
+
 		<RadioButton x:Name="NorthIndicator" Style="{StaticResource RadioButtonStyle1}"
 			GroupName="VelibParkingSwitch" IsChecked="True"
 			Background="#BF000000" BorderBrush="{x:Null}" MinWidth="0"
-			RenderTransformOrigin="0.5,0.5"  Margin="0,50,20,0" VerticalAlignment="Top" Width="60" Height="60" HorizontalAlignment="Right" Click="NorthIndicator_Click" Padding="0" FontFamily="Global User Interface" Opacity="0" Visibility="Collapsed">
+			RenderTransformOrigin="0.5,0.5"  Margin="0,50,20,0" VerticalAlignment="Top" Width="60" Height="60" HorizontalAlignment="Right" Click="NorthIndicator_Click" Padding="0" FontFamily="Global User Interface" Opacity="0" IsHitTestVisible="False">
 
 			<RadioButton.RenderTransform>
 				<CompositeTransform Rotation="0"/>
@@ -972,19 +1032,6 @@
 				
 			</Canvas>
 		</RadioButton>
-    	<Grid x:Name="grid" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0" d:IsHidden="True">
-    		<Grid.ColumnDefinitions>
-    			<ColumnDefinition Width="*"/>
-    			<ColumnDefinition Width="Auto"/>
-    		</Grid.ColumnDefinitions>
-    		<ProgressBar x:Name="SearchingProgressBar" Height="10" VerticalAlignment="Top" Grid.ColumnSpan="2" Visibility="Collapsed" IsIndeterminate="True"/>
-    		<ScrollViewer x:Name="scrollViewer" VerticalAlignment="Top" Margin="10,0" >
-    			<TextBox x:Name="SearchTextBox" VerticalAlignment="Center" PlaceholderText="address" FontFamily="Global User Interface" KeyUp="AddressTextBox_KeyUp"/>
-    		</ScrollViewer>
-    		<TextBlock x:Name="SearchStatusTextBlock" HorizontalAlignment="Left" 
-    			
-    			TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Margin="10,55,0,0" IsHitTestVisible="False"/>
-    	</Grid>
             
 			
     	<RadioButton x:Name="RadioButtonVelib" Style="{StaticResource RadioButtonStyle1}"
@@ -1001,6 +1048,24 @@
 		  Background="#BF000000" BorderBrush="{x:Null}" MinWidth="0" Width="40" Height="40" HorizontalAlignment="Right" FontFamily="Global User Interface" Visibility="Collapsed">
 		 	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="P" VerticalAlignment="Center" Foreground="White" FontSize="26.667" FontFamily="Global User Interface" FontWeight="Bold" Margin="2,3,0,0"/>
 			</RadioButton>
+		<Border x:Name="GreyPanel" Background="Black" Width="1000" Height="1000" IsHitTestVisible="False" ManipulationMode="None" Opacity="0" RenderTransformOrigin="0.5,0.5">
+			<Border.RenderTransform>
+				<CompositeTransform/>
+			</Border.RenderTransform>
+		</Border>
+    	<Grid x:Name="grid" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0">
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition Width="*"/>
+    			<ColumnDefinition Width="Auto"/>
+    		</Grid.ColumnDefinitions>
+    		<ProgressBar x:Name="SearchingProgressBar" Height="10" VerticalAlignment="Top" Grid.ColumnSpan="2" Visibility="Collapsed" IsIndeterminate="True"/>
+    		<ScrollViewer x:Name="scrollViewer" VerticalAlignment="Top" Margin="10,0" >
+    			<TextBox x:Name="SearchTextBox" VerticalAlignment="Center" PlaceholderText="address" FontFamily="Global User Interface" KeyUp="AddressTextBox_KeyUp"/>
+    		</ScrollViewer>
+    		<TextBlock x:Name="SearchStatusTextBlock" HorizontalAlignment="Left" 
+    			
+    			TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Margin="10,55,0,0" IsHitTestVisible="False"/>
+    	</Grid>
     	<ToggleButton x:Name="ToggleButtonVelibParking" 
 		   HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource ToggleButtonStyle1}" Background="#BD000000" MinWidth="0" MinHeight="0" BorderBrush="{x:Null}" FontFamily="Global User Interface" Margin="0,0,16,20" Click="ToggleButtonVelibParking_Click"/>
     </Grid>

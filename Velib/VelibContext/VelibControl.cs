@@ -23,6 +23,8 @@ namespace Velib.VelibContext
         {
             this.map = map;
             this.Tapped += VelibControl_Tapped;
+            this.ManipulationMode = Windows.UI.Xaml.Input.ManipulationModes.All;
+        
         }
 
 
@@ -77,6 +79,7 @@ namespace Velib.VelibContext
             {
                 new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
                 SwitchModeVelibParking();
+                
             }
             else if(Velibs.Count > 1)
             {
@@ -89,7 +92,8 @@ namespace Velib.VelibContext
         public void SwitchModeVelibParking()
         {
             ShowVelibStation();
-            if (Velibs[0].Loaded && MainPage.BikeMode) {
+            if (Velibs[0].Loaded && MainPage.BikeMode)
+            {
                 Velibs[0].AvailableStr = Velibs[0].AvailableBikes.ToString();
                 ShowColor(Velibs[0].AvailableBikes);
             }
@@ -128,28 +132,60 @@ namespace Velib.VelibContext
         }
         public void ShowVelibStation()
         {
+           
+
             VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);
             VisualStateManager.GoToState(this, "Normal", false);
-            var velib = Velibs.FirstOrDefault();
-            if(velib!= null && velib.Selected)
-                VisualStateManager.GoToState(this, "ShowSelected", true);
-            else
-                VisualStateManager.GoToState(this, "HideSelected", true);
+            //if(velib!= null && velib.Selected)
+            //    VisualStateManager.GoToState(this, "ShowSelected", true);
+            //else
+            //    VisualStateManager.GoToState(this, "HideSelected", true);
+         
+                
         }
-        public void ShowColor(int velibNumber)
+        public void ShowStationColor()
+        {
+            var station = Velibs.FirstOrDefault();
+            if (MainPage.BikeMode)
+            {
+                station.AvailableStr = station.AvailableBikes.ToString();
+                ShowColor(station.AvailableBikes);
+
+            }
+            else
+            {
+                station.AvailableStr = station.AvailableBikeStands.ToString();
+                ShowColor(station.AvailableBikeStands);
+            }
+        }
+
+
+        public enum VisualStateColor
+        {
+            notLoaded,
+            other
+        }
+        public VisualStateColor CurrentVisualStateColor;
+        private void ShowColor(int velibNumber)
         {
             if (Velibs.Count != 1)
                 return;
 
-            if (velibNumber == -1)
+            if (velibNumber == -1){
+                CurrentVisualStateColor = VelibControl.VisualStateColor.notLoaded;
                 VisualStateManager.GoToState(this, "Normal", false);
-            else if (velibNumber == 0)
+            }
+            else{
+                CurrentVisualStateColor = VelibControl.VisualStateColor.other;
+                if (velibNumber == 0)
                 VisualStateManager.GoToState(this, "ShowRedVelib", false);
             else if (velibNumber < 5)
                 VisualStateManager.GoToState(this, "ShowOrangeVelib", false);
             else if (velibNumber >= 5)
                 VisualStateManager.GoToState(this, "ShowGreenVelib", false);
+            }
+            
         }
 
         public void Hide()

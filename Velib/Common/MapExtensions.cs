@@ -7,6 +7,7 @@ using Velib.VelibContext;
 using VelibContext;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
+using Windows.Services.Maps;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Maps;
 
@@ -110,6 +111,13 @@ namespace Velib.Common
             
         }
 
+        public static string ParseMapLocationFinderResultAddress(this MapLocationFinderResult result){
+            var address = result.Locations[0].Address.StreetNumber + " " + result.Locations[0].Address.Street
+                    + " " + result.Locations[0].Address.PostCode + " " + result.Locations[0].Address.Town ;
+                 if(!string.IsNullOrWhiteSpace(address ))
+                    address +=  " " + result.Locations[0].Address.Country; 
+                return address;
+        }
 
         public static GeoboundingBox GetAreaFromLocations(List<Geopoint> geopoints)
         {

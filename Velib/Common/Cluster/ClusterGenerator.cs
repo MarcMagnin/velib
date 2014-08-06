@@ -153,7 +153,7 @@ namespace Velib.Common.Cluster
             bool added = false;
             // merge to other velib cluster if required
             // otherwise create a new cluster
-            foreach (var allreadyAddedVelib in Items)
+            foreach (var allreadyAddedVelib in Items.ToList())
             {
                 double distance = allreadyAddedVelib.VelibControl.GetOffsetLocation2(leftCornerLocation, zoomLevel)
                     .GetDistanceTo(velib.GetOffsetLocation2(leftCornerLocation, zoomLevel));

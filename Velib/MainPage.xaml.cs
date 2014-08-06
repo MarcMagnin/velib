@@ -60,12 +60,11 @@ namespace Velib
         private Geolocator gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.High, MovementThreshold = 5, ReportInterval = 1000 };
         private Geopoint userLastLocation;
         private ClustersGenerator clusterGenerator;
-        private CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+        public static CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         public static bool BikeMode = true;
         private Compass compass = Compass.GetDefault();
         public static MapControl Map;
         public static MainPage mainPage;
-
         Storyboard NorthIndicatorStoryboard;
         DoubleAnimation NorthIndicatorRotationAnimation;
 
@@ -76,7 +75,6 @@ namespace Velib
             this.InitializeComponent();
 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-
             Map = MapCtrl;
             mainPage = this;
             // Hub est pris en charge uniquement en mode Portrait
@@ -404,10 +402,10 @@ namespace Velib
 
             
             
-            dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                UpdateNorthElementAngle(angle);
-                UpdateUserLocationElementAngle(-angle);
+                UpdateNorthElementAngle(MapCtrl.Heading);
+                UpdateUserLocationElementAngle(angle);
                 if (compassMode){
                     //.Heading = angle;
                     SetView(null, null, angle, null, MapAnimationKind.Linear);
@@ -421,20 +419,43 @@ namespace Velib
             });
 
         }
+
+        Geopoint previousBigChangeInUserLocation;
         async void gl_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
             userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Longitude, Latitude = args.Position.Coordinate.Latitude });
+            if (previousBigChangeInUserLocation == null)
+                previousBigChangeInUserLocation = userLastLocation;
+            
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                ShowUserLocation();
+                var pixelDistance = userLastLocation.Position.GetDistancePixel(MapCtrl.Center.Position, MapCtrl.ZoomLevel);
+                // recalculate route if there is any big change in the position
+                if (MapCtrl.Routes.Count > 0)
+                {
+                    if (previousBigChangeInUserLocation.Position.GetDistancePixel(userLastLocation.Position, MapCtrl.ZoomLevel) > 50)
+                    {
+                        previousBigChangeInUserLocation = userLastLocation;
+                        GetRoute(LastSearchGeopoint);
+                    }
+                }
                 if (stickToUserLocation)
                 {
-                    // only move center if the userlocation is far from the center
-                    if (userLastLocation.Position.GetDistancePixel(MapCtrl.Center.Position, MapCtrl.ZoomLevel) > 50)
-                        SetView(userLastLocation, null, null, null, MapAnimationKind.Linear);
-                        //MapCtrl.TrySetViewAsync(userLastLocation, MapCtrl.ZoomLevel, null, null, MapAnimationKind.Default);
+                    if (compassMode)
+                        SetView(userLastLocation, null, null, null, MapAnimationKind.None);
+                    else
+                    {
+                        // only move center if the userlocation is far from the center
+                        if (pixelDistance > 50)
+                        {
+                            SetView(userLastLocation, null, null, null, MapAnimationKind.Linear);
+                        }
+                    }
                 }
+                ShowUserLocation();
+                
             });
+
         }
 
 
@@ -467,11 +488,21 @@ namespace Velib
 
         private async void MapCtrl_DoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
-            double zoom = MapCtrl.ZoomLevel++;
+            double zoom = MapCtrl.ZoomLevel + 1;
             if (zoom > 20)
                 zoom = 20;
-            SetView(null, zoom, null, null, MapAnimationKind.None);
-            //await MapCtrl.TrySetViewAsync(MapCtrl.Center, zoom, null, null, MapAnimationKind.None);
+            
+            if(stickToUserLocation){
+                await MapCtrl.TrySetViewAsync(userLastLocation, zoom, null, null, MapAnimationKind.None);
+            }
+                //SetView(null, zoom, null, null, MapAnimationKind.None);
+            else
+            {
+                Geopoint location;
+                MapCtrl.GetLocationFromOffset(e.GetPosition(MapCtrl), out location);
+                await MapCtrl.TrySetViewAsync(location, zoom, null, null, MapAnimationKind.None);
+            }
+                
         }
 
 
@@ -541,8 +572,9 @@ namespace Velib
 
                 lastSearchLocationResult = result;
                 MapCtrl.Center = result.Locations.FirstOrDefault().Point;
-                SearchLocationText.Text = SearchTextBox.Text + result.Locations[0].DisplayName;
-                ShowSearchLocationPoint(result.Locations.FirstOrDefault().Point, string.Empty);
+                
+                SearchLocationText.Text =result.ParseMapLocationFinderResultAddress() ;
+                ShowSearchLocationPoint(result.Locations.FirstOrDefault().Point, SearchLocationText.Text);
                 HideSearch();
 
                 
@@ -611,14 +643,46 @@ namespace Velib
                 HideSearch();
             }
         }
+        public void GetRoute(Geopoint point, Favorite favorit= null){
+             if (SearchRouteCancellationToken == null)
+                SearchRouteCancellationToken = new CancellationTokenSource();
+            else
+                SearchRouteCancellationToken.Cancel();
+            SearchRouteCancellationToken = new CancellationTokenSource();
+            GetRouteWithToken(point, SearchRouteCancellationToken.Token, favorit);
+        }
+
+        MapRoute previousMapRoute;
+        public async void GetRouteWithToken(Geopoint endPoint, CancellationToken token, Favorite favorite = null)
+        {
 
 
 
-        public async void GetRoute(Geopoint endPoint, CancellationToken token){
+            if (favorite != null)
+            {
+                ShowSearchLocationPoint(endPoint, favorite.Name);
+                if (userLastLocation == null)
+                {
+                    var dialog = new MessageDialog(
+                        "To get there, the phone must find your location first. Please wait a bit an try again.");
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    {
+                        await dialog.ShowAsync();
+                    });
+                    return;
+
+
+                    
+                }
+                // Fit the MapControl to the route.
+                await MapCtrl.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(new List<Geopoint>() { userLastLocation, endPoint }),
+                    new Thickness(40, 40, 40, 40), MapAnimationKind.None);
+
+            }
+
             if (userLastLocation == null)
                 return;
 
-            
             // Get the route between the points.
                 MapRouteFinderResult routeResult =
                     await MapRouteFinder.GetWalkingRouteAsync(
@@ -630,29 +694,34 @@ namespace Velib
                 {
                     return;
                 }
-                    
+
+
 
                 if (routeResult.Status == MapRouteFinderStatus.Success)
                 {
+
                     // Use the route to initialize a MapRouteView.
                     MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
                     viewOfRoute.RouteColor = new SolidColorBrush((Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color).Color;
                     viewOfRoute.OutlineColor = Colors.Black;
 
 
-                    MapCtrl.Routes.Clear();
-                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
-                        // Add the new MapRouteView to the Routes collection
-                        // of the MapControl.
-                        MapCtrl.Routes.Add(viewOfRoute);
-                      
-                        ShowUserLocation();
-                    });
+                    if (previousMapRoute == null || previousMapRoute.LengthInMeters != routeResult.Route.LengthInMeters)
+                    {
 
-                }
-                else
-                {
-                    GetRoute(endPoint, token);
+                           
+
+                        MapCtrl.Routes.Clear() ;
+                        Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
+                            // Add the new MapRouteView to the Routes collection
+                            // of the MapControl.
+                            MapCtrl.Routes.Add(viewOfRoute);
+                      
+                            ShowUserLocation();
+                            
+                        });
+                    }
+                    previousMapRoute= routeResult.Route;
                 }
 
         }
@@ -671,12 +740,8 @@ namespace Velib
         {
                 
 
-
-            if (PreviousSelectedItem == item && !skipFlyout)
-            {
-                VelibFlyout.ShowAt(this);
-            }
-
+            
+            
 
             //if (item == SearchLocationPoint && PreviousSelectedItem != null && PreviousSelectedItem is VelibControl)
             //{
@@ -691,18 +756,21 @@ namespace Velib
                 LastSearchGeopoint = SearchLocationPoint.GetValue(MapControl.LocationProperty) as Geopoint;
             }
 
+            
+
+
             if (item is VelibControl)
             {
                 var control = item as VelibControl;
-                VisualStateManager.GoToState(control, "Clear", true);
-                VisualStateManager.GoToState(control, "Click", true);
+               
                 VisualStateManager.GoToState(control, "ShowSelected", true);
                 
                 
-                // Show the route
+                
                 var velib = control.Velibs.FirstOrDefault();
                 if (velib != null)
                 {
+                    LastSearchGeopoint = velib.Location;
                     if (PreviousSelectedVelibStation != null)
                     {
                         var prevControl = PreviousSelectedVelibStation.VelibControl as Control;
@@ -714,7 +782,7 @@ namespace Velib
                     }
                     velib.Selected = true;
                     PreviousSelectedVelibStation = velib;
-                    LastSearchGeopoint = velib.Location;
+
                     
                   
                 }
@@ -732,14 +800,21 @@ namespace Velib
 
 
             }
+            if (PreviousSelectedItem == item && !skipFlyout)
+            {
+                VelibFlyout.ShowAt(this);
+            }
 
-            if (SearchRouteCancellationToken == null)
-                SearchRouteCancellationToken = new CancellationTokenSource();
+            // Show the route if the user is at least 30 KM from the selected item
+            if (userLastLocation != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 30)
+            {
+                GetRoute(LastSearchGeopoint);
+            }
             else
-                SearchRouteCancellationToken.Cancel();
-            SearchRouteCancellationToken = new CancellationTokenSource();
-            GetRoute(LastSearchGeopoint, SearchRouteCancellationToken.Token);
+            {
+                VelibFlyout.ShowAt(this);
 
+            }
             PreviousSelectedItem = item;
 
 
@@ -748,32 +823,38 @@ namespace Velib
         private void ShowSearchLocationPoint(Geopoint location, string name)
         {
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
-
-                SearchLocationPoint.SetValue(MapControl.LocationProperty, location);
                 
+                SearchLocationPoint.SetValue(MapControl.LocationProperty, location);
+
+                // le nom est précisé, c'est une localisation pour un favoris
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    SearchLocationText.Text = name;
+                    VisualStateManager.GoToState(this, "SearchAddressPinSearchedFinished", true);
+                }
+                else
+                {
+                    VisualStateManager.GoToState(this, "SearchAddressPinSearching", true);
+                }
+                    
+                VisualStateManager.GoToState(this, "SearchLocationHide", true);
+                VisualStateManager.GoToState(this, "SearchLocationShow", true);
+
+                
+
+
                 SelectItem(SearchLocationPoint, true);
 
-                if (!string.IsNullOrWhiteSpace(name))
-                    SearchLocationText.Text = name;
+
 
                 // put the canvas on the map this way cause zindex is not working
                 if (LayoutRoot.Children.Remove(SearchLocationPoint))
                 {
                     MapCtrl.Children.Add(SearchLocationPoint);
                 }
-                SearchLocationPoint.Opacity = 1;
-                SearchLocationPoint.Visibility = Visibility.Visible;
-                //SearchLocationPoint.SetValue(Canvas.ZIndexProperty, 1000);
-                //SearchLocationPoint.SetValue(MapElement.ZIndexProperty, 1000);
-                SearchButtonGoLocation.IsHitTestVisible = true;
                 
 
-                if (SearchRouteCancellationToken == null)
-                    SearchRouteCancellationToken = new CancellationTokenSource();
-                else
-                    SearchRouteCancellationToken.Cancel();
-                SearchRouteCancellationToken = new CancellationTokenSource();
-                GetRoute(location, SearchRouteCancellationToken.Token);
+                GetRoute(location);
             });
             
             
@@ -787,12 +868,15 @@ namespace Velib
             // prevent twice holding
             if (e.HoldingState == Windows.UI.Input.HoldingState.Completed)
                 return;
-            SearchLocationText.Text = "Searching address...";
+
+            
             Geopoint point;
             MapCtrl.GetLocationFromOffset(e.GetPosition(MapCtrl), out point);
             LastSearchGeopoint = point;
 
             ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
+
+            //MapCtrl.TrySetViewAsync(LastSearchGeopoint,null,null,null,MapAnimationKind.None);
 
             if (reverseGeocodeCancellationTokenSource == null)
                 reverseGeocodeCancellationTokenSource = new CancellationTokenSource();
@@ -802,21 +886,6 @@ namespace Velib
             ReverseGeocode(LastSearchGeopoint, reverseGeocodeCancellationTokenSource.Token);
         }
 
-        private async void MapCtrl_MapHolding(Windows.UI.Xaml.Controls.Maps.MapControl sender, Windows.UI.Xaml.Controls.Maps.MapInputEventArgs args)
-        {
-            SearchLocationText.Text = "Searching address...";
-            LastSearchGeopoint = args.Location;
-
-            ShowSearchLocationPoint(args.Location, string.Empty);
-            
-            if (reverseGeocodeCancellationTokenSource == null)
-                reverseGeocodeCancellationTokenSource = new CancellationTokenSource();
-            else
-                reverseGeocodeCancellationTokenSource.Cancel();
-            reverseGeocodeCancellationTokenSource = new CancellationTokenSource();
-            ReverseGeocode(args.Location, reverseGeocodeCancellationTokenSource.Token);
-
-        }
         private async void ReverseGeocode(Geopoint location, CancellationToken token)
         {
             stickToUserLocation = false;
@@ -827,53 +896,58 @@ namespace Velib
             var searchedText = "";
              if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count > 0)
             {
-                 searchedText = result.Locations[0].Address.StreetNumber + " " + result.Locations[0].Address.Street
-                    + " " + result.Locations[0].Address.PostCode + " " + result.Locations[0].Address.Town ;
-                 if(!string.IsNullOrWhiteSpace(searchedText)){
-                     searchedText +=  " " + result.Locations[0].Address.Country;
-                 }
+                 searchedText = result.ParseMapLocationFinderResultAddress();
             }
+
+             
 
             if(string.IsNullOrWhiteSpace(searchedText))
              SearchLocationText.Text = "No address found.";
             else
                 SearchLocationText.Text = searchedText.Trim();
 
+            VisualStateManager.GoToState(this, "SearchAddressPinSearchedFinished", true);
         }
 
 
         double angleCorrectionUserLoc;
         double previousAngleUserLoc;
+        bool triggerReinitRotation;
         #endregion
         public void UpdateUserLocationElementAngle( double angle)
         {
 
-            Debug.WriteLine(angle);
             double modifiedAngleUserLoc = angle ;
+
+
             if (compassMode) {
+                
                 modifiedAngleUserLoc = 0;
+            //    UserLocationRotationAnimation.From = 0;
             }
             else
             {
                 if (angle - previousAngleUserLoc > 150)
                 {
                     angleCorrectionUserLoc = 360;
+              //      UserLocationRotationAnimation.From = 0;
                 }
                 else if (angle - previousAngleUserLoc < -150)
                 {
                     angleCorrectionUserLoc = 0;
+                //    UserLocationRotationAnimation.From = 0;
                 }
-                modifiedAngleUserLoc = -(angleCorrectionUserLoc - angle);
+                modifiedAngleUserLoc = angle - angleCorrectionUserLoc;
 
             }
-
-            Debug.WriteLine("m" + modifiedAngleUserLoc);
             UserLocationRotationAnimation.To = modifiedAngleUserLoc;
+
+
             UserLocationStoryboard.Begin();
 
-            
 
-            previousAngle = angle;
+
+            previousAngleUserLoc = angle;
         }   
         
         
@@ -1021,16 +1095,7 @@ namespace Velib
 
         internal async void GetNearestStationRoute(Favorite favorit, CancellationToken token )
         {
-            if (userLastLocation == null)
-            {
-                var dialog = new MessageDialog(
-                    "To get there, the phone must find your location first. Please wait a bit an try again.");
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    await dialog.ShowAsync();
-                });
-                return;
-            }
+           
                 
             var destination = new Geopoint(
                             new BasicGeoposition() { Latitude = favorit.Latitude, 
@@ -1043,9 +1108,7 @@ namespace Velib
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 ShowUserLocation();
-                // Fit the MapControl to the route.
-                await MapCtrl.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(new List<Geopoint>() {  userLastLocation ,destination }), 
-                    new Thickness(40, 40, 40, 40), MapAnimationKind.Default);
+                
                     
             });
 
@@ -1084,8 +1147,6 @@ namespace Velib
 
         private void SearchLocationPoint_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            VisualStateManager.GoToState(this, "SearchLocationClear", true);
-            VisualStateManager.GoToState(this, "SearchLocationClick", true);
             SelectItem(SearchLocationPoint, false);
             //
             //VelibFlyout.ShowAt(this);
@@ -1101,6 +1162,24 @@ namespace Velib
             
         }
 
+        private void SearchLocationPoint_ManipulationStarting(object sender, Windows.UI.Xaml.Input.ManipulationStartingRoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, "SearchLocationClear", true);
+            VisualStateManager.GoToState(this, "SearchLocationClick", true);
+          
+        }
+
+        private void VelibTemplateStationRootCanvas_ManipulationStarting(object sender, Windows.UI.Xaml.Input.ManipulationStartingRoutedEventArgs e)
+        {
+            var model = (sender as Canvas).DataContext as VelibModel;
+            if (model != null && model.VelibControl != null) {
+                VisualStateManager.GoToState(model.VelibControl, "Clear", true);
+                VisualStateManager.GoToState(model.VelibControl, "Click", true);
+            }
+        
+        }
+
+      
        
     }
 }

@@ -19,6 +19,9 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.UI.Xaml.Controls.Maps;
+using Windows.UI.Core;
+using Windows.UI.Popups;
+using System.Threading.Tasks;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -30,18 +33,26 @@ namespace Velib
     public sealed partial class App : Application
     {
         private TransitionCollection transitions;
-
         /// <summary>
         /// Initialise l'objet d'application de singleton.  Il s'agit de la première ligne du code créé
         /// à être exécutée. Elle correspond donc à l'équivalent logique de main() ou WinMain().
         /// </summary>
         public App()
-        {
+        {   
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             
             //this.DebugSettings.EnableRedrawRegions = true;
             this.Resuming += App_Resuming;
+            this.UnhandledException += App_UnhandledException;
+        }
+
+        async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var dialog = new MessageDialog(e.Message + e.Exception.InnerException + e.Exception.StackTrace);
+            await dialog.ShowAsync();
+            await Task.Delay(5000);
+            e.Handled = true;
         }
 
         

@@ -93,10 +93,13 @@
     <Compile Include="Common\SerializationExtensions.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
+    <Compile Include="Contracts\ContractJCDecauxVelib.cs" />
     <Compile Include="Contracts\ContractsPage.xaml.cs">
       <DependentUpon>ContractsPage.xaml</DependentUpon>
     </Compile>
     <None Include="Contracts\SampleData.json" />
+    <Compile Include="Contracts\ContractTFLLondon.cs" />
+    <Compile Include="Contracts\Models\TFLModel.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="drawingPage.xaml.cs">
       <DependentUpon>drawingPage.xaml</DependentUpon>
