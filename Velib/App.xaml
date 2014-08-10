@@ -10,6 +10,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <converters:BoolToVisConverter x:Key="BoolToVisConverter"></converters:BoolToVisConverter>
+            <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"></converters:NullOrEmptyToVisibilityConverter>
             <Thickness x:Key="PhoneBorderThickness">2.5</Thickness>
             <FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
             <FontWeight x:Key="PhoneButtonFontWeight">Semibold</FontWeight>

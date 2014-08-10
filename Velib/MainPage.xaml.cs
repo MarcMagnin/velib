@@ -44,6 +44,7 @@ using System.Threading;
 using System.Globalization;
 using Velib.Favorits;
 using Windows.UI.Xaml.Media.Animation;
+using Velib.Tutorial;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -67,7 +68,7 @@ namespace Velib
         public static MainPage mainPage;
         Storyboard NorthIndicatorStoryboard;
         DoubleAnimation NorthIndicatorRotationAnimation;
-
+        Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         Storyboard UserLocationStoryboard;
         DoubleAnimation UserLocationRotationAnimation;
         public MainPage()
@@ -78,12 +79,9 @@ namespace Velib
             Map = MapCtrl;
             mainPage = this;
             // Hub est pris en charge uniquement en mode Portrait
-            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
-
-            
-
+           // DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
             MapCtrl.Center = new Geopoint(new BasicGeoposition { Latitude = 48.8791, Longitude = 2.354 });
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
             if (Windows.Storage.ApplicationData.Current.LocalSettings.Values["PreviousMapCenterLat"] != null)
             {
                 MapCtrl.Center = new Geopoint(new BasicGeoposition { Latitude = (double)localSettings.Values["PreviousMapCenterLat"] 
@@ -123,6 +121,7 @@ namespace Velib
         {
             this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
             HideSearch();
+
         }
 
         void TouchPanel_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -608,7 +607,8 @@ namespace Velib
         private void SearchButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             VelibFlyout.Hide();
-            
+            FavoriteFlyout.Hide();
+
             if (actionVisisible && string.IsNullOrWhiteSpace(SearchTextBox.Text))
             {
                 HideSearch();
@@ -644,9 +644,9 @@ namespace Velib
             }
         }
         public void GetRoute(Geopoint point, Favorite favorit= null){
-             if (SearchRouteCancellationToken == null)
-                SearchRouteCancellationToken = new CancellationTokenSource();
-            else
+            HideSearch();
+
+             if (SearchRouteCancellationToken != null)
                 SearchRouteCancellationToken.Cancel();
             SearchRouteCancellationToken = new CancellationTokenSource();
             GetRouteWithToken(point, SearchRouteCancellationToken.Token, favorit);
@@ -709,9 +709,9 @@ namespace Velib
                     if (previousMapRoute == null || previousMapRoute.LengthInMeters != routeResult.Route.LengthInMeters)
                     {
 
-                           
 
-                        MapCtrl.Routes.Clear() ;
+
+                        MapCtrl.Routes.Clear();
                         Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
                             // Add the new MapRouteView to the Routes collection
                             // of the MapControl.
@@ -722,6 +722,10 @@ namespace Velib
                         });
                     }
                     previousMapRoute= routeResult.Route;
+                }
+                else
+                {
+                    MapCtrl.Routes.Clear();
                 }
 
         }
@@ -805,8 +809,8 @@ namespace Velib
                 VelibFlyout.ShowAt(this);
             }
 
-            // Show the route if the user is at least 30 KM from the selected item
-            if (userLastLocation != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 30)
+            // Show the route if the user is at least 15 KM from the selected item
+            if (userLastLocation != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 15)
             {
                 GetRoute(LastSearchGeopoint);
             }
@@ -854,7 +858,7 @@ namespace Velib
                 }
                 
 
-                GetRoute(location);
+                
             });
             
             
@@ -1024,6 +1028,7 @@ namespace Velib
         private void FavoritsButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             VelibFlyout.Hide();
+            FavoriteFlyout.Hide();
             Frame.Navigate(typeof(FavoritsPage));
         }
 
@@ -1177,6 +1182,18 @@ namespace Velib
                 VisualStateManager.GoToState(model.VelibControl, "Click", true);
             }
         
+        }
+
+        private async void CrashLogsButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var dialog = new MessageDialog(localSettings.Values["CrashLog"] == null ? "" : localSettings.Values["CrashLog"].ToString());
+            await dialog.ShowAsync();	
+        }
+
+
+        private void HowToUseThisAppButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+        	Frame.Navigate(typeof(HowTo));
         }
 
       

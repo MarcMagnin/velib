@@ -636,7 +636,9 @@
 			<CommandBar.SecondaryCommands>
 				<AppBarButton Icon="Download" Label="download cities" 
 					Click="DownloadCitiesButton_Click"/>
+				<AppBarButton Label="how to use this app" Click="HowToUseThisAppButton_Click" />
 				<AppBarButton Label="about"/>
+				<AppBarButton Label="show crash logs" Click="CrashLogsButton_Click" Visibility="Collapsed"/>
 			</CommandBar.SecondaryCommands>
 			<AppBarButton x:Name="FavoritsButton"  Label="Favorites" Icon="Favorite" Click="FavoritsButton_Click"/>
 			<AppBarButton x:Name="LocationButton" Click="AppBarButton_Click" Label="Location" Icon="Target" FontFamily="Global User Interface"/>
@@ -644,7 +646,7 @@
 		</CommandBar>
 	</Page.BottomAppBar>
 
-    <Grid x:Name="LayoutRoot" Margin="0" Background="{x:Null}" Visibility="Visible">
+    <Grid x:Name="LayoutRoot" Margin="0" Background="{x:Null}">
     	<FlyoutBase.AttachedFlyout>
     		<Flyout x:Name="VelibFlyout"  d:IsHidden="True" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}">
 					
@@ -977,11 +979,11 @@
 
 
     		<Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6" IsHitTestVisible="False"/>
-    		<Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#CC000000" Width="16" Height="9.295" Canvas.Left="-8" Canvas.Top="-10" IsHitTestVisible="False"/>
+    		<Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#CC1F1F1F" Width="16" Height="9.295" Canvas.Left="-8" Canvas.Top="-10" IsHitTestVisible="False"/>
 
 
              
-    		<Grid HorizontalAlignment="Left" Background="#CC000000" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
+    		<Grid HorizontalAlignment="Left" Background="#CC1F1F1F" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
             		
     			<Grid.RenderTransform>
     				<CompositeTransform/>
@@ -1008,7 +1010,7 @@
 
 		<RadioButton x:Name="NorthIndicator" Style="{StaticResource RadioButtonStyle1}"
 			GroupName="VelibParkingSwitch" IsChecked="True"
-			Background="#BF000000" BorderBrush="{x:Null}" MinWidth="0"
+			Background="#CC1F1F1F" BorderBrush="{x:Null}" MinWidth="0"
 			RenderTransformOrigin="0.5,0.5"  Margin="0,50,20,0" VerticalAlignment="Top" Width="60" Height="60" HorizontalAlignment="Right" Click="NorthIndicator_Click" Padding="0" FontFamily="Global User Interface" Opacity="0" IsHitTestVisible="False">
 
 			<RadioButton.RenderTransform>
@@ -1067,6 +1069,6 @@
     			TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Margin="10,55,0,0" IsHitTestVisible="False"/>
     	</Grid>
     	<ToggleButton x:Name="ToggleButtonVelibParking" 
-		   HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource ToggleButtonStyle1}" Background="#BD000000" MinWidth="0" MinHeight="0" BorderBrush="{x:Null}" FontFamily="Global User Interface" Margin="0,0,16,20" Click="ToggleButtonVelibParking_Click"/>
+		   HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource ToggleButtonStyle1}" Background="#CC1F1F1F" MinWidth="0" MinHeight="0" BorderBrush="{x:Null}" FontFamily="Global User Interface" Margin="0,0,16,20" Click="ToggleButtonVelibParking_Click"/>
     </Grid>
 </Page>

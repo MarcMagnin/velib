@@ -85,6 +85,8 @@
     </Compile>
     <Compile Include="Common\Cluster\ClusterGenerator.cs" />
     <Compile Include="Common\Converters\BoolToVisConverter.cs" />
+    <Compile Include="Common\Converters\NullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Common\GZipHttpClient.cs" />
     <Compile Include="Common\MapElementData.cs" />
     <Compile Include="Common\MapExtensions.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
@@ -93,13 +95,19 @@
     <Compile Include="Common\SerializationExtensions.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
-    <Compile Include="Contracts\ContractJCDecauxVelib.cs" />
+    <Compile Include="Contracts\Models\FR\ContractJCDecauxVelib.cs" />
     <Compile Include="Contracts\ContractsPage.xaml.cs">
       <DependentUpon>ContractsPage.xaml</DependentUpon>
     </Compile>
     <None Include="Contracts\SampleData.json" />
-    <Compile Include="Contracts\ContractTFLLondon.cs" />
-    <Compile Include="Contracts\Models\TFLModel.cs" />
+    <Compile Include="Contracts\Models\UK\ContractTFLLondon.cs" />
+    <Compile Include="Contracts\Models\UK\TFLModel.cs" />
+    <Compile Include="Contracts\Models\US\New York\CitiBikeContract.cs" />
+    <Compile Include="Contracts\Models\US\New York\CitiBikeModel.cs" />
+    <Compile Include="Contracts\Models\US\Chicago\DivyBikeContract.cs" />
+    <Compile Include="Contracts\Models\US\Chicago\DivyBikeModel.cs" />
+    <Compile Include="Contracts\Models\US\Washington\CapitalBikeShareModel.cs" />
+    <Compile Include="Contracts\Models\US\Washington\CapitalBikeShareContract.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="drawingPage.xaml.cs">
       <DependentUpon>drawingPage.xaml</DependentUpon>
@@ -120,6 +128,11 @@
       <DependentUpon>SectionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Contracts\ContractsViewModel.cs" />
+    <Compile Include="Tutorial\HowTo.xaml.cs">
+      <DependentUpon>HowTo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tutorial\HowToModel.cs" />
+    <Compile Include="Tutorial\HowToViewModel.cs" />
     <Compile Include="VelibContext\Velib.cs" />
     <Compile Include="VelibContext\VelibCluster.cs" />
     <Compile Include="VelibContext\VelibControl.cs" />
@@ -193,6 +206,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Tutorial\HowTo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Core">
@@ -210,6 +227,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Tutorial\addressSearch.png" />
+    <Content Include="Tutorial\addToFavorites.png" />
+    <Content Include="Tutorial\compass.png" />
+    <Content Include="Tutorial\cyclemode.png" />
+    <Content Include="Tutorial\downloadcities.png" />
+    <Content Include="Tutorial\downloadcities2.png" />
+    <Content Include="Tutorial\favorits.png" />
+    <Content Include="Tutorial\mapHolding.png" />
+    <Content Include="Tutorial\parkingmode.png" />
+    <Content Include="Tutorial\path.PNG" />
     <Content Include="VelibContext\velibsParis.json" />
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +252,11 @@
     <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

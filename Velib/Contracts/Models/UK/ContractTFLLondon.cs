@@ -56,7 +56,6 @@ namespace Velib.Contracts
                                     {
                                         foreach (var velibModel in Velibs)
                                         {
-                                            velibModel.Reload = false;
                                             if (velibModel.Number == station.id)
                                             {
                                                 if (MainPage.BikeMode && velibModel.AvailableBikes != station.nbBikes)
@@ -72,30 +71,26 @@ namespace Velib.Contracts
                                                 }
                                                 velibModel.AvailableBikes = station.nbBikes;
                                                 velibModel.AvailableBikeStands = station.nbEmptyDocks;
+                                                velibModel.Loaded = true;
+                                                break;
                                             }
-                                            velibModel.Loaded = true;
+                                            
                                         }
                                     }
 
                                     await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                                     {
-                                        foreach (var velibControl in Velibs.Where(t => t.VelibControl != null).Select(t => t.VelibControl))
+                                      foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1 ))
                                         {
-
-                                            if (velibControl.Velibs.Count != 1)
-                                                continue;
-                                            var station = velibControl.Velibs.FirstOrDefault();
-                                            if (station == null)
-                                                continue;
-
-                                            if (station.Reload )
+                                            var control = station.VelibControl;
+                                            if (control != null)
                                             {
-                                                velibControl.ShowVelibStation();
-                                                velibControl.ShowStationColor();
-                                                station.Reload = false;
+                                                control.ShowVelibStation();
+                                                control.ShowStationColor();
                                             }
-                                                
-
+                                            station.Reload = false;
+                                           
+                                        }
                                            
 
                                             //if (MainPage.BikeMode)
@@ -108,7 +103,6 @@ namespace Velib.Contracts
                                             //    velibControl.ShowColor(station.AvailableBikeStands);
                                             //    station.AvailableStr = station.AvailableBikeStands.ToString();
                                             //}
-                                        }
 
                                     });
                                     httpClient.Dispose();

@@ -17,6 +17,8 @@ using Velib.Contracts;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Core;
 using System.Linq;
+using Velib.Contracts.Models.US;
+using Velib.Contracts.Models.US.Washington;
 namespace Velib
 {
     public class ContractsViewModel
@@ -31,6 +33,15 @@ namespace Velib
         private static string paysImagesRootPath = "ms-appx:///Assets/Pays";
         private static List<string> downloadedContract;
         private static List<Contract> contracts = new List<Contract>(){
+            new CapitalBikeShareContract{Name = "Washington",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States"},
+             new DivyBikeContract{Name = "Chicago",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States"},
+            new CitiBikeContract{Name = "New York",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States"},
              new ContractTFLLondon{Name = "London",
                PaysImage = paysImagesRootPath+ "/UK.png",
                Pays = "United Kingdom"},

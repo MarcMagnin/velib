@@ -50,8 +50,10 @@ namespace Velib
         async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             var dialog = new MessageDialog(e.Message + e.Exception.InnerException + e.Exception.StackTrace);
+
+            localSettings.Values["CrashLog"] = localSettings.Values["CrashLog"] + e.Message + e.Exception.InnerException + e.Exception.StackTrace; 
+            
             await dialog.ShowAsync();
-            await Task.Delay(5000);
             e.Handled = true;
         }
 
