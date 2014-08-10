@@ -147,10 +147,10 @@
     <Content Include="Assets\DarkGray.png" />
     <Content Include="Assets\icons\light\appbar.next.rest.png" />
     <Content Include="Assets\LightGray.png" />
+    <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\HubBackground.theme-dark.png" />
     <Content Include="Assets\HubBackground.theme-light.png" />
-    <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\ombre.png" />
     <Content Include="Assets\Pays\BE.png" />
     <Content Include="Assets\Pays\ES.png" />
@@ -162,9 +162,12 @@
     <Content Include="Assets\Pays\RU.png" />
     <Content Include="Assets\Pays\SE.png" />
     <Content Include="Assets\Pays\SI.png" />
-    <Content Include="Assets\SmallLogo.scale-240.png" />
+    <Content Include="Assets\SmallLogo.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />
-    <Content Include="Assets\Square71x71Logo.scale-240.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-240.png" />
     <Content Include="Assets\velo.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />

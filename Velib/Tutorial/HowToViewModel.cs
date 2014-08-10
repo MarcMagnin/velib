@@ -16,13 +16,13 @@ namespace Velib.Tutorial
             Items.Add(new HowToModel()
             {
                 Title = "Download a city",
-                Text ="Tap on \"download cities\" on the menu panel. It will show the available cities list",
+                Text ="Tap on \"download cities\" on the menu panel",
                 ImageUrl = "downloadcities.png",
             });
             Items.Add(new HowToModel()
             {
                 Title = "",
-                Text = "Then tap on a city to download or remove it.",
+                Text = "It will show the available cities list. Then tap on a city to download or remove it.",
                 Details = "It will download the stations list from the selected service." +
                 "If there is some new stations provided by the public bike service, you can refresh that list by removing and downloading again the city.",
                 ImageUrl = "downloadcities2.png",

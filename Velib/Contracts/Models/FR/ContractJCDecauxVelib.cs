@@ -133,7 +133,7 @@ namespace Velib.Contracts
                 var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
                 // require Velib.Common
                 Velibs = responseBodyAsText.FromJsonString<List<VelibModel>>();
-                VelibCounter = Velibs.Count.ToString() + " cycles";
+                VelibCounter = Velibs.Count.ToString() + " stations";
                 foreach (var velib in Velibs)
                 {
                     
