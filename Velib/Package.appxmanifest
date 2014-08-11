@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Velib.App">
-      <m3:VisualElements DisplayName="Velib" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Velib" ForegroundText="light" BackgroundColor="transparent">
+      <m3:VisualElements DisplayName="Easy Bike" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="The simplest app to get around the city using public bikes. You can easely find any bike station around you or  The application use a lot of services to provide bike and station availability information across the world." ForegroundText="light" BackgroundColor="transparent">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />

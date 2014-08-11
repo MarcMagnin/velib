@@ -24,7 +24,7 @@ namespace Velib.Tutorial
                 Title = "",
                 Text = "It will show the available cities list. Then tap on a city to download or remove it.",
                 Details = "It will download the stations list from the selected service." +
-                "If there is some new stations provided by the public bike service, you can refresh that list by removing and downloading again the city.",
+                " If there is some new stations provided by the public bike service, you can refresh that list by removing and downloading again the city.",
                 ImageUrl = "downloadcities2.png",
             });
             Items.Add(new HowToModel()
@@ -32,6 +32,17 @@ namespace Velib.Tutorial
                 Title = "Switch between bike and station mode",
                 Text = "Tap on the bike icon or (P) icon on the bottom right corner.",
                 ImageUrl = "cyclemode.png",
+            });
+            Items.Add(new HowToModel()
+            {
+                Title = "Use the compass",
+                Text = "Tap once on the position button in the command bar, it will focus on your location."+
+                " Tap again on the button to activate the compass.",
+
+                Details = "If you tapped once on the location button, it will change the location button for the compass button."+
+                "Dragging the map when you are in location or compass mode will deactivate the location or compass mode."+
+                "To reset the north of the map just click on the top right corner button that appear if the north of the map have changed.",
+                ImageUrl = "compass.png",
             });
             Items.Add(new HowToModel()
             {

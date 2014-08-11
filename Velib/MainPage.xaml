@@ -23,7 +23,7 @@
             <Canvas x:Name="VelibTemplateStationRootCanvas" Height="20" 
 				
 			
-				Width="20" RenderTransformOrigin="0,0" CacheMode="BitmapCache" ManipulationMode="All" ManipulationStarting="VelibTemplateStationRootCanvas_ManipulationStarting" >
+				Width="20" RenderTransformOrigin="0,0" ManipulationMode="All" ManipulationStarting="VelibTemplateStationRootCanvas_ManipulationStarting" >
                 <Canvas.RenderTransform>
                     <CompositeTransform/>
                 </Canvas.RenderTransform>
@@ -637,7 +637,7 @@
 				<AppBarButton Icon="Download" Label="download cities" 
 					Click="DownloadCitiesButton_Click"/>
 				<AppBarButton Label="how to use this app" Click="HowToUseThisAppButton_Click" />
-				<AppBarButton Label="about"/>
+                <AppBarButton Label="about"  Click="AboutButton_Click"/>
 				<AppBarButton Label="show crash logs" Click="CrashLogsButton_Click" Visibility="Collapsed"/>
 			</CommandBar.SecondaryCommands>
 			<AppBarButton x:Name="FavoritsButton"  Label="Favorites" Icon="Favorite" Click="FavoritsButton_Click"/>

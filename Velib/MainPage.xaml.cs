@@ -1196,7 +1196,10 @@ namespace Velib
         	Frame.Navigate(typeof(HowTo));
         }
 
-      
+        private void AboutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(About.About));
+        }
        
     }
 }
