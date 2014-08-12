@@ -1037,6 +1037,7 @@ namespace Velib
             VelibFlyout.Hide();
             FavoriteFlyout.Hide();
             Frame.Navigate(typeof(FavoritsPage));
+            
         }
 
         private void FavoriteNameTextBox_KeyUp(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
@@ -1172,6 +1173,7 @@ namespace Velib
                 if (VelibDataSource.StaticVelibs.Count == 0)
                 {
                     var dialog = new MessageDialog("it's a bit lonely on this map, let's check if your city is in the current list.");
+                    dialog.Commands.Add(new UICommand("Ok", null));
                     await dialog.ShowAsync();
                     Frame.Navigate(typeof(ContractsPage));
                 }

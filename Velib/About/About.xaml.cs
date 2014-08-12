@@ -116,14 +116,14 @@ namespace Velib.About
         {
             EmailRecipient sendTo = new EmailRecipient()
             {
-                Address = "easyvelib@gmail.com"
+                Address = "easybike@outlook.fr"
             };
 
 
            // string version = XDocument.Load("ms-appx:///WMAppManifest.xml").Root.Element("App").Attribute("Version").Value;
 
             EmailMessage mail = new EmailMessage();
-            mail.Subject = "Easy Velib "; //+ version;
+            mail.Subject = "Easy Bike "; //+ version;
             mail.To.Add(sendTo);
             await EmailManager.ShowComposeNewEmailAsync(mail);
         }

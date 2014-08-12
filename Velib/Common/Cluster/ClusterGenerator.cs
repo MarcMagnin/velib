@@ -155,11 +155,14 @@ namespace Velib.Common.Cluster
             // otherwise create a new cluster
             foreach (var allreadyAddedVelib in Items.ToList())
             {
-                double distance = allreadyAddedVelib.VelibControl.GetOffsetLocation2(leftCornerLocation, zoomLevel)
+                var control = allreadyAddedVelib.VelibControl;
+                if (control == null)
+                    continue;
+                double distance = control.GetOffsetLocation2(leftCornerLocation, zoomLevel)
                     .GetDistanceTo(velib.GetOffsetLocation2(leftCornerLocation, zoomLevel));
                 if (distance < MAXDISTANCE)
                 {
-                    allreadyAddedVelib.VelibControl.AddVelib(velib);
+                    control.AddVelib(velib);
                     added = true;
                     break;
                 }

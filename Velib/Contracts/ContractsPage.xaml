@@ -239,62 +239,67 @@
 		</Style>
 	</Page.Resources>
 
-	<ScrollViewer>
-		<Grid Margin="20,20,20,0">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="80" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
+	<Grid>
+		<ListView ItemsSource="{Binding}"
+			SelectionMode="None"
+			IsItemClickEnabled="True"
+			ItemClick="ListView_ItemClick" ItemContainerStyle="{StaticResource ListViewItemStyle1}" Margin="20,0,0,0">
+			<ListView.HeaderTemplate>
+				<DataTemplate>
+					<StackPanel>
+						<TextBlock Grid.Row="0" 
+							Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface">
+							<Run Text="Download cities"/>
+						</TextBlock>
+			
+						<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,10">
+							<Paragraph FontSize="21.333">
+								<Run  Text="Your city is not in this list ? We work on it but you can ask at "/>
+								<Hyperlink NavigateUri="mailto:easybike@outlook.fr"  Foreground="{ThemeResource PhoneAccentBrush}">
+									<Run Text="this address."/>
+								</Hyperlink>
+							</Paragraph>
+						</RichTextBlock>
+					</StackPanel>
+				</DataTemplate>
+			</ListView.HeaderTemplate>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Grid Height="99" Margin="0">
+						<Interactivity:Interaction.Behaviors>
+							<Core:DataTriggerBehavior Binding="{Binding Downloading}">
+								<Core:GoToStateAction StateName="Disabled"/>
+							</Core:DataTriggerBehavior>
+						</Interactivity:Interaction.Behaviors>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Row="0" 
-				Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface">
-				<Run Text="Download cities"/>
-			</TextBlock>
-
-			<ListView ItemsSource="{Binding}"
-				Grid.Row="1"
-				SelectionMode="None"
-				IsItemClickEnabled="True"
-				ItemClick="ListView_ItemClick" ItemContainerStyle="{StaticResource ListViewItemStyle1}">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<Grid Height="99" Margin="0">
-							<Interactivity:Interaction.Behaviors>
-								<Core:DataTriggerBehavior Binding="{Binding Downloading}">
-									<Core:GoToStateAction StateName="Disabled"/>
-								</Core:DataTriggerBehavior>
-							</Interactivity:Interaction.Behaviors>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto"/>
-								<ColumnDefinition Width="*"/>
-							</Grid.ColumnDefinitions>
-
-							<CheckBox IsChecked="{Binding Downloaded}" MinWidth="0" VerticalAlignment="Center" Margin="0,0,0,14" IsHitTestVisible="False" />
+						<CheckBox IsChecked="{Binding Downloaded}" MinWidth="0" VerticalAlignment="Center" Margin="0,0,0,14" IsHitTestVisible="False" />
 
                         
-							<StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
-								<StackPanel Orientation="Horizontal" >
-									<Image Source="{Binding PaysImage}" Width="60" Height="40"/>
-									<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
-								</StackPanel>
+						<StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
+							<StackPanel Orientation="Horizontal" >
+								<Image Source="{Binding PaysImage}" Width="60" Height="40"/>
+								<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
+							</StackPanel>
                             
-								<TextBlock Text="{Binding Pays}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-								<TextBlock Text="{Binding VelibCounter}" 
+							<TextBlock Text="{Binding Pays}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+							<TextBlock Text="{Binding VelibCounter}" 
 								Visibility="{Binding Downloaded, Converter={StaticResource BoolToVisConverter}}"
 								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-								<TextBlock Text="Downloading..." 
-									Visibility="{Binding Downloading, Converter={StaticResource BoolToVisConverter}}"
-									Style="{ThemeResource ListViewItemContentTextBlockStyle}" FontFamily="Global User Interface"/>
-								<ProgressBar FontFamily="Global User Interface"
-									Visibility="{Binding Downloading, Converter={StaticResource BoolToVisConverter}}" IsIndeterminate="True"
+							<TextBlock Text="Downloading..." 
+								Visibility="{Binding Downloading, Converter={StaticResource BoolToVisConverter}}"
+								Style="{ThemeResource ListViewItemContentTextBlockStyle}" FontFamily="Global User Interface"/>
+							<ProgressBar FontFamily="Global User Interface"
+								Visibility="{Binding Downloading, Converter={StaticResource BoolToVisConverter}}" IsIndeterminate="True"
 							/>
-							</StackPanel>
-						</Grid>
+						</StackPanel>
+					</Grid>
                            
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-
-		</Grid>
-	</ScrollViewer>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</Grid>
 </Page>

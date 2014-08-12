@@ -48,7 +48,7 @@
      				</Canvas>
 				
 				
-					<TextBlock TextWrapping="Wrap" Text="easyvelib@gmail.com" VerticalAlignment="Center" Margin="22,0,0,0"/>
+					<TextBlock TextWrapping="Wrap" Text="easybike@outlook.fr" VerticalAlignment="Center" Margin="22,0,0,0"/>
 				</StackPanel>
 				
 			</Button>

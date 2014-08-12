@@ -245,7 +245,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                           
-                            <Grid x:Name="ReorderHintContent" Background="Transparent">
+                            <Grid x:Name="ReorderHintContent" Background="Transparent" Margin="0,0,20,0">
                                 <Border x:Name="CheckboxTiltContainer" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,39,0,0">
                                     <Border x:Name="CheckboxOuterContainer">
                                         <Border.Clip>
@@ -488,115 +488,93 @@
         </Style>
     </Page.Resources>
 	<Page.BottomAppBar>
-		<CommandBar x:Name="CommandBar" Visibility="Collapsed">
-			<AppBarButton Icon="Delete" Label="Delete" Click="AppBarButton_Click"/>
+        <CommandBar x:Name="commandBar" >
+            <AppBarButton x:Name="DeleteButton"  Icon="Delete" Label="Delete" Click="AppBarButton_Click" Visibility="Collapsed"/>
 		</CommandBar>
 	</Page.BottomAppBar>
     
-    <ScrollViewer>
-    	<VisualStateManager.VisualStateGroups>
-    		<VisualStateGroup x:Name="VisualStateGroup">
-    			<VisualStateGroup.Transitions>
-    				<VisualTransition GeneratedDuration="0:0:0.3" To="LonelyHere"/>
-    			</VisualStateGroup.Transitions>
-    			<VisualState x:Name="Normal"/>
-    			<VisualState x:Name="LonelyHere">
-    				<Storyboard>
-    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock">
-    						<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
-    					</DoubleAnimationUsingKeyFrames>
-    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock1">
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="1"/>
-    					</DoubleAnimationUsingKeyFrames>
-    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="textBlock">
-    						<EasingDoubleKeyFrame KeyTime="0" Value="30"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
-    							<EasingDoubleKeyFrame.EasingFunction>
-    								<CircleEase EasingMode="EaseOut"/>
-    							</EasingDoubleKeyFrame.EasingFunction>
-    						</EasingDoubleKeyFrame>
-    					</DoubleAnimationUsingKeyFrames>
-    					<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="textBlock1">
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="30"/>
-    						<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
-    							<EasingDoubleKeyFrame.EasingFunction>
-    								<CircleEase EasingMode="EaseOut"/>
-    							</EasingDoubleKeyFrame.EasingFunction>
-    						</EasingDoubleKeyFrame>
-    					</DoubleAnimationUsingKeyFrames>
-    					<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="stackPanel">
-    						<DiscreteObjectKeyFrame KeyTime="0">
-    							<DiscreteObjectKeyFrame.Value>
-    								<Visibility>Visible</Visibility>
-    							</DiscreteObjectKeyFrame.Value>
-    						</DiscreteObjectKeyFrame>
-    					</ObjectAnimationUsingKeyFrames>
-    				</Storyboard>
-    			</VisualState>
-    		</VisualStateGroup>
-    	</VisualStateManager.VisualStateGroups>
-        <Grid Margin="20,20,20,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="80" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" 
-				Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="Favorites"/>
-            <StackPanel x:Name="stackPanel" Grid.RowSpan="2" Grid.Row="1" Margin="0,37,0,0" Visibility="Collapsed">
-			
-            	<TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" 
-            		Text="It's lonely here..." VerticalAlignment="Top" 
-            		FontFamily="Andy" FontSize="44" RenderTransformOrigin="0.5,0.5" Opacity="0" >
-            		<TextBlock.RenderTransform>
-            			<CompositeTransform/>
-            		</TextBlock.RenderTransform>
-            	</TextBlock>
-			
-            	<TextBlock x:Name="textBlock1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Add some favorites by tapping on a station twice or on a searched location. :)" VerticalAlignment="Top" FontSize="29.333" Margin="0,13,0,0" Foreground="#FFC9C7C7" RenderTransformOrigin="0.5,0.5" Opacity="0" >
-            		<TextBlock.RenderTransform>
-            			<CompositeTransform/>
-            		</TextBlock.RenderTransform>
-            	</TextBlock>
-            </StackPanel>
-			
-
-            <ListView x:Name="FavoriteListView" ItemsSource="{Binding}"
-				Grid.Row="1"
-				SelectionMode="Multiple"
-				 SelectionChanged="ListView_SelectionChanged" ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
+    <Grid>
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="VisualStateGroup">
+				<VisualStateGroup.Transitions>
+					<VisualTransition GeneratedDuration="0:0:0.3" To="LonelyHere"/>
+				</VisualStateGroup.Transitions>
+				<VisualState x:Name="Normal"/>
+				<VisualState x:Name="LonelyHere">
+					<Storyboard>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock1">
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="1"/>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="textBlock">
+							<EasingDoubleKeyFrame KeyTime="0" Value="30"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<CircleEase EasingMode="EaseOut"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="textBlock1">
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="30"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<CircleEase EasingMode="EaseOut"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="stackPanel">
+							<DiscreteObjectKeyFrame KeyTime="0">
+								<DiscreteObjectKeyFrame.Value>
+									<Visibility>Visible</Visibility>
+								</DiscreteObjectKeyFrame.Value>
+							</DiscreteObjectKeyFrame>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+		<ListView x:Name="FavoriteListView" ItemsSource="{Binding}"
+    		SelectionMode="Multiple"
+    		SelectionChanged="ListView_SelectionChanged" ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
 				 
-                 >
-				 <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Height="99" Margin="0,0,17,0">
-                        	<StackPanel VerticalAlignment="Top" Margin="0,22,81,0">
-                        		<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}" FontFamily="Global User Interface" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        		<TextBlock Text="{Binding Address}" Style="{StaticResource ListViewItemContentTextBlockStyle}" FontFamily="Global User Interface" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
-                        	</StackPanel>
+                 Margin="20,0,0,0" 
+				 
+                 ><ListView.HeaderTemplate>
+    			<DataTemplate>
+    				<TextBlock Grid.Row="0" 
+    					Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="Favorites"/>
+    			</DataTemplate>
+    		</ListView.HeaderTemplate>
+    		<ListView.ItemTemplate>
+    			<DataTemplate>
+    				<Grid Height="99" Margin="0,0,17,0">
+    					<StackPanel VerticalAlignment="Top" Margin="0,22,81,0">
+    						<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}" FontFamily="Global User Interface" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+    						<TextBlock Text="{Binding Address}" Style="{StaticResource ListViewItemContentTextBlockStyle}" FontFamily="Global User Interface" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+    					</StackPanel>
 								  
-                        	<Button x:Name="FavoritButtonGoLocation" Background="{x:Null}" BorderBrush="{x:Null}" Style="{StaticResource SimpleButton}"  HorizontalAlignment="Right" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" Click="FavoritButtonGoLocation_Click" Width="80" MinWidth="0" MinHeight="0" Margin="0" Height="60">
-                        		<Path Data="M23.7812,35.0946 L31.8159,35.0946 L41.9688,45.702 L41.9688,46.2782 L31.8257,56.9071 L23.7812,56.9071 L31.2812,49.2508 L15.0312,49.2508 L15.0312,42.7196 L31.2812,42.7196 z M28.1875,25.6258 C26.3623,25.6258 24.588,25.8728 22.8645,26.3668 C21.141,26.8608 19.5203,27.553 18.0024,28.4435 C16.4845,29.3339 15.099,30.4007 13.8457,31.6439 C12.5924,32.8871 11.5198,34.269 10.6277,35.7896 C9.7356,37.3103 9.04338,38.9298 8.55103,40.648 C8.05867,42.3663 7.8125,44.161 7.8125,46.0321 C7.8125,47.9097 8.05867,49.7075 8.55103,51.4256 C9.04338,53.1437 9.7356,54.7581 10.6277,56.2687 C11.5198,57.7792 12.5875,59.1562 13.8308,60.3995 C15.0741,61.6428 16.4543,62.7095 17.9712,63.5995 C19.4881,64.4894 21.1025,65.1747 22.8142,65.6551 C24.526,66.1356 26.3171,66.3758 28.1875,66.3758 C30.0566,66.3758 31.8494,66.1349 33.5659,65.6529 C35.2824,65.171 36.8954,64.4843 38.405,63.5929 C39.9146,62.7014 41.2915,61.6387 42.5356,60.4046 C43.7798,59.1706 44.8475,57.7939 45.7388,56.2745 C46.63,54.7551 47.3183,53.1314 47.8035,51.4034 C48.2887,49.6754 48.5312,47.8849 48.5312,46.0321 C48.5312,43.2512 47.996,40.6236 46.9255,38.1493 C45.8551,35.675 44.3914,33.5095 42.5347,31.6527 C40.6779,29.7959 38.5175,28.3272 36.0535,27.2467 C33.5894,26.1661 30.9674,25.6258 28.1875,25.6258 z M28.1562,22.2508 C30.3086,22.2508 32.3984,22.5419 34.4258,23.1241 C36.4531,23.7063 38.3488,24.5159 40.1128,25.5528 C41.8768,26.5898 43.481,27.8359 44.9255,29.2911 C46.37,30.7464 47.6096,32.354 48.6443,34.1141 C49.679,35.8742 50.4865,37.77 51.0669,39.8016 C51.6473,41.8332 51.9375,43.9204 51.9375,46.0633 C51.9375,48.2134 51.6472,50.2992 51.0667,52.3207 C50.4861,54.3421 49.6785,56.2275 48.6438,57.9767 C47.6091,59.7258 46.3696,61.328 44.9253,62.7831 C43.481,64.2381 41.8769,65.4841 40.113,66.5209 C38.3492,67.5576 36.4593,68.3656 34.4434,68.9447 C32.4274,69.5238 30.3317,69.8133 28.1562,69.8133 C25.9811,69.8133 23.8877,69.5297 21.876,68.9625 C19.8643,68.3953 17.978,67.5941 16.2173,66.5589 C14.4565,65.5238 12.8491,64.2844 11.395,62.8409 C9.94092,61.3974 8.69629,59.7951 7.66113,58.034 C6.62598,56.273 5.8195,54.3867 5.2417,52.3751 C4.6639,50.3635 4.375,48.2596 4.375,46.0633 C4.375,43.8937 4.6639,41.8032 5.2417,39.7918 C5.8195,37.7805 6.62598,35.8943 7.66113,34.1334 C8.69629,32.3725 9.94059,30.7653 11.394,29.3119 C12.8475,27.8584 14.4547,26.6087 16.2156,25.5628 C17.9765,24.5169 19.8686,23.7035 21.8918,23.1224 C23.9151,22.5414 26.0033,22.2508 28.1562,22.2508 z" Height="47.562" RenderTransformOrigin="0.5,0.5" Stretch="Fill" UseLayoutRounding="False" Width="47.563" HorizontalAlignment="Left" Margin="0,0,21,0" Fill="{ThemeResource ButtonForegroundThemeBrush}">
-                        			<Path.RenderTransform>
-                        				<TransformGroup>
-                        					<ScaleTransform/>
-                        					<SkewTransform/>
-                        					<RotateTransform/>
-                        					<TranslateTransform/>
-                        				</TransformGroup>
-                        			</Path.RenderTransform>
-                        		</Path>
-                        	</Button>
-                        </Grid>
+    					<Button x:Name="FavoritButtonGoLocation" Background="{x:Null}" BorderBrush="{x:Null}" Style="{StaticResource SimpleButton}"  HorizontalAlignment="Right" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" Click="FavoritButtonGoLocation_Click" Width="80" MinWidth="0" MinHeight="0" Margin="0" Height="60">
+    						<Path Data="M23.7812,35.0946 L31.8159,35.0946 L41.9688,45.702 L41.9688,46.2782 L31.8257,56.9071 L23.7812,56.9071 L31.2812,49.2508 L15.0312,49.2508 L15.0312,42.7196 L31.2812,42.7196 z M28.1875,25.6258 C26.3623,25.6258 24.588,25.8728 22.8645,26.3668 C21.141,26.8608 19.5203,27.553 18.0024,28.4435 C16.4845,29.3339 15.099,30.4007 13.8457,31.6439 C12.5924,32.8871 11.5198,34.269 10.6277,35.7896 C9.7356,37.3103 9.04338,38.9298 8.55103,40.648 C8.05867,42.3663 7.8125,44.161 7.8125,46.0321 C7.8125,47.9097 8.05867,49.7075 8.55103,51.4256 C9.04338,53.1437 9.7356,54.7581 10.6277,56.2687 C11.5198,57.7792 12.5875,59.1562 13.8308,60.3995 C15.0741,61.6428 16.4543,62.7095 17.9712,63.5995 C19.4881,64.4894 21.1025,65.1747 22.8142,65.6551 C24.526,66.1356 26.3171,66.3758 28.1875,66.3758 C30.0566,66.3758 31.8494,66.1349 33.5659,65.6529 C35.2824,65.171 36.8954,64.4843 38.405,63.5929 C39.9146,62.7014 41.2915,61.6387 42.5356,60.4046 C43.7798,59.1706 44.8475,57.7939 45.7388,56.2745 C46.63,54.7551 47.3183,53.1314 47.8035,51.4034 C48.2887,49.6754 48.5312,47.8849 48.5312,46.0321 C48.5312,43.2512 47.996,40.6236 46.9255,38.1493 C45.8551,35.675 44.3914,33.5095 42.5347,31.6527 C40.6779,29.7959 38.5175,28.3272 36.0535,27.2467 C33.5894,26.1661 30.9674,25.6258 28.1875,25.6258 z M28.1562,22.2508 C30.3086,22.2508 32.3984,22.5419 34.4258,23.1241 C36.4531,23.7063 38.3488,24.5159 40.1128,25.5528 C41.8768,26.5898 43.481,27.8359 44.9255,29.2911 C46.37,30.7464 47.6096,32.354 48.6443,34.1141 C49.679,35.8742 50.4865,37.77 51.0669,39.8016 C51.6473,41.8332 51.9375,43.9204 51.9375,46.0633 C51.9375,48.2134 51.6472,50.2992 51.0667,52.3207 C50.4861,54.3421 49.6785,56.2275 48.6438,57.9767 C47.6091,59.7258 46.3696,61.328 44.9253,62.7831 C43.481,64.2381 41.8769,65.4841 40.113,66.5209 C38.3492,67.5576 36.4593,68.3656 34.4434,68.9447 C32.4274,69.5238 30.3317,69.8133 28.1562,69.8133 C25.9811,69.8133 23.8877,69.5297 21.876,68.9625 C19.8643,68.3953 17.978,67.5941 16.2173,66.5589 C14.4565,65.5238 12.8491,64.2844 11.395,62.8409 C9.94092,61.3974 8.69629,59.7951 7.66113,58.034 C6.62598,56.273 5.8195,54.3867 5.2417,52.3751 C4.6639,50.3635 4.375,48.2596 4.375,46.0633 C4.375,43.8937 4.6639,41.8032 5.2417,39.7918 C5.8195,37.7805 6.62598,35.8943 7.66113,34.1334 C8.69629,32.3725 9.94059,30.7653 11.394,29.3119 C12.8475,27.8584 14.4547,26.6087 16.2156,25.5628 C17.9765,24.5169 19.8686,23.7035 21.8918,23.1224 C23.9151,22.5414 26.0033,22.2508 28.1562,22.2508 z" Height="47.562" RenderTransformOrigin="0.5,0.5" Stretch="Fill" UseLayoutRounding="False" Width="47.563" HorizontalAlignment="Left" Margin="0,0,21,0" Fill="{ThemeResource ButtonForegroundThemeBrush}">
+    							<Path.RenderTransform>
+    								<TransformGroup>
+    									<ScaleTransform/>
+    									<SkewTransform/>
+    									<RotateTransform/>
+    									<TranslateTransform/>
+    								</TransformGroup>
+    							</Path.RenderTransform>
+    						</Path>
+    					</Button>
+    				</Grid>
 
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            	<local:Favorite Name="Test"/>
-            	<local:Favorite Name="Station 22"/>
-            </ListView>
-
-        </Grid>
-    </ScrollViewer>
+    			</DataTemplate>
+    		</ListView.ItemTemplate>
+    		<local:Favorite Name="Test"/>
+    		<local:Favorite Name="Station 22"/>
+    	</ListView>
+	</Grid>
 </Page>

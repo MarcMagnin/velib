@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Geolocation;
 using System.Threading;
+using System.Diagnostics;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -29,14 +30,29 @@ namespace Velib.Favorits
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
+        AppBarButton button;
         public FavoritsPage()
         {
+            
             this.InitializeComponent();
-
+           
+            // if commandbar is collapsed, the back navigation can crash the app
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            
+            this.Unloaded += FavoritsPage_Unloaded;
+        }
+
+        void FavoritsPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if(button != null)
+                button.Click -= AppBarButton_Click;
+        }
+
+        void button_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
         public ObservableDictionary DefaultViewModel
         {
@@ -99,7 +115,6 @@ namespace Velib.Favorits
             this.navigationHelper.OnNavigatedTo(e);
             FavoritsViewModel f = new FavoritsViewModel();
             this.DefaultViewModel["Group"] = FavoritsViewModel.Favorits;
-
             if (FavoritsViewModel.Favorits.Count == 0)
             {
                 VisualStateManager.GoToState(this, "LonelyHere", true);
@@ -137,11 +152,11 @@ namespace Velib.Favorits
             var list = (sender as ListView);
             if (list.SelectedItems.Count > 0)
             {
-                CommandBar.Visibility = Visibility.Visible;
+                DeleteButton.Visibility = Visibility.Visible;
             }
             else
             {
-                CommandBar.Visibility = Visibility.Collapsed;
+                DeleteButton.Visibility = Visibility.Collapsed;
             }
         }
 

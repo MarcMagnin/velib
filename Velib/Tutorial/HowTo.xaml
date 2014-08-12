@@ -9,7 +9,7 @@
      DataContext="{Binding DefaultViewModel.Group, RelativeSource={RelativeSource Mode=Self}}">
 	<Page.Resources>
 		<DataTemplate x:Key="ItemDataTemplate">
-			<Grid Margin="20,0">
+			<Grid Margin="0" IsHitTestVisible="False">
             		<Grid.RowDefinitions>
             			<RowDefinition Height="Auto"/>
 						<RowDefinition/>
@@ -50,31 +50,21 @@
 		<x:Double x:Key="ListViewItemReorderHintThemeOffset">32</x:Double>
 	</Page.Resources>
 
-     <ScrollViewer Background="{StaticResource AppBarItemBackgroundThemeBrush}">
+     <Grid Background="{StaticResource AppBarItemBackgroundThemeBrush}">
     
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="90" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <TextBlock 
-				Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="How To" Padding="20,20,0,0"/>
-            <StackPanel x:Name="stackPanel" Grid.RowSpan="2" Grid.Row="1">
-			
-            	<ListView ItemsSource="{Binding}" 
-				ItemTemplate="{StaticResource ItemDataTemplate}" SelectionMode="None" IsHitTestVisible="False">
-
-				<local:HowToModel Title="Test" 
-				Text ="Test TEst Test Blalblalblla"
-				Details="test test blal bla bla"
-				ImageUrl="addToFavorites.png"/>
+		<ListView ItemsSource="{Binding}" 
+     		ItemTemplate="{StaticResource ItemDataTemplate}" SelectionMode="None" Margin="20,0">
+     		<ListView.HeaderTemplate>
+     			<DataTemplate>
+     				<TextBlock 
+     					Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="How to"/>
+     			</DataTemplate>
+     		</ListView.HeaderTemplate>
+     		<local:HowToModel Title="Test" 
+     			Text ="Test TEst Test Blalblalblla"
+     			Details="test test blal bla bla"
+     			ImageUrl="addToFavorites.png"/>
             	
-				</ListView>
-            </StackPanel>
-			
-
-    
-        </Grid>
-    </ScrollViewer>
+     	</ListView>
+	</Grid>
 </Page>

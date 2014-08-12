@@ -165,6 +165,8 @@
     <Content Include="Assets\Pays\RU.png" />
     <Content Include="Assets\Pays\SE.png" />
     <Content Include="Assets\Pays\SI.png" />
+    <Content Include="Assets\Pays\UK.png" />
+    <Content Include="Assets\Pays\US.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-140.png" />
