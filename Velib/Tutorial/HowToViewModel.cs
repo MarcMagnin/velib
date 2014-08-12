@@ -24,7 +24,8 @@ namespace Velib.Tutorial
                 Title = "",
                 Text = "It will show the available cities list. Then tap on a city to download or remove it.",
                 Details = "It will download the stations list from the selected service." +
-                " If there is some new stations provided by the public bike service, you can refresh that list by removing and downloading again the city.",
+                " If there is some new stations provided by the public bike service, you can refresh that list by removing and downloading again the city."+
+                " This list will get bigger on future updates",
                 ImageUrl = "downloadcities2.png",
             });
             Items.Add(new HowToModel()

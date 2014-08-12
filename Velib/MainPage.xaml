@@ -641,7 +641,7 @@
 				<AppBarButton Label="show crash logs" Click="CrashLogsButton_Click" Visibility="Collapsed"/>
 			</CommandBar.SecondaryCommands>
 			<AppBarButton x:Name="FavoritsButton"  Label="Favorites" Icon="Favorite" Click="FavoritsButton_Click"/>
-			<AppBarButton x:Name="LocationButton" Click="AppBarButton_Click" Label="Location" Icon="Target" FontFamily="Global User Interface"/>
+			<AppBarButton x:Name="LocationButton" Click="LocationButton_Click" Label="Location" Icon="Target" FontFamily="Global User Interface"/>
 			<AppBarButton x:Name="SearchButton" Click="SearchButton_Click" Label="Search" Icon="Find"/>
 		</CommandBar>
 	</Page.BottomAppBar>

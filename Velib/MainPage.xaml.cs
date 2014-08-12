@@ -300,7 +300,7 @@ namespace Velib
         private bool searchingLocation = false;
         private bool stickToUserLocation = false;
         private bool compassMode = false;
-        private async void AppBarButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void LocationButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (stickToUserLocation == false)
             {
@@ -328,7 +328,14 @@ namespace Velib
             
             ShowUserLocation();
 
-            SetView(userLastLocation, null, null, null, MapAnimationKind.None);
+            //SetView(userLastLocation, null, null, null, MapAnimationKind.None);
+            var zoom = MapCtrl.ZoomLevel;
+            if (MapCtrl.ZoomLevel < 13 )
+            {
+                zoom = 13;
+            }
+
+            MapCtrl.TrySetViewAsync(userLastLocation, zoom, null, null, MapAnimationKind.None);
             //MapCtrl.TrySetViewAsync(userLastLocation, MapCtrl.ZoomLevel, null, null, MapAnimationKind.None);
             
 
@@ -1160,8 +1167,15 @@ namespace Velib
         // trigger a map center changed to refresh the view
         internal  void DataSourceLoaded()
         {
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
+                if (VelibDataSource.StaticVelibs.Count == 0)
+                {
+                    var dialog = new MessageDialog("it's a bit lonely on this map, let's check if your city is in the current list.");
+                    await dialog.ShowAsync();
+                    Frame.Navigate(typeof(ContractsPage));
+                }
+
                 Map.Center = new Geopoint(new BasicGeoposition() { Longitude = Map.Center.Position.Longitude+0.0001, Latitude = Map.Center.Position.Latitude });
             });
             
