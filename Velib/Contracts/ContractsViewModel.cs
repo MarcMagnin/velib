@@ -24,8 +24,8 @@ namespace Velib
     public class ContractsViewModel
     {
         public static  ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-        static  Windows.Storage.StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
-        
+        //static  Windows.Storage.StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
+        static Windows.Storage.StorageFolder installedLocation = ApplicationData.Current.LocalFolder;
         
 
 
