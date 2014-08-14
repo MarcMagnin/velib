@@ -139,6 +139,8 @@ namespace Velib.Favorits
                                 Latitude = favorite.Latitude,
                                 Longitude = favorite.Longitude
                             });
+                MainPage.mainPage.StopCompassAndUserLocationTracking();
+                MainPage.Map.Heading = 0;
                 MainPage.mainPage.GetRoute(destination, favorite);
                 if (this.Frame.CanGoBack)
                 {

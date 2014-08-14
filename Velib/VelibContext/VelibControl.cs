@@ -31,9 +31,14 @@ namespace Velib.VelibContext
         private static VelibControl previousVelibTapped;
         void VelibControl_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
+            try { 
             if (Velibs.Count > 1)
             {
-                map.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(Velibs.Select(s => s.Location).ToList()), new Thickness(20, 20, 20, 20), MapAnimationKind.Default);
+                if(MainPage.mainPage.compassMode){
+                    MainPage.mainPage.StopCompassAndUserLocationTracking();
+                }
+                    map.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(Velibs.Select(s => s.Location).ToList()), new Thickness(20, 20, 20, 20), MapAnimationKind.Default);
+                
             }
             else
             {
@@ -41,8 +46,12 @@ namespace Velib.VelibContext
                 {
                     MainPage.mainPage.SelectItem(this, false);
                 });
-                
+
             }
+            }
+            catch (Exception ex) { 
+            }
+
         }
 
         public  VelibCluster Cluster = new VelibCluster();

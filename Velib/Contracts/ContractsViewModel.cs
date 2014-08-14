@@ -148,7 +148,7 @@ namespace Velib
         public static List<string> DownloadedContracts { get{
             if (downloadedContract != null)
                 return downloadedContract;
-            var jsonContractNames = (Windows.Storage.ApplicationData.Current.LocalSettings.Values["DownloadedContracts"] as string);
+            var jsonContractNames = (localSettings.Values["DownloadedContracts"] as string);
             if (jsonContractNames != null)
                 downloadedContract = jsonContractNames.FromJsonString<List<string>>();
             else
@@ -160,6 +160,10 @@ namespace Velib
         private static async Task writeJsonAsync(Contract contract)
         {
             localSettings.Values[contract.Name] = true;
+            try
+            {
+
+           
             StorageFile file = await installedLocation.CreateFileAsync(contract.Name, CreationCollisionOption.ReplaceExisting);
             using (StorageStreamTransaction transaction = await file.OpenTransactedWriteAsync())
             {
@@ -169,6 +173,12 @@ namespace Velib
                     transaction.Stream.Size = await dataWriter.StoreAsync(); // reset stream size to override the file
                     await transaction.CommitAsync();
                 }
+            }
+            }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog("Unable to save city to you storage : "+ e.Message + e.InnerException+ e.ToString());
+                dialog.ShowAsync();
             }
         }
 

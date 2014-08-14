@@ -19,7 +19,7 @@
        
         <!--POIs-->
 		      <ControlTemplate x:Key="VelibTemplate">
-            <!--Maps:MapControl.NormalizedAnchorPoint="0.5,0"-->
+            <!--Maps:MapControl.NormalizedAnchorPoint="0.5,0" CacheMode="BitmapCache"-->
             <Canvas x:Name="VelibTemplateStationRootCanvas" Height="20" 
 				
 			
@@ -244,7 +244,9 @@
             </Canvas>
         </ControlTemplate>
 		<Storyboard x:Key="NorthIndicatorStoryboard">
-    		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="NorthIndicator" d:IsOptimized="True"/>		
+    		<DoubleAnimation Duration="0:0:0.2" To="0" 
+                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" 
+                             Storyboard.TargetName="NorthIndicator" d:IsOptimized="True"/>		
 		</Storyboard>
 		<Storyboard x:Key="UserLocationStoryboard">
 		<DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="UserLocation" d:IsOptimized="True">
@@ -638,7 +640,7 @@
 					Click="DownloadCitiesButton_Click"/>
 				<AppBarButton Label="how to use this app" Click="HowToUseThisAppButton_Click" />
                 <AppBarButton Label="about"  Click="AboutButton_Click"/>
-				<AppBarButton Label="show crash logs" Click="CrashLogsButton_Click" Visibility="Collapsed"/>
+				<AppBarButton Label="show crash logs" Click="CrashLogsButton_Click"/>
 			</CommandBar.SecondaryCommands>
 			<AppBarButton x:Name="FavoritsButton"  Label="Favorites" Icon="Favorite" Click="FavoritsButton_Click"/>
             <AppBarButton x:Name="LocationButton" Click="LocationButton_Click" Label="Location" Icon="Target" FontFamily="Global User Interface"/>
@@ -1014,7 +1016,7 @@
 			RenderTransformOrigin="0.5,0.5"  Margin="0,50,20,0" VerticalAlignment="Top" Width="60" Height="60" HorizontalAlignment="Right" Click="NorthIndicator_Click" Padding="0" FontFamily="Global User Interface" Opacity="0" IsHitTestVisible="False">
 
 			<RadioButton.RenderTransform>
-				<CompositeTransform Rotation="0"/>
+                <CompositeTransform x:Name="NorthIndicatorCompositeTransform" Rotation="0"/>
 			</RadioButton.RenderTransform>
 
 			<Canvas HorizontalAlignment="Left" Height="36" Margin="0,0,0,4" VerticalAlignment="Top" Width="34">

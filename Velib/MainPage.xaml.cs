@@ -127,6 +127,7 @@ namespace Velib
         void TouchPanel_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             StopCompassAndUserLocationTracking();
+            MapCtrl.TrySetViewAsync(MapCtrl.Center, null, null, null, MapAnimationKind.None);
             LocationButton.Icon = new SymbolIcon(Symbol.Target);
             LocationButton.Label = "Location";
         }
@@ -299,7 +300,7 @@ namespace Velib
 
         private bool searchingLocation = false;
         private bool stickToUserLocation = false;
-        private bool compassMode = false;
+        public bool compassMode = false;
         private async void LocationButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (stickToUserLocation == false)
@@ -348,6 +349,8 @@ namespace Velib
             if (compassMode)
             {
                 StopCompass(new SymbolIcon(Symbol.View), "Compass");
+                if (Map.Heading != 0)
+                    MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
             }
             else
             {
@@ -369,12 +372,14 @@ namespace Velib
         }
         private async void StopCompass(SymbolIcon locationButtonIcon, string locationButtonLabel)
         {
-            compassMode = false;
-            LocationButton.Icon = locationButtonIcon;
-            LocationButton.Label = locationButtonLabel;
-            SetView(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
-            //TouchPanel.Visibility = Visibility.Collapsed;
-            //await MapCtrl.TrySetViewAsync(MapCtrl.Center, MapCtrl.ZoomLevel, 0, null, MapAnimationKind.Default);
+
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                compassMode = false;
+                LocationButton.Icon = locationButtonIcon;
+                LocationButton.Label = locationButtonLabel;
+
+            });
         }
 
         void MapCtrl_HeadingChanged(MapControl sender, object args)
@@ -414,8 +419,8 @@ namespace Velib
                 UpdateUserLocationElementAngle(angle);
                 if (compassMode){
                     //.Heading = angle;
-                    SetView(null, null, angle, null, MapAnimationKind.Linear);
-                     //MapCtrl.TrySetViewAsync(MapCtrl.Center, MapCtrl.ZoomLevel, angle, null, MapAnimationKind.Linear);
+                    SetView(userLastLocation, null, angle, null, MapAnimationKind.Linear);
+                    //MapCtrl.TrySetViewAsync(userLastLocation, null, angle, null, MapAnimationKind.Linear);
                     //MapCtrl.Heading = angle;
                     
                 }
@@ -504,9 +509,9 @@ namespace Velib
                 //SetView(null, zoom, null, null, MapAnimationKind.None);
             else
             {
-                Geopoint location;
-                MapCtrl.GetLocationFromOffset(e.GetPosition(MapCtrl), out location);
-                await MapCtrl.TrySetViewAsync(location, zoom, null, null, MapAnimationKind.None);
+            //    Geopoint location;
+            //    MapCtrl.GetLocationFromOffset(e.GetPosition(MapCtrl), out location);
+            //    await MapCtrl.TrySetViewAsync(location, zoom, null, null, MapAnimationKind.None);
             }
                 
         }
@@ -575,10 +580,12 @@ namespace Velib
             if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count > 0)
             {
                 StopCompassAndUserLocationTracking();
+                
+              
 
                 lastSearchLocationResult = result;
                 MapCtrl.Center = result.Locations.FirstOrDefault().Point;
-                
+                MapCtrl.Heading = 0;
                 SearchLocationText.Text =result.ParseMapLocationFinderResultAddress() ;
                 ShowSearchLocationPoint(result.Locations.FirstOrDefault().Point, SearchLocationText.Text);
                 HideSearch();
@@ -594,7 +601,7 @@ namespace Velib
 
         public void StopCompassAndUserLocationTracking()
         {
-            compassMode = false;
+            StopCompass(new SymbolIcon(Symbol.Target), "Location");
             stickToUserLocation = false;
         }
 
@@ -817,7 +824,7 @@ namespace Velib
             }
 
             // Show the route if the user is at least 15 KM from the selected item
-            if (userLastLocation != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 15)
+            if (userLastLocation != null && LastSearchGeopoint != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 15)
             {
                 GetRoute(LastSearchGeopoint);
             }
@@ -923,6 +930,7 @@ namespace Velib
 
         double angleCorrectionUserLoc;
         double previousAngleUserLoc;
+        double previousModifiedAngleUserLoc;
         bool triggerReinitRotation;
         #endregion
         public void UpdateUserLocationElementAngle( double angle)
@@ -930,34 +938,36 @@ namespace Velib
 
             double modifiedAngleUserLoc = angle ;
 
-
             if (compassMode) {
-                
+                UserLocationStoryboard.Stop();
+                UserLocationRotationAnimation.To = modifiedAngleUserLoc;
+                UserLocationStoryboard.Begin();
                 modifiedAngleUserLoc = 0;
             //    UserLocationRotationAnimation.From = 0;
             }
             else
             {
-                if (angle - previousAngleUserLoc > 150)
+                if (angle - previousAngleUserLoc > 200)
                 {
                     angleCorrectionUserLoc = 360;
               //      UserLocationRotationAnimation.From = 0;
                 }
-                else if (angle - previousAngleUserLoc < -150)
+                else if (angle - previousAngleUserLoc < -200)
                 {
                     angleCorrectionUserLoc = 0;
                 //    UserLocationRotationAnimation.From = 0;
                 }
-                modifiedAngleUserLoc = angle - angleCorrectionUserLoc;
+                modifiedAngleUserLoc = angle - 360;
 
             }
+            UserLocationRotationAnimation.From = previousModifiedAngleUserLoc; 
             UserLocationRotationAnimation.To = modifiedAngleUserLoc;
 
-
+           
             UserLocationStoryboard.Begin();
 
 
-
+            previousModifiedAngleUserLoc = modifiedAngleUserLoc;
             previousAngleUserLoc = angle;
         }   
         
@@ -966,6 +976,7 @@ namespace Velib
 
         double previousAngle;
         double angleCorrection;
+        double prevModifiedAngle;
         public void UpdateNorthElementAngle( double angle)
         {
             if (NorthIndicator.Visibility == Visibility.Collapsed )
@@ -980,12 +991,13 @@ namespace Velib
             }
             modifiedAngle = -(angleCorrection - angle);
 
+            NorthIndicatorRotationAnimation.From = prevModifiedAngle;
             NorthIndicatorRotationAnimation.To = -modifiedAngle;
 
             NorthIndicatorStoryboard.Begin();
 
-            
 
+            prevModifiedAngle = -modifiedAngle;
             previousAngle = angle;
         }   
 
@@ -998,6 +1010,8 @@ namespace Velib
             {
                 StopCompass(new SymbolIcon(Symbol.Target), "Location");
             }
+            if (Map.Heading != 0)
+                MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
         }
 
        
@@ -1027,6 +1041,7 @@ namespace Velib
                     FavoriteNameTextBox.Text= "Station " + velib.Number ;
                 }
             }
+            else FavoriteNameTextBox.Text = string.Empty;
             
         }
 
@@ -1067,7 +1082,7 @@ namespace Velib
                 var velib = control.Velibs.FirstOrDefault();
                 if (velib != null)
                 {
-                    FavoritsViewModel.AddFavorit(new Favorite { Latitude = velib.Latitude, Longitude = velib.Longitude, Name = name });
+                    FavoritsViewModel.AddFavorit(new Favorite { Latitude = velib.Latitude, Longitude = velib.Longitude, Name = name, Address = velib.Address });
                 }
             }
 

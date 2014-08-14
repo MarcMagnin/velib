@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="5950MarcMagnin.EasyBike" Publisher="CN=814EE514-E2F9-406F-A32A-08E35ADCBAC2" Version="1.1.0.9" />
+  <Identity Name="5950MarcMagnin.EasyBike" Publisher="CN=814EE514-E2F9-406F-A32A-08E35ADCBAC2" Version="1.1.0.11" />
   <mp:PhoneIdentity PhoneProductId="ed55417e-91cb-4506-b860-556df0bf3409" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Easy Bike</DisplayName>
     <PublisherDisplayName>Marc Magnin</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\StoreLogo.jpg</Logo>
   </Properties>
   <Prerequisites>
     <OSMinVersion>6.3.1</OSMinVersion>
@@ -17,7 +17,11 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Velib.App">
       <m3:VisualElements DisplayName="Easy Bike" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="The simplest app to get around the city using public bikes. You can easely find any bike station around you or  The application use a lot of services to provide bike and station availability information across the world." ForegroundText="light" BackgroundColor="transparent">
-        <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
+        <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png" ShortName="Easy bike">
+          <m3:ShowNameOnTiles>
+            <m3:ShowOn Tile="square150x150Logo" />
+            <m3:ShowOn Tile="wide310x150Logo" />
+          </m3:ShowNameOnTiles>
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.jpg" />
         <m3:ApplicationView MinWidth="width320" />
