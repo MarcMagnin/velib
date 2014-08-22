@@ -45,6 +45,8 @@ using System.Globalization;
 using Velib.Favorits;
 using Windows.UI.Xaml.Media.Animation;
 using Velib.Tutorial;
+using Windows.ApplicationModel.Chat;
+using Windows.ApplicationModel.Email;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -772,6 +774,8 @@ namespace Velib
             if (item == SearchLocationPoint )
             {
                 LastSearchGeopoint = SearchLocationPoint.GetValue(MapControl.LocationProperty) as Geopoint;
+                ReverseGeocode(true);
+
             }
 
             
@@ -789,6 +793,7 @@ namespace Velib
                 if (velib != null)
                 {
                     LastSearchGeopoint = velib.Location;
+                    ReverseGeocode();
                     if (PreviousSelectedVelibStation != null)
                     {
                         var prevControl = PreviousSelectedVelibStation.VelibControl as Control;
@@ -830,9 +835,11 @@ namespace Velib
             }
             else
             {
-                VelibFlyout.ShowAt(this);
-
+            //    VelibFlyout.ShowAt(this);
             }
+
+            
+
             PreviousSelectedItem = item;
 
 
@@ -896,35 +903,61 @@ namespace Velib
 
             //MapCtrl.TrySetViewAsync(LastSearchGeopoint,null,null,null,MapAnimationKind.None);
 
+            //ReverseGeocode(true);
+        }
+        private void ReverseGeocode(bool fromSearch = false)
+        {
             if (reverseGeocodeCancellationTokenSource == null)
                 reverseGeocodeCancellationTokenSource = new CancellationTokenSource();
             else
                 reverseGeocodeCancellationTokenSource.Cancel();
             reverseGeocodeCancellationTokenSource = new CancellationTokenSource();
-            ReverseGeocode(LastSearchGeopoint, reverseGeocodeCancellationTokenSource.Token);
+            ReverseGeocode(fromSearch, reverseGeocodeCancellationTokenSource.Token);
         }
 
-        private async void ReverseGeocode(Geopoint location, CancellationToken token)
+
+        private string lastAddressFound;
+        private async void ReverseGeocode(bool fromSearch, CancellationToken token)
         {
-            stickToUserLocation = false;
-
-            var result = await MapLocationFinder.FindLocationsAtAsync(location);
-            if (token.IsCancellationRequested)
-                return;
-            var searchedText = "";
-             if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count > 0)
+            lastAddressFound = string.Empty;
+            Debug.WriteLine("searching adress...");
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                 searchedText = result.ParseMapLocationFinderResultAddress();
-            }
+                var result = await MapLocationFinder.FindLocationsAtAsync(LastSearchGeopoint);
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                    Debug.WriteLine("searching adress cancelled");
+                }
 
-             
 
-            if(string.IsNullOrWhiteSpace(searchedText))
-             SearchLocationText.Text = "No address found.";
-            else
-                SearchLocationText.Text = searchedText.Trim();
+                if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count > 0)
+                {
+                    lastAddressFound = result.ParseMapLocationFinderResultAddress().Trim();
+                    Debug.WriteLine("adress found ! : " + lastAddressFound);
+                    if (fromSearch)
+                    {
+                        if (string.IsNullOrWhiteSpace(lastAddressFound))
+                            SearchLocationText.Text = "No address found.";
+                        else
+                            SearchLocationText.Text = lastAddressFound;
 
-            VisualStateManager.GoToState(this, "SearchAddressPinSearchedFinished", true);
+
+                        stickToUserLocation = false;
+                        VisualStateManager.GoToState(this, "SearchAddressPinSearchedFinished", true);
+                    }
+                }
+                else
+                {
+                    if (fromSearch)
+                    {
+                        stickToUserLocation = false;
+                        SearchLocationText.Text = "Unable to find the address for now...";
+                        VisualStateManager.GoToState(this, "SearchAddressPinSearchedFinished", true);
+                        Debug.WriteLine("Unable to find the address");
+                    }
+                }
+            });
         }
 
 
@@ -1231,6 +1264,41 @@ namespace Velib
         {
             Frame.Navigate(typeof(About.About));
         }
-       
+
+
+
+        private async void ShareByMailButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            EmailMessage mail = new EmailMessage();
+            mail.Subject = "Check this location"; //+ version;
+
+            string body = string.Empty;
+            if (!string.IsNullOrWhiteSpace(lastAddressFound))
+            {
+                body = lastAddressFound + "\r\n";
+            }
+            body += "Decimal degrees (lat, lon): \r\n";
+            body += Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) + ", ";
+            body += Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture);
+            mail.Body = body;
+            await EmailManager.ShowComposeNewEmailAsync(mail);
+        }
+        private async void ShareByTextButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            string body = string.Empty;
+            if (!string.IsNullOrWhiteSpace(lastAddressFound))
+            {
+                body = lastAddressFound + "\r\n";
+            }
+
+
+            body += "Decimal degrees (lat, lon): \r\n";
+            body += Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture)+", ";
+            body += Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture);
+            await ChatMessageManager.ShowComposeSmsMessageAsync(new ChatMessage
+            {
+                Body = body
+            });
+        }
     }
 }

@@ -32,6 +32,7 @@ namespace Velib.VelibContext
         void VelibControl_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             try { 
+
             if (Velibs.Count > 1)
             {
                 if(MainPage.mainPage.compassMode){
