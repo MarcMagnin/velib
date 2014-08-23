@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -57,7 +58,62 @@ namespace Velib
             e.Handled = true;
         }
 
-        
+
+
+
+        private async void RestoreStatus(ApplicationExecutionState previousExecutionState)
+        {
+            // Do not repeat app initialization when the Window already has content,
+            // just ensure that the window is active
+            if (previousExecutionState == ApplicationExecutionState.Terminated)
+            {
+                // Restore the saved session state only when appropriate
+                try
+                {
+                    await SuspensionManager.RestoreAsync();
+                }
+                catch (SuspensionManagerException)
+                {
+                    //Something went wrong restoring state.
+                    //Assume there is no state and continue
+                }
+            }
+        }
+
+        private Frame CreateRootFrame()
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            // Do not repeat app initialization when the Window already has content,
+            // just ensure that the window is active
+            if (rootFrame == null)
+            {
+                // Create a Frame to act as the navigation context and navigate to the first page
+                rootFrame = new Frame();
+
+                // Set the default language
+                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
+                rootFrame.NavigationFailed += OnNavigationFailed;
+
+                SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
+
+                // Place the frame in the current Window
+                Window.Current.Content = rootFrame;
+            }
+
+            return rootFrame;
+        }
+
+
+        /// <summary>
+        /// Invoked when Navigation to a certain page fails
+        /// </summary>
+        /// <param name="sender">The Frame which failed navigation</param>
+        /// <param name="e">Details about the navigation failure</param>
+        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        {
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
 
         /// <summary>
         /// Invoqué lorsque l'application est lancée normalement par l'utilisateur final.  D'autres points d'entrée
@@ -73,65 +129,13 @@ namespace Velib
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+            Frame rootFrame = CreateRootFrame();
+            RestoreStatus(e.PreviousExecutionState);
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            //MainPage is always in rootFrame so we don't have to worry about restoring the navigation state on resume
+            rootFrame.Navigate(typeof(MainPage), e.Arguments);
 
-            // Ne répétez pas l'initialisation de l'application lorsque la fenêtre comporte déjà du contenu,
-            // permettent simplement de s'assurer que la fenêtre est active.
-            if (rootFrame == null)
-            {
-                // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page.
-                rootFrame = new Frame();
-
-                // Associez le frame à une clé SuspensionManager.
-                SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
-
-                // TODO: modifier cette valeur à une taille de cache qui contient à votre application.
-                rootFrame.CacheSize = 1;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    // Restaurez l'état de session enregistré uniquement lorsque cela est approprié.
-                    try
-                    {
-                        await SuspensionManager.RestoreAsync();
-                    }
-                    catch (SuspensionManagerException)
-                    {
-                        // Un problème est survenu lors de la restauration de l'état.
-                        // Partez du principe que l'état est absent et continuez.
-                    }
-                }
-
-                // Placez le frame dans la fenêtre active.
-                Window.Current.Content = rootFrame;
-            }
-
-            if (rootFrame.Content == null)
-            {
-                // Supprime la navigation tourniquet pour le démarrage.
-                if (rootFrame.ContentTransitions != null)
-                {
-                    this.transitions = new TransitionCollection();
-                    foreach (var c in rootFrame.ContentTransitions)
-                    {
-                        this.transitions.Add(c);
-                    }
-                }
-
-                rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
-
-                // Quand la pile de navigation n'est pas restaurée, accédez à la première page,
-                // puis configurez la nouvelle page en transmettant les informations requises en tant que
-                // de navigation.
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
-            }
-
-            // Vérifiez que la fenêtre actuelle est active.
+            // Ensure the current window is active
             Window.Current.Activate();
         }
 
@@ -169,6 +173,62 @@ namespace Velib
         }
 
 
-          
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+                base.OnActivated(args);
+                if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
+                    MainPage.Map.ColorScheme = MapColorScheme.Dark;
+
+
+                if (args.Kind == ActivationKind.Protocol)
+                {
+                    ProtocolActivatedEventArgs protocolArgs = args as ProtocolActivatedEventArgs;
+                    Frame rootFrame = CreateRootFrame();
+                    RestoreStatus(args.PreviousExecutionState);
+
+                    if (rootFrame.Content == null)
+                    {
+                        if (!rootFrame.Navigate(typeof(MainPage)))
+                        {
+                            throw new Exception("Failed to create initial page");
+                        }
+                    }
+                    double lat=0, lon = 0;
+                    string pattern = @"(?<=lat=)-?[0-9]\d*\.\d+";
+                    if (Regex.IsMatch(protocolArgs.Uri.Query, pattern))
+                    {
+                        var regex = new Regex(pattern).Match(protocolArgs.Uri.Query);
+                        if (regex != null && regex.Captures.Count > 0)
+                        {
+                            lat = double.Parse(regex.Captures[0].Value);
+                        }
+                    }
+                    pattern = @"(?<=lon=)-?[0-9]\d*\.\d+";
+                    if (Regex.IsMatch(protocolArgs.Uri.Query, pattern))
+                    {
+                        var regex = new Regex(pattern).Match(protocolArgs.Uri.Query);
+                        if (regex != null && regex.Captures.Count > 0)
+                        {
+                            lon= double.Parse(regex.Captures[0].Value);
+                        }
+                    }
+
+                    
+                    // Ensure the current window is active
+                    Window.Current.Activate();
+
+                    var p = rootFrame.Content as MainPage;
+                    if (lat != 0 && lon != 0)
+                    {
+                        p.SetViewToLocation(lat, lon);
+                    }
+                    else
+                    {
+                        var dialog = new MessageDialog("Unable to find the passed location :(");
+                        dialog.ShowAsync();
+                    }
+                }
+
+        }
     }
 }

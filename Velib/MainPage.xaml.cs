@@ -1206,6 +1206,8 @@ namespace Velib
             }
         }
 
+        
+
         private void SearchLocationPoint_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             SelectItem(SearchLocationPoint, false);
@@ -1277,9 +1279,12 @@ namespace Velib
             {
                 body = lastAddressFound + "\r\n";
             }
-            body += "Decimal degrees (lat, lon): \r\n";
-            body += Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) + ", ";
-            body += Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture);
+            body += "easybike://center/?lat=" + Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) +
+                "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+
+            body += "\r\nCan't open this location ? Get the Easy Bike app : \r\n";
+            body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+
             mail.Body = body;
             await EmailManager.ShowComposeNewEmailAsync(mail);
         }
@@ -1288,17 +1293,28 @@ namespace Velib
             string body = string.Empty;
             if (!string.IsNullOrWhiteSpace(lastAddressFound))
             {
-                body = lastAddressFound + "\r\n";
+                body = lastAddressFound + "\r\n\r\n";
             }
 
 
-            body += "Decimal degrees (lat, lon): \r\n";
-            body += Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture)+", ";
-            body += Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture);
+            
+            body += "easybike://center/?lat=" + Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) +
+                "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+
+            body += "\r\nCan't open this location ? Get the Easy Bike app : \r\n";
+            body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+
             await ChatMessageManager.ShowComposeSmsMessageAsync(new ChatMessage
             {
                 Body = body
             });
+        }
+
+        public void SetViewToLocation(double lat, double lon)
+        {
+            LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
+            ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
+            Map.TrySetViewAsync(LastSearchGeopoint, 15,null,null,MapAnimationKind.None);
         }
     }
 }
