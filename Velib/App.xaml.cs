@@ -168,16 +168,14 @@ namespace Velib
         }
         void App_Resuming(object sender, object e)
         {
-            if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
-                MainPage.Map.ColorScheme = MapColorScheme.Dark;
+            //if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
+            //    MainPage.Map.ColorScheme = MapColorScheme.Dark;
         }
 
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
                 base.OnActivated(args);
-                if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
-                    MainPage.Map.ColorScheme = MapColorScheme.Dark;
 
 
                 if (args.Kind == ActivationKind.Protocol)
@@ -218,6 +216,13 @@ namespace Velib
                     Window.Current.Activate();
 
                     var p = rootFrame.Content as MainPage;
+                    if (p != null) {
+                        if (MainPage.Map != null)
+                        {
+                            if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
+                                MainPage.Map.ColorScheme = MapColorScheme.Dark;
+                        }
+
                     if (lat != 0 && lon != 0)
                     {
                         p.SetViewToLocation(lat, lon);
@@ -226,6 +231,7 @@ namespace Velib
                     {
                         var dialog = new MessageDialog("Unable to find the passed location :(");
                         dialog.ShowAsync();
+                    }
                     }
                 }
 

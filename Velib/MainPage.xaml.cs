@@ -1215,20 +1215,23 @@ namespace Velib
             //VelibFlyout.ShowAt(this);
         }
 
+        public bool appLaunchedFromProtocolUri = false;
         // trigger a map center changed to refresh the view
         internal  void DataSourceLoaded()
         {
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                if (VelibDataSource.StaticVelibs.Count == 0)
+                if (!appLaunchedFromProtocolUri)
                 {
-                    var dialog = new MessageDialog("it's a bit lonely on this map, let's check if your city is in the current list.");
-                    dialog.Commands.Add(new UICommand("Ok", null));
-                    await dialog.ShowAsync();
-                    Frame.Navigate(typeof(ContractsPage));
+                    if (VelibDataSource.StaticVelibs.Count == 0)
+                    {
+                        var dialog = new MessageDialog("it's a bit lonely on this map, let's check if your city is in the current list.");
+                        dialog.Commands.Add(new UICommand("Ok", null));
+                        await dialog.ShowAsync();
+                        Frame.Navigate(typeof(ContractsPage));
+                    }
+                    Map.Center = new Geopoint(new BasicGeoposition() { Longitude = Map.Center.Position.Longitude + 0.000001, Latitude = Map.Center.Position.Latitude });
                 }
-
-                Map.Center = new Geopoint(new BasicGeoposition() { Longitude = Map.Center.Position.Longitude+0.0001, Latitude = Map.Center.Position.Latitude });
             });
             
         }
@@ -1283,8 +1286,8 @@ namespace Velib
                 "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
 
             body += "\r\nCan't open this location ? Get the Easy Bike app : \r\n";
-            body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
-
+           // body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+            body += "http://www.windowsphone.com/s?appid=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
             mail.Body = body;
             await EmailManager.ShowComposeNewEmailAsync(mail);
         }
@@ -1302,7 +1305,7 @@ namespace Velib
                 "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
 
             body += "\r\nCan't open this location ? Get the Easy Bike app : \r\n";
-            body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+            body += "http://www.windowsphone.com/s?appid=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
 
             await ChatMessageManager.ShowComposeSmsMessageAsync(new ChatMessage
             {
@@ -1312,9 +1315,10 @@ namespace Velib
 
         public void SetViewToLocation(double lat, double lon)
         {
+            appLaunchedFromProtocolUri = true;
             LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
             ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
-            Map.TrySetViewAsync(LastSearchGeopoint, 15,null,null,MapAnimationKind.None);
+            Map.TrySetViewAsync(LastSearchGeopoint, 14.5,null,null,MapAnimationKind.None);
         }
     }
 }
