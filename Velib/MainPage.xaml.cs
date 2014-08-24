@@ -1319,6 +1319,7 @@ namespace Velib
             appLaunchedFromProtocolUri = true;
             LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
             ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
+            StopCompassAndUserLocationTracking();
             Map.TrySetViewAsync(LastSearchGeopoint, 14.5,null,null,MapAnimationKind.None);
         }
     }
