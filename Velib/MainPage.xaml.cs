@@ -376,7 +376,7 @@ namespace Velib
         private async void StopCompass(SymbolIcon locationButtonIcon, string locationButtonLabel)
         {
 
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 compassMode = false;
                 LocationButton.Icon = locationButtonIcon;
@@ -1316,11 +1316,15 @@ namespace Velib
 
         public void SetViewToLocation(double lat, double lon)
         {
-            appLaunchedFromProtocolUri = true;
-            LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
-            ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
-            StopCompassAndUserLocationTracking();
-            Map.TrySetViewAsync(LastSearchGeopoint, 14.5,null,null,MapAnimationKind.None);
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                StopCompassAndUserLocationTracking();
+                appLaunchedFromProtocolUri = true;
+                LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
+                ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
+                Map.TrySetViewAsync(LastSearchGeopoint, 14.5, 0, null, MapAnimationKind.None);
+            });
+            
         }
     }
 }
