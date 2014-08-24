@@ -78,6 +78,7 @@ namespace Velib
             this.InitializeComponent();
 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
             Map = MapCtrl;
             mainPage = this;
             // Hub est pris en charge uniquement en mode Portrait
@@ -313,8 +314,8 @@ namespace Velib
                     return;
                 searchingLocation = true;
                 Geoposition locationGeoPos = null;
-                try { 
-                    locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.Default }).GetGeopositionAsync();
+                try {
+                    locationGeoPos = await gl.GetGeopositionAsync();
                 }
                 catch (Exception ex)
                 {

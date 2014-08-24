@@ -47,12 +47,22 @@ namespace Velib.Tutorial
             });
             Items.Add(new HowToModel()
             {
-                Title = "Add some favorites",
+                Title = "Get directions to go somewhere",
                 Text = "Tap on a station or a searched location, it will show up a path walk to get there." +
-                            "Then tap again to show up a command panel. Press \"Add to favorites\".",
-                Details = "If the tapped point is far away from your location, it will directly shows up " +
-                            "the command panel as the walk path is not revelant.",
-                ImageUrl = "addToFavorites.png",
+                            " Then tap again to show up a command panel. Press \"Drive to\"."+
+                            " It will start your favorite driving app like HERE drive.",
+                Details = "You can then get your" +
+                            " headphones on, lock your phone, put it in your pocket and listen to the directions"+
+                            " from the HERE drive app :) (take care, it's usally a car itinerary so you might need to tweak it a bit)",
+                ImageUrl = "shareLocation1.jpg",
+            });
+            Items.Add(new HowToModel()
+            {
+                Title = "Add some favorites",
+                Text = "Press \"Add to favorites\".",
+                Details = "It will store the location of the point. You can name it as you like and manage" +
+                            " favorits from the dedicated page.",
+                ImageUrl = "shareLocation1.jpg",
             });
             Items.Add(new HowToModel()
             {
@@ -68,16 +78,31 @@ namespace Velib.Tutorial
                 Details = "",
                 ImageUrl = "addressSearch.png",
             });
-            
 
+            Items.Add(new HowToModel()
+            {
+                Title = "Share a location",
+                Text = "By tapping on a bike station or on a searched place, you can share that location by mail or text.",
+                ImageUrl = "shareLocation1.jpg",
+            });
+            Items.Add(new HowToModel()
+            {
+                ImageUrl = "shareLocation2.jpg",
+            });
+            Items.Add(new HowToModel()
+            {
+                Text = "The message will automatically contains the address if it has been resolved."+
+                " It will also contains a direct link to the Easy Bike app to show that location on the map.",
+                ImageUrl = "shareLocation3.jpg",
+            });
 
             Items.Add(new HowToModel()
             {
                 Title = "Tips : Store your home/car location",
                 Text = "Like a \"Dude, where is my car\" app, if you want to easely get back to your home / car / whereever location, just hold a finger on the"+
                 " location and add it to your favorites.",
-                Details = "It will be really easy to get back there from the favorites list.",
-                ImageUrl = "mapHolding.png",
+                Details = "It's then really easy to get back somewhere.",
+                ImageUrl = "whereIsMyCar.jpg",
             });
         }
     }

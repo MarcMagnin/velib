@@ -187,6 +187,10 @@
     <Content Include="Assets\WideLogo.scale-100.png" />
     <Content Include="Assets\wplogo.png" />
     <Content Include="Common\ReadMe.txt" />
+    <Content Include="Tutorial\shareLocation1.jpg" />
+    <Content Include="Tutorial\shareLocation2.jpg" />
+    <Content Include="Tutorial\shareLocation3.jpg" />
+    <Content Include="Tutorial\whereIsMyCar.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -250,7 +254,6 @@
     <None Include="packages.config" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Tutorial\addressSearch.png" />
-    <Content Include="Tutorial\addToFavorites.png" />
     <Content Include="Tutorial\compass.png" />
     <Content Include="Tutorial\cyclemode.png" />
     <Content Include="Tutorial\downloadcities.png" />
