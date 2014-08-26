@@ -76,6 +76,12 @@ namespace Velib
         public MainPage()
         {
             this.InitializeComponent();
+            MapService.ServiceToken = "AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo";
+
+
+            /// TEST
+            /// 
+            
 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
@@ -122,6 +128,8 @@ namespace Velib
 
         void TouchPanel_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {
+            if(searchCancellationToken != null)
+                searchCancellationToken.Cancel();
             this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
             HideSearch();
 
@@ -138,9 +146,11 @@ namespace Velib
 
 
 
-     
-        void MainPage_Loaded(object sender, RoutedEventArgs e)
+        private bool pageLoaded = false;
+        async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+
+           pageLoaded = true;
             Debug.WriteLine("Page LOADED");
         }
 
@@ -537,6 +547,8 @@ namespace Velib
         }
 
 
+       
+
         private async void AddressTextBox_KeyUp(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
@@ -548,13 +560,22 @@ namespace Velib
                 else
                     searchCancellationToken.Cancel();
                 searchCancellationToken = new CancellationTokenSource(); 
-                SearchAddress(searchCancellationToken.Token, searchCounter++);
+                SearchAddress(searchCancellationToken.Token);
                 
             }
         }
-        int searchCounter = 0;
+
+
+
+        private async Task<MapLocationFinderResult> FindLocation(string address, Geopoint hintPoint, uint maxResult)
+        {
+            return await MapLocationFinder.FindLocationsAsync(
+                                    address,
+                                    hintPoint,
+                                    maxResult);
+        }
         MapLocationFinderResult lastSearchLocationResult;
-        private async void SearchAddress(CancellationToken token, int counter)
+        private async void SearchAddress(CancellationToken token)
         {
             if (string.IsNullOrWhiteSpace(SearchTextBox.Text))
                 return;
@@ -564,18 +585,22 @@ namespace Velib
                 return;
             }
             SearchingProgressBar.Visibility = Visibility.Visible;
-            // Geocode the specified address, using the specified reference point as
-            // a query hint. Return no more than 3 results.
-            MapLocationFinderResult result = await MapLocationFinder.FindLocationsAsync(
-                                    SearchTextBox.Text,
-                                    userLastLocation,
-                                    1);
+
+            var task = FindLocation(SearchTextBox.Text, userLastLocation, 1);
+            if (task != await Task.WhenAny(task, Task.Delay(3000, token)))
+            {
+                // timout case 
+                Debug.WriteLine("searching address TIMEOUT or CANCELED !");
+                if(!token.IsCancellationRequested)
+                    SearchAddress(token);
+                return;
+            }
 
             if (token.IsCancellationRequested)
             {
                 return;
             }
-
+            var result = task.Result;
 
 
             // If the query returns results, display the coordinates
@@ -597,8 +622,11 @@ namespace Velib
             }
             else
             {
-               // VisualStateManager.GoToState(this, "SearchVisible", true);
-                SearchStatusTextBlock.Text = "Couldn't find that place. Try using different spelling or keywords.";
+                if (!token.IsCancellationRequested)
+                {
+                    VisualStateManager.GoToState(this, "SearchVisible", true);
+                    SearchStatusTextBlock.Text = "Couldn't find that place. Try using different spelling or keywords.";
+                }
             }
         }
 
@@ -637,7 +665,7 @@ namespace Velib
                 else
                     searchCancellationToken.Cancel();
                 searchCancellationToken = new CancellationTokenSource();
-                SearchAddress(searchCancellationToken.Token, searchCounter++);
+                SearchAddress(searchCancellationToken.Token);
             }
             else
             {
@@ -669,6 +697,15 @@ namespace Velib
             GetRouteWithToken(point, SearchRouteCancellationToken.Token, favorit);
         }
 
+
+
+        private async Task<MapRouteFinderResult> FindRoute(Geopoint startPoint, Geopoint endPoint)
+        {
+            return await MapRouteFinder.GetWalkingRouteAsync(
+                    startPoint,
+                    endPoint
+                    ); 
+        }
         MapRoute previousMapRoute;
         public async void GetRouteWithToken(Geopoint endPoint, CancellationToken token, Favorite favorite = null)
         {
@@ -700,19 +737,18 @@ namespace Velib
             if (userLastLocation == null)
                 return;
 
-            // Get the route between the points.
-                MapRouteFinderResult routeResult =
-                    await MapRouteFinder.GetWalkingRouteAsync(
-                    userLastLocation,
-                    endPoint
-                    );
+            var task = FindRoute(userLastLocation,endPoint);
+            if (task != await Task.WhenAny(task, Task.Delay(2000, token)))
+            {
+                // timout case 
+                Debug.WriteLine("get route TIMEOUT or CANCELED !");
+                if (!token.IsCancellationRequested)
+                    GetRouteWithToken(endPoint, token, favorite);
+                return;
+            }
+            
 
-                if (token.IsCancellationRequested)
-                {
-                    return;
-                }
-
-
+            var routeResult = task.Result;
 
                 if (routeResult.Status == MapRouteFinderStatus.Success)
                 {
@@ -913,25 +949,59 @@ namespace Velib
             else
                 reverseGeocodeCancellationTokenSource.Cancel();
             reverseGeocodeCancellationTokenSource = new CancellationTokenSource();
+
             ReverseGeocode(fromSearch, reverseGeocodeCancellationTokenSource.Token);
+            
         }
 
 
+
+        private async Task<MapLocationFinderResult> FindLocationsAt(Geopoint geoPoint)
+        {
+            return await MapLocationFinder.FindLocationsAtAsync(geoPoint);
+        }
+
         private string lastAddressFound;
+        private Geopoint previousGeopoint;
         private async void ReverseGeocode(bool fromSearch, CancellationToken token)
         {
             lastAddressFound = string.Empty;
-            Debug.WriteLine("searching adress...");
-            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            if (LastSearchGeopoint == previousGeopoint)
             {
-                var result = await MapLocationFinder.FindLocationsAtAsync(LastSearchGeopoint);
-                if (token.IsCancellationRequested)
-                {
-                    return;
-                    Debug.WriteLine("searching adress cancelled");
-                }
+                Debug.WriteLine("Skip reverse geocode : same location provided.");
+                return;
+            }
+            Debug.WriteLine("searching adress...");
+            var task = FindLocationsAt(LastSearchGeopoint);
+            if (task != await Task.WhenAny(task, Task.Delay(2000, token)))
+            {
+                // timout case 
+                Debug.WriteLine("searching adress TIMEOUT or CANCELED !");
+                if(!token.IsCancellationRequested)
+                    ReverseGeocode(fromSearch, token);
+                return;
+            }
+            
+            var result = task.Result;
+            if (token.IsCancellationRequested)
+            {
+                Debug.WriteLine("searching adress cancelled");
+                return;
+            }
+            // TODO WTF : sometime it sends indexfailure.. retry !
+            if (result.Status == MapLocationFinderStatus.IndexFailure)
+            {
+                new Task(async () => {
+                    await Task.Delay(500);
+                    ReverseGeocode(fromSearch, token);
+                    
+                }).Start();
+                
+                return;
+            }
 
-
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
                 if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count > 0)
                 {
                     lastAddressFound = result.ParseMapLocationFinderResultAddress().Trim();
@@ -953,12 +1023,15 @@ namespace Velib
                     if (fromSearch)
                     {
                         stickToUserLocation = false;
-                        SearchLocationText.Text = "Unable to find the address for now...";
+                        SearchLocationText.Text = "Unable to find the address.";
                         VisualStateManager.GoToState(this, "SearchAddressPinSearchedFinished", true);
                         Debug.WriteLine("Unable to find the address");
                     }
                 }
             });
+
+            
+            previousGeopoint = LastSearchGeopoint;
         }
 
 
@@ -1241,7 +1314,6 @@ namespace Velib
         {
             VisualStateManager.GoToState(this, "SearchLocationClear", true);
             VisualStateManager.GoToState(this, "SearchLocationClick", true);
-          
         }
 
         private void VelibTemplateStationRootCanvas_ManipulationStarting(object sender, Windows.UI.Xaml.Input.ManipulationStartingRoutedEventArgs e)
@@ -1314,16 +1386,16 @@ namespace Velib
             });
         }
 
-        public void SetViewToLocation(double lat, double lon)
+        public async void SetViewToLocation(double lat, double lon)
         {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                StopCompassAndUserLocationTracking();
-                appLaunchedFromProtocolUri = true;
-                LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = lat, Longitude = lon });
-                ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
                 Map.TrySetViewAsync(LastSearchGeopoint, 14.5, 0, null, MapAnimationKind.None);
             });
+            StopCompassAndUserLocationTracking();
+            appLaunchedFromProtocolUri = true;
+            ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
             
         }
     }
