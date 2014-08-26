@@ -1350,6 +1350,19 @@ namespace Velib
             EmailMessage mail = new EmailMessage();
             mail.Subject = "Check this location"; //+ version;
 
+            mail.Body = FormatShareLocationMessage();
+            await EmailManager.ShowComposeNewEmailAsync(mail);
+        }
+        private async void ShareByTextButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await ChatMessageManager.ShowComposeSmsMessageAsync(new ChatMessage
+            {
+                Body = FormatShareLocationMessage()
+            });
+        }
+
+        private string FormatShareLocationMessage()
+        {
             string body = string.Empty;
             if (!string.IsNullOrWhiteSpace(lastAddressFound))
             {
@@ -1358,32 +1371,10 @@ namespace Velib
             body += "easybike://center/?lat=" + Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) +
                 "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
 
-            body += "\r\nCan't open this location ? Get the Easy Bike app : \r\n";
-           // body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+            body += "\r\nCan't open this location ? Check out \"Easy Bike\" for Windows Phone ";
+            // body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
             body += "http://www.windowsphone.com/s?appid=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
-            mail.Body = body;
-            await EmailManager.ShowComposeNewEmailAsync(mail);
-        }
-        private async void ShareByTextButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            string body = string.Empty;
-            if (!string.IsNullOrWhiteSpace(lastAddressFound))
-            {
-                body = lastAddressFound + "\r\n\r\n";
-            }
-
-
-            
-            body += "easybike://center/?lat=" + Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) +
-                "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
-
-            body += "\r\nCan't open this location ? Get the Easy Bike app : \r\n";
-            body += "http://www.windowsphone.com/s?appid=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
-
-            await ChatMessageManager.ShowComposeSmsMessageAsync(new ChatMessage
-            {
-                Body = body
-            });
+            return body;
         }
 
         public async void SetViewToLocation(double lat, double lon)
