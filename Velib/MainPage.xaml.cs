@@ -84,7 +84,7 @@ namespace Velib
             
 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-            gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+           // gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
             Map = MapCtrl;
             mainPage = this;
             // Hub est pris en charge uniquement en mode Portrait
@@ -107,6 +107,7 @@ namespace Velib
 
             clusterGenerator = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
             gl.PositionChanged += gl_PositionChanged;
+            gl.StatusChanged += gl_StatusChanged;
             compass.ReportInterval = 200;
             compass.ReadingChanged -= compass_ReadingChanged;
             compass.ReadingChanged += compass_ReadingChanged;
@@ -124,6 +125,11 @@ namespace Velib
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             this.Loaded += MainPage_Loaded;
+        }
+
+        void gl_StatusChanged(Geolocator sender, StatusChangedEventArgs args)
+        {
+            Debug.WriteLine("Geolocator  status: " + args.Status);
         }
 
         void TouchPanel_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
@@ -314,28 +320,31 @@ namespace Velib
         private bool searchingLocation = false;
         private bool stickToUserLocation = false;
         public bool compassMode = false;
+        //private Geolocator glOnDemande;
         private async void LocationButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (stickToUserLocation == false)
             {
-            if (userLastLocation == null)
-            {
-                if (searchingLocation)
-                    return;
-                searchingLocation = true;
-                Geoposition locationGeoPos = null;
-                try {
-                    locationGeoPos = await gl.GetGeopositionAsync();
-                }
-                catch (Exception ex)
+                if (userLastLocation == null)
                 {
-                    var dialog = new MessageDialog("Unable to find your location now. Please try again later.");
-                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
-                    return;
+                    if (searchingLocation)
+                        return;
+                    searchingLocation = true;
+                    Geoposition locationGeoPos = null;
+                    try
+                    {
+                        locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.Default }).GetGeopositionAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        var dialog = new MessageDialog("Unable to find your location now. Please try again later.");
+                        Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
+                        return;
+                    }
+                    userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
+                    searchingLocation = false;
                 }
-                userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
-                searchingLocation = false;
-            }
+         
          
             LocationButton.Icon = new SymbolIcon(Symbol.View);
             LocationButton.Label = "Compass";
@@ -447,6 +456,7 @@ namespace Velib
         Geopoint previousBigChangeInUserLocation;
         async void gl_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
+            Debug.WriteLine("New POSITION ");
             userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Longitude, Latitude = args.Position.Coordinate.Latitude });
             if (previousBigChangeInUserLocation == null)
                 previousBigChangeInUserLocation = userLastLocation;
@@ -707,7 +717,7 @@ namespace Velib
                     ); 
         }
         MapRoute previousMapRoute;
-        public async void GetRouteWithToken(Geopoint endPoint, CancellationToken token, Favorite favorite = null)
+        public async void GetRouteWithToken(Geopoint endPoint, CancellationToken token, Favorite favorite = null, int retry = 0)
         {
 
 
@@ -742,8 +752,8 @@ namespace Velib
             {
                 // timout case 
                 Debug.WriteLine("get route TIMEOUT or CANCELED !");
-                if (!token.IsCancellationRequested)
-                    GetRouteWithToken(endPoint, token, favorite);
+                if (!token.IsCancellationRequested && retry <5)
+                    GetRouteWithToken(endPoint, token, null, retry++);
                 return;
             }
             
