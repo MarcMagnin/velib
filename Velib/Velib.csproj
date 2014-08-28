@@ -142,7 +142,6 @@
     <Compile Include="Tutorial\HowToModel.cs" />
     <Compile Include="Tutorial\HowToViewModel.cs" />
     <Compile Include="VelibContext\Velib.cs" />
-    <Compile Include="VelibContext\VelibCluster.cs" />
     <Compile Include="VelibContext\VelibControl.cs" />
     <Compile Include="VelibContext\VelibDataSource.cs" />
   </ItemGroup>

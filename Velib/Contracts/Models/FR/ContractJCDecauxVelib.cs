@@ -70,13 +70,16 @@ namespace Velib.Contracts
 
                             //if(!velibModel.OnlyColorReload)
                                 
+                                // for contract like jcdecaux to prevent the loading animation to pass from grey color to colored one
                                 if (velibModel.OnlyColorReload)
                                 {
                                     control.ShowStationColor();
+                                    velibModel.OnlyColorReload = false;
                                 }
                                 else
                                 {
                                     control.ShowVelibStation();
+                                    control.ShowStationColor();
                                 }
 
                             //velibModel.OnlyColorReload = false;

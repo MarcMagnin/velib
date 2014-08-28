@@ -55,7 +55,6 @@ namespace Velib.VelibContext
 
         }
 
-        public  VelibCluster Cluster = new VelibCluster();
 
         public List<VelibModel> Velibs = new List<VelibModel>();
         public TextBlock ClusterTextBlock;

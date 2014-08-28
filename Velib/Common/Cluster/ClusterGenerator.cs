@@ -25,7 +25,6 @@ namespace Velib.Common.Cluster
         const int MAX_CONTROLS = 40;
         private readonly List<VelibControl> velibControls = new List<VelibControl>(MAX_CONTROLS);
         public readonly List<VelibModel> Items = new List<VelibModel>();
-        private readonly List<VelibCluster> clusters = new List<VelibCluster>();
         private MapControl _map;
         private TimeSpan throttleTime = TimeSpan.FromMilliseconds(100);
         private CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
