@@ -108,9 +108,18 @@ namespace Velib
             clusterGenerator = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
             gl.PositionChanged += gl_PositionChanged;
             gl.StatusChanged += gl_StatusChanged;
-            compass.ReportInterval = 200;
-            compass.ReadingChanged -= compass_ReadingChanged;
-            compass.ReadingChanged += compass_ReadingChanged;
+            if (compass != null)
+            {
+                compass.ReportInterval = 200;
+                compass.ReadingChanged -= compass_ReadingChanged;
+                compass.ReadingChanged += compass_ReadingChanged;
+                VisualStateManager.GoToState(this, "compassState", true);
+            }
+            else
+            {
+                VisualStateManager.GoToState(this, "noCompassState", true);
+            }
+            
             MapCtrl.MapTapped += MyMap_MapTapped;
             MapCtrl.DoubleTapped += MapCtrl_DoubleTapped;
             MapCtrl.PitchChanged += MapCtrl_PitchChanged;
@@ -344,11 +353,12 @@ namespace Velib
                     userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
                     searchingLocation = false;
                 }
-         
-         
-            LocationButton.Icon = new SymbolIcon(Symbol.View);
-            LocationButton.Label = "Compass";
-            
+
+
+            if (compass != null) { 
+                LocationButton.Icon = new SymbolIcon(Symbol.View);
+                LocationButton.Label = "Compass";
+            }
             ShowUserLocation();
 
             //SetView(userLastLocation, null, null, null, MapAnimationKind.None);
@@ -378,8 +388,13 @@ namespace Velib
             {
                 if (stickToUserLocation) { 
                 // Compass mode
-                VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
-                compassMode = true;
+
+                    if (compass != null)
+                    {
+                        compassMode = true;
+                        VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
+                    }
+                    
                 LocationButton.Icon = new SymbolIcon(Symbol.Target);
                 LocationButton.Label = "Location";
 
@@ -415,8 +430,10 @@ namespace Velib
                 VisualStateManager.GoToState(this, "NorthIndicatorHidden", true);
             }
 
-            //NorthIndicatorRotationAnimation.To = Map.;
-
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                UpdateNorthElementAngle(MapCtrl.Heading);
+            });
         
         }
 
@@ -437,7 +454,7 @@ namespace Velib
             
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                UpdateNorthElementAngle(MapCtrl.Heading);
+               // UpdateNorthElementAngle(MapCtrl.Heading);
                 UpdateUserLocationElementAngle(angle);
                 if (compassMode){
                     //.Heading = angle;
