@@ -106,8 +106,6 @@
       <DependentUpon>ContractsPage.xaml</DependentUpon>
     </Compile>
     <None Include="Contracts\SampleData.json" />
-    <Compile Include="Contracts\Models\FR\Nantes\ContractBicloo.cs" />
-    <Compile Include="Contracts\Models\FR\Nantes\BiclooModel.cs" />
     <Compile Include="Contracts\Models\UK\ContractTFLLondon.cs" />
     <Compile Include="Contracts\Models\UK\TFLModel.cs" />
     <Compile Include="Contracts\Models\US\New York\CitiBikeContract.cs" />
