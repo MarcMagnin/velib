@@ -98,6 +98,8 @@ namespace Velib
 
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
+
+                rootFrame.Navigate(typeof(MainPage), null);
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
@@ -134,8 +136,8 @@ namespace Velib
             RestoreStatus(e.PreviousExecutionState);
 
             //MainPage is always in rootFrame so we don't have to worry about restoring the navigation state on resume
-            rootFrame.Navigate(typeof(MainPage), e.Arguments);
-
+            //rootFrame.Navigate(typeof(MainPage), e.Arguments);
+            Window.Current.Content = rootFrame;
             // Ensure the current window is active
             Window.Current.Activate();
         }
@@ -177,7 +179,6 @@ namespace Velib
         protected override void OnActivated(IActivatedEventArgs args)
         {
                 base.OnActivated(args);
-
 
                 if (args.Kind == ActivationKind.Protocol)
                 {

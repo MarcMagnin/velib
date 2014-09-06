@@ -55,7 +55,7 @@ namespace Velib.Contracts.Models.US
                                     HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())), tokenSource.Token);//.AsTask(cts.Token);
                                     var responseBodyAsText = await response.Content.ReadAsStringAsync();
                                     var model = responseBodyAsText.FromJsonString<DivyBikeModel>();
-
+                                    
                                     foreach (var station in model.Stations)
                                     {
                                         foreach (var velibModel in Velibs)

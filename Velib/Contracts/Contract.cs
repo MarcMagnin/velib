@@ -17,6 +17,7 @@ namespace Velib.Contracts
     {
         public DateTime LastUpdate;
         public bool DirectDownloadAvailability;
+        public int RefreshTimer;
         [IgnoreDataMember]
         public string ApiUrl;
 

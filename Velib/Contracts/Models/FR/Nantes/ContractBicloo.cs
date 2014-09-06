@@ -19,16 +19,13 @@ namespace Velib.Contracts
     public class ContractBicloo : Contract
     {
         [IgnoreDataMember]
-        public string ApiUrl = "http://www.tfl.gov.uk/tfl/syndication/feeds/cycle-hire/livecyclehireupdates.xml";
-        private string ApplicationId = "37451f1f";
-        private string ApplicationKeys = "b62f82ae23b105aad2ecc72c48c35c3d";
+        public string ApiUrl = "http://geovelo.nantesmetropole.fr/geovelo/getdecauxbikesharing/?contract=Nantes&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed&_=1409549782583";
         private DateTime nextUpdate;
         private Task Updater;
         public ContractBicloo()
         {
+            RefreshTimer = 10;
             DirectDownloadAvailability = true;
-            
-
         }
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
@@ -47,30 +44,27 @@ namespace Velib.Contracts
                                 {
                                     HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())));//.AsTask(cts.Token);
                                     var responseBodyAsText = await response.Content.ReadAsStringAsync();
-                                    var tflModel = responseBodyAsText.FromXmlString<stations>("stations");
-                                    //this.LastUpdate = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-                                    //this.LastUpdate = this.LastUpdate.AddMilliseconds(Convert.ToInt64(tflModel.lastUpdate)).ToLocalTime();
-                                    //nextUpdate = LastUpdate.AddMinutes(3);
-
-                                    foreach (var station in tflModel.station)
+                                    var items = responseBodyAsText.FromJsonString<List<VelibModel>>();
+                                    VelibCounter = Velibs.Count.ToString() + " stations";
+                                    foreach (var station in items)
                                     {
                                         foreach (var velibModel in Velibs)
                                         {
-                                            if (velibModel.Number == station.id)
+                                            if (velibModel.Number == station.Number)
                                             {
-                                                if (MainPage.BikeMode && velibModel.AvailableBikes != station.nbBikes)
+                                                if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                                 {
                                                     velibModel.Reload = true;
                                                     
 
                                                 }
-                                                if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.nbEmptyDocks)
+                                                if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.AvailableBikeStands)
                                                 {
                                                     velibModel.Reload = true;
                                                     
                                                 }
-                                                velibModel.AvailableBikes = station.nbBikes;
-                                                velibModel.AvailableBikeStands = station.nbEmptyDocks;
+                                                velibModel.AvailableBikes = station.AvailableBikes;
+                                                velibModel.AvailableBikeStands = station.AvailableBikeStands;
                                                 velibModel.Loaded = true;
                                                 break;
                                             }
@@ -91,19 +85,6 @@ namespace Velib.Contracts
                                             station.Reload = false;
                                            
                                         }
-                                           
-
-                                            //if (MainPage.BikeMode)
-                                            //{
-                                            //    velibControl.ShowColor(station.AvailableBikes);
-                                            //    station.AvailableStr = station.AvailableBikes.ToString();
-                                            //}
-                                            //else
-                                            //{
-                                            //    velibControl.ShowColor(station.AvailableBikeStands);
-                                            //    station.AvailableStr = station.AvailableBikeStands.ToString();
-                                            //}
-
                                     });
                                     httpClient.Dispose();
                                 }
@@ -118,7 +99,7 @@ namespace Velib.Contracts
                                 finally
                                 {
                                 }
-                                await Task.Delay(TimeSpan.FromMinutes(1));
+                                await Task.Delay(TimeSpan.FromSeconds(RefreshTimer));
                             }
                         
                     });
@@ -137,43 +118,25 @@ namespace Velib.Contracts
                 HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Name)));
                 var responseBodyAsText = await response.Content.ReadAsStringAsync();
                 // require Velib.Common
-                var tflModel = responseBodyAsText.FromXmlString<stations>("stations");
-                VelibCounter = tflModel.station.Length.ToString() + " stations";
-                Velibs = new List<VelibModel>();
-                //this.LastUpdate = tflModel.lastUpdate;
-                foreach (var station in tflModel.station)
+                Velibs = responseBodyAsText.FromJsonString<List<VelibModel>>();
+                VelibCounter = Velibs.Count.ToString() + " stations";
+                foreach (var station in Velibs)
                 {
-                    var stationModel = new VelibModel()
-                    {
-                        Contract = this,
-                        Number = station.id,
-                        Name = station.name,
-                        AvailableBikes = station.nbBikes,
-                        AvailableBikeStands = station.nbEmptyDocks,
-                        Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
-                    {
-                        Latitude = station.lat,
-                        Longitude = station.@long
-                    }),
-                        Latitude = station.lat,
-                        Longitude = station.@long,
-                        Loaded = true
-                    };
-
                     if (MainPage.BikeMode)
-                        stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
+                        station.AvailableStr = station.AvailableBikes.ToString();
                     else
-                        stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
+                        station.AvailableStr = station.AvailableBikeStands.ToString();
 
-                    Velibs.Add(stationModel);
+                    station.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
+                    {
+                        Latitude = station.Position.Latitude,
+                        Longitude = station.Position.Longitude
+                    });
+                    station.Latitude = station.Position.Latitude;
+                    station.Longitude = station.Position.Longitude; 
+                    station.Contract = this;
+                    station.Loaded = true;
 
-                    //velib.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
-                    //{
-                    //    Latitude = velib.Latitude,
-                    //    Longitude = velib.Longitude
-                    //});
-                    //velib.AvailableBikes = -1;
-                    //velib.AvailableBikeStands = -1;
                 }
 
                 Downloaded = true;

@@ -31,7 +31,6 @@ namespace Velib
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         public ContractsPage()
         {
             this.InitializeComponent();
@@ -111,18 +110,18 @@ namespace Velib
         {
             this.navigationHelper.OnNavigatedTo(e);
             var collection = new ObservableCollection<Contract>();
-            this.DefaultViewModel["Group"] = collection ;
-            new Task(async () =>
-            {
-                foreach (var contract in ContractsViewModel.Contracts)
-                {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        collection.Add(contract);
-                    });
-                    await Task.Delay(40);
-                }
-            }).Start();
+            this.DefaultViewModel["Group"] = ContractsViewModel.Contracts;
+            //new Task(async () =>
+            //{
+            //    foreach (var contract in ContractsViewModel.Contracts)
+            //    {
+            //        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            //        {
+            //           // collection.Add(contract);
+            //        });
+            //        await Task.Delay(40);
+            //    }
+            //}).Start();
             
 
         }
@@ -138,11 +137,8 @@ namespace Velib
                 }
                 else
                     ContractsViewModel.DownloadAndSaveContract(contract);
-
             }
-            
         }
-
         
 
         #endregion

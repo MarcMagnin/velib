@@ -18,7 +18,7 @@ namespace Velib.Contracts
     {
         [IgnoreDataMember]
         public string ApiUrl = "https://developer.jcdecaux.com/rest/vls/stations/{0}.json";
-        private static string dataURL = "https://api.jcdecaux.com/vls/v1/stations/{0}?contract=Paris&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed";
+        private static string dataURL = "https://api.jcdecaux.com/vls/v1/stations/{0}?contract={1}&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed";
         public override async void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
         {
             var httpClient = new HttpClient();
@@ -28,7 +28,7 @@ namespace Velib.Contracts
             bool failed = true;
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, velibModel.Number)));//.AsTask(cts.Token);
+                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, velibModel.Number,this.Name)));//.AsTask(cts.Token);
                 var responseBodyAsText = await response.Content.ReadAsStringAsync(); //.AsTask(cts.Token);
                 var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
                 if ( MainPage.BikeMode && velibModel.AvailableBikes != rootNode.AvailableBikes)

@@ -266,11 +266,11 @@
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<Grid Height="99" Margin="0">
-						<Interactivity:Interaction.Behaviors>
+						<!--<Interactivity:Interaction.Behaviors>
 							<Core:DataTriggerBehavior Binding="{Binding Downloading}">
 								<Core:GoToStateAction StateName="Disabled"/>
 							</Core:DataTriggerBehavior>
-						</Interactivity:Interaction.Behaviors>
+						</Interactivity:Interaction.Behaviors>-->
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>

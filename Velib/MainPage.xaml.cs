@@ -449,11 +449,12 @@ namespace Velib
             else
                 angle = args.Reading.HeadingMagneticNorth;
 
-
+            
             
             
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                angle = angle - Map.Heading;
                // UpdateNorthElementAngle(MapCtrl.Heading);
                 UpdateUserLocationElementAngle(angle);
                 if (compassMode){
@@ -473,7 +474,6 @@ namespace Velib
         Geopoint previousBigChangeInUserLocation;
         async void gl_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
-            Debug.WriteLine("New POSITION ");
             userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Longitude, Latitude = args.Position.Coordinate.Latitude });
             if (previousBigChangeInUserLocation == null)
                 previousBigChangeInUserLocation = userLastLocation;
@@ -1062,46 +1062,72 @@ namespace Velib
         }
 
 
-        double angleCorrectionUserLoc;
+        //double angleCorrectionUserLoc;
         double previousAngleUserLoc;
-        double previousModifiedAngleUserLoc;
-        bool triggerReinitRotation;
+        double currentRotation = 0;
+        //double previousModifiedAngleUserLoc;
+        //bool triggerReinitRotation;
+        bool reverseCumulation;
+        double cumulatedAngle = 0;
+        int cumulatorSign = 1;
         #endregion
         public void UpdateUserLocationElementAngle( double angle)
         {
 
-            double modifiedAngleUserLoc = angle ;
+            Debug.WriteLine(angle);
+            if (angle < previousAngleUserLoc)
+            {
+                if(Math.Abs(angle - previousAngleUserLoc)  > 300)
+                    cumulatorSign = cumulatorSign * -1;
 
+                cumulatedAngle = cumulatedAngle + (angle + cumulatedAngle) * cumulatorSign;
+            }
+            else if(angle >previousAngleUserLoc   ){
+                //    175         -175
+                if(Math.Abs(previousAngleUserLoc - angle) > 300)
+                    cumulatorSign = cumulatorSign * -1;
+
+                cumulatedAngle = cumulatedAngle + (angle - cumulatedAngle) * cumulatorSign;
+            }
+            
+
+            //double modifiedAngleUserLoc = angle ;
+
+            UserLocationRotationAnimation.To = cumulatedAngle;
+            UserLocationStoryboard.Begin();
+
+            return;
             if (compassMode) {
-                UserLocationStoryboard.Stop();
-                UserLocationRotationAnimation.To = modifiedAngleUserLoc;
-                UserLocationStoryboard.Begin();
-                modifiedAngleUserLoc = 0;
-            //    UserLocationRotationAnimation.From = 0;
+                //UserLocationStoryboard.Stop();
+                //UserLocationRotationAnimation.To = modifiedAngleUserLoc;
+                //UserLocationStoryboard.Begin();
+                //modifiedAngleUserLoc = 0;
+
+                UserLocationCompositeTransform.Rotation = 0;
+
             }
             else
             {
-                if (angle - previousAngleUserLoc > 200)
-                {
-                    angleCorrectionUserLoc = 360;
-              //      UserLocationRotationAnimation.From = 0;
-                }
-                else if (angle - previousAngleUserLoc < -200)
-                {
-                    angleCorrectionUserLoc = 0;
-                //    UserLocationRotationAnimation.From = 0;
-                }
-                modifiedAngleUserLoc = angle - 360;
+                UserLocationCompositeTransform.Rotation = angle;
+                //if (angle - previousAngleUserLoc > 200)
+                //{
+                //    angleCorrectionUserLoc = 360;
+                //}
+                //else if (angle - previousAngleUserLoc < -200)
+                //{
+                //    angleCorrectionUserLoc = 0;
+                //}
+                //modifiedAngleUserLoc = angle - 360;
 
             }
-            UserLocationRotationAnimation.From = previousModifiedAngleUserLoc; 
-            UserLocationRotationAnimation.To = modifiedAngleUserLoc;
+            //UserLocationRotationAnimation.From = previousModifiedAngleUserLoc; 
+            //UserLocationRotationAnimation.To = modifiedAngleUserLoc;
 
            
-            UserLocationStoryboard.Begin();
+            //UserLocationStoryboard.Begin();
 
-
-            previousModifiedAngleUserLoc = modifiedAngleUserLoc;
+            
+            //previousModifiedAngleUserLoc = modifiedAngleUserLoc;
             previousAngleUserLoc = angle;
         }   
         

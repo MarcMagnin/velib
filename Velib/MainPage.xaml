@@ -1060,7 +1060,7 @@
     			Width="26" Height="24" 
     			RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
                 <Canvas.RenderTransform>
-                    <CompositeTransform Rotation="0"/>
+                    <CompositeTransform x:Name="UserLocationCompositeTransform" Rotation="0"/>
                 </Canvas.RenderTransform>
 
                 <Path x:Name="path" Data="M12.978,0.5 L24.3847,22.832 L24.3958,22.8558 C25.1051,24.4247 25.5,26.1662 25.5,28 C25.5,34.9036 19.9036,40.5 13,40.5 C6.09644,40.5 0.5,34.9036 0.5,28 C0.5,26.2741 0.849777,24.6299 1.48231,23.1344 L1.52754,23.031 z" Fill="Black" HorizontalAlignment="Center" Height="41" RenderTransformOrigin="0.5,0.286976" Stretch="Fill" Stroke="White" UseLayoutRounding="False" VerticalAlignment="Center" Width="26" Canvas.Top="-16"/>

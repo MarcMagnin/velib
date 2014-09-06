@@ -101,7 +101,7 @@
     <Compile Include="Common\SerializationExtensions.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
-    <Compile Include="Contracts\Models\FR\ContractJCDecauxVelib.cs" />
+    <Compile Include="Contracts\Models\FR\JCDecaux\ContractJCDecauxVelib.cs" />
     <Compile Include="Contracts\ContractsPage.xaml.cs">
       <DependentUpon>ContractsPage.xaml</DependentUpon>
     </Compile>
@@ -141,7 +141,7 @@
     </Compile>
     <Compile Include="Tutorial\HowToModel.cs" />
     <Compile Include="Tutorial\HowToViewModel.cs" />
-    <Compile Include="VelibContext\Velib.cs" />
+    <Compile Include="Contracts\Models\FR\JCDecaux\Velib.cs" />
     <Compile Include="VelibContext\VelibControl.cs" />
     <Compile Include="VelibContext\VelibDataSource.cs" />
   </ItemGroup>
