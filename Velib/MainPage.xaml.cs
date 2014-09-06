@@ -79,10 +79,6 @@ namespace Velib
             MapService.ServiceToken = "AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo";
 
 
-            /// TEST
-            /// 
-            
-
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
            // gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
             Map = MapCtrl;
@@ -289,33 +285,7 @@ namespace Velib
            
         }
 
-        //private VelibControl previousItemTapped;
-        //void VelibTapped(object sender, TappedRoutedEventArgs e)
-        //{
-        //    var itemTapped = (sender as VelibControl);
-
-        //    if (previousItemTapped != itemTapped)
-        //    {
-        //        if (previousItemTapped != null)
-        //        {
-        //            VisualStateManager.GoToState(previousItemTapped, "Normal", true);
-        //            previousItemTapped.Selected = false;
-        //        }
-        //    }
-
-        //    if (itemTapped.Selected)
-        //    {
-        //        VisualStateManager.GoToState(itemTapped, "Normal", true);
-        //    }
-        //    else
-        //    {
-        //        VisualStateManager.GoToState(itemTapped, "Selected", true);
-        //    }
-
-        //    itemTapped.Selected = !itemTapped.Selected;
-        //    previousItemTapped = itemTapped;
-        //}
-
+        
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
@@ -382,7 +352,7 @@ namespace Velib
             {
                 StopCompass(new SymbolIcon(Symbol.View), "Compass");
                 if (Map.Heading != 0)
-                    MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
+                    MapCtrl.TrySetViewAsync(MapCtrl.Center, null, Map.Heading, null, MapAnimationKind.Linear);
             }
             else
             {
@@ -437,8 +407,6 @@ namespace Velib
         
         }
 
-       
-
         private void compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
         {
             double angle;
@@ -454,9 +422,8 @@ namespace Velib
             
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                angle = angle - Map.Heading;
                // UpdateNorthElementAngle(MapCtrl.Heading);
-                UpdateUserLocationElementAngle(angle);
+                UpdateUserLocationElementAngle(angle - Map.Heading);
                 if (compassMode){
                     //.Heading = angle;
                     SetView(userLastLocation, null, angle, null, MapAnimationKind.Linear);
@@ -1061,74 +1028,40 @@ namespace Velib
             previousGeopoint = LastSearchGeopoint;
         }
 
-
-        //double angleCorrectionUserLoc;
         double previousAngleUserLoc;
-        double currentRotation = 0;
-        //double previousModifiedAngleUserLoc;
-        //bool triggerReinitRotation;
-        bool reverseCumulation;
-        double cumulatedAngle = 0;
-        int cumulatorSign = 1;
         #endregion
         public void UpdateUserLocationElementAngle( double angle)
         {
 
-            Debug.WriteLine(angle);
-            if (angle < previousAngleUserLoc)
+            if (compassMode)
             {
-                if(Math.Abs(angle - previousAngleUserLoc)  > 300)
-                    cumulatorSign = cumulatorSign * -1;
-
-                cumulatedAngle = cumulatedAngle + (angle + cumulatedAngle) * cumulatorSign;
-            }
-            else if(angle >previousAngleUserLoc   ){
-                //    175         -175
-                if(Math.Abs(previousAngleUserLoc - angle) > 300)
-                    cumulatorSign = cumulatorSign * -1;
-
-                cumulatedAngle = cumulatedAngle + (angle - cumulatedAngle) * cumulatorSign;
-            }
-            
-
-            //double modifiedAngleUserLoc = angle ;
-
-            UserLocationRotationAnimation.To = cumulatedAngle;
-            UserLocationStoryboard.Begin();
-
-            return;
-            if (compassMode) {
-                //UserLocationStoryboard.Stop();
-                //UserLocationRotationAnimation.To = modifiedAngleUserLoc;
-                //UserLocationStoryboard.Begin();
-                //modifiedAngleUserLoc = 0;
-
-                UserLocationCompositeTransform.Rotation = 0;
-
+               UserLocationStoryboard.Stop();
+                UserLocationRotationAnimation.To = 0;
+                UserLocationStoryboard.Begin();
             }
             else
             {
-                UserLocationCompositeTransform.Rotation = angle;
-                //if (angle - previousAngleUserLoc > 200)
-                //{
-                //    angleCorrectionUserLoc = 360;
-                //}
-                //else if (angle - previousAngleUserLoc < -200)
-                //{
-                //    angleCorrectionUserLoc = 0;
-                //}
-                //modifiedAngleUserLoc = angle - 360;
+                if (angle < previousAngleUserLoc)
+                {
+                    if (Math.Abs(angle - previousAngleUserLoc) > 300)
+                        UserLocationRotationAnimation.From = previousAngleUserLoc - 360;
+                    else
+                        UserLocationRotationAnimation.From = null;
 
+                }
+                else if (angle > previousAngleUserLoc)
+                {
+                    if (Math.Abs(previousAngleUserLoc - angle) > 300)
+                        UserLocationRotationAnimation.From = previousAngleUserLoc + 360;
+                    else
+                        UserLocationRotationAnimation.From = null;
+
+                }
+                UserLocationRotationAnimation.To = angle;
+                UserLocationStoryboard.Begin();
+                previousAngleUserLoc = angle;
             }
-            //UserLocationRotationAnimation.From = previousModifiedAngleUserLoc; 
-            //UserLocationRotationAnimation.To = modifiedAngleUserLoc;
-
-           
-            //UserLocationStoryboard.Begin();
-
             
-            //previousModifiedAngleUserLoc = modifiedAngleUserLoc;
-            previousAngleUserLoc = angle;
         }   
         
         
