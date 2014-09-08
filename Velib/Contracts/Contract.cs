@@ -22,6 +22,7 @@ namespace Velib.Contracts
         public string ApiUrl;
 
         public string Name { get; set; }
+        public string Id { get; set; }
         public string Pays { get; set; }
         public string Description { get; set; }
         [IgnoreDataMember]

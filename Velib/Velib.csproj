@@ -101,6 +101,8 @@
     <Compile Include="Common\SerializationExtensions.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
+    <Compile Include="Contracts\Models\NextBike\NextBikeContract.cs" />
+    <Compile Include="Contracts\Models\NextBike\NextBikeModel.cs" />
     <Compile Include="Contracts\Models\CH\PubliBike\PubliBikeContract.cs" />
     <Compile Include="Contracts\Models\CH\PubliBike\PubliBikeModel.cs" />
     <Compile Include="Contracts\Models\FR\JCDecaux\ContractJCDecauxVelib.cs" />
@@ -263,7 +265,6 @@
     <Content Include="Tutorial\path.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Contracts\Models\CH\NextBike\" />
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>

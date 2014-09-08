@@ -19,6 +19,7 @@ using Windows.UI.Core;
 using Velib.Contracts.Models.US;
 using Velib.Contracts.Models.US.Washington;
 using Velib.Contracts.Models.CH.PubliBike;
+using Velib.Contracts.Models.NextBike;
 namespace Velib
 {
     public class ContractsViewModel
@@ -33,9 +34,15 @@ namespace Velib
         private static string paysImagesRootPath = "ms-appx:///Assets/Pays";
         private static List<string> downloadedContract;
         private static List<Contract> contracts = new List<Contract>(){
-              new PubliBikeContract{Name = "SwissBikes",
+               new PubliBikeContract{Name = "SwissBikes",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
+              new NextBikeContract{Name = "Luzern",
+               PaysImage = paysImagesRootPath+ "/CH.png",
+               Pays = "Switzerland", Id= "126"},
+                new NextBikeContract{Name = "Sursee",
+               PaysImage = paysImagesRootPath+ "/CH.png",
+               Pays = "Switzerland", Id= "88"},
             new CapitalBikeShareContract{Name = "Washington",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
