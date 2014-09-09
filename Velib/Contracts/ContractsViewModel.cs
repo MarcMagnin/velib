@@ -20,6 +20,7 @@ using Velib.Contracts.Models.US;
 using Velib.Contracts.Models.US.Washington;
 using Velib.Contracts.Models.CH.PubliBike;
 using Velib.Contracts.Models.NextBike;
+using Velib.Contracts.Models.Smoove;
 namespace Velib
 {
     public class ContractsViewModel
@@ -125,6 +126,9 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Toulouse",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"},
+            new SmooveContract{Name = "Strasbourg",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
             new NextBikeContract{Name = "Berlin",
