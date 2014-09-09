@@ -103,7 +103,6 @@
     <Compile Include="Contracts\Contract.cs" />
     <Compile Include="Contracts\Models\FR\Strasbourg\SmooveContract.cs" />
     <Compile Include="Contracts\Models\FR\Strasbourg\SmooveModel.cs" />
-    <Compile Include="Contracts\Models\FR\Strasbourg\vcstations.cs" />
     <Compile Include="Contracts\Models\NextBike\NextBikeContract.cs" />
     <Compile Include="Contracts\Models\NextBike\NextBikeModel.cs" />
     <Compile Include="Contracts\Models\CH\PubliBike\PubliBikeContract.cs" />

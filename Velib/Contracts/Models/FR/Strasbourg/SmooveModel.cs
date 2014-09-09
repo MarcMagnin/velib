@@ -8,63 +8,46 @@ namespace Velib.Contracts.Models.Smoove
 {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class stations
+    public class vcs
     {
 
-        private stationsStation[] stationField;
-
-        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("sl", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public stationsStation[] Stations
+        public strassStation Node
         {
-            get
-            {
-                return this.stationField;
-            }
-            set
-            {
-                this.stationField = value;
-            }
+            get;
+            set;
         }
 
     }
-    /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class stationsStation
+    public class strassStation
+    {
+        [System.Xml.Serialization.XmlElementAttribute("si", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public station[] Stations
+        {
+            get;
+            set;
+        }
+
+
+    }
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public class station
     {
 
         private int idField;
-
-        private string nameField;
-
-        private string terminalNameField;
-
-        private string lastCommWithServerField;
 
         private double latField;
 
         private double longField;
 
-        private string installedField;
-
-        private string lockedField;
-
-        private string installDateField;
-
-        private string removalDateField;
-
-        private string temporaryField;
-
-        private string publicField;
-
         private int nbBikesField;
 
         private int nbEmptyDocksField;
 
-        private string latestUpdateTimeField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("id",Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlAttributeAttribute("id", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int Id
         {
             get
@@ -77,24 +60,10 @@ namespace Velib.Contracts.Models.Smoove
             }
         }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("si", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name
-        {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
-        }
-
-
+       
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("la",Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlAttributeAttribute("la", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public double Latitude
         {
             get
@@ -108,7 +77,7 @@ namespace Velib.Contracts.Models.Smoove
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("lg",Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlAttributeAttribute("lg", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public double Longitude
         {
             get
@@ -121,25 +90,11 @@ namespace Velib.Contracts.Models.Smoove
             }
         }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string locked
-        {
-            get
-            {
-                return this.lockedField;
-            }
-            set
-            {
-                this.lockedField = value;
-            }
-        }
-        
         
         
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("av", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlAttributeAttribute("av", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int AvailableBikes
         {
             get
@@ -153,7 +108,7 @@ namespace Velib.Contracts.Models.Smoove
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("fr",Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlAttributeAttribute("fr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int AvailableDocks
         {
             get

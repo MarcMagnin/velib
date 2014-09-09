@@ -15,9 +15,10 @@ namespace Velib.Contracts
 
     public class Contract : INotifyPropertyChanged
     {
+        [IgnoreDataMember]
         public DateTime LastUpdate;
         public bool DirectDownloadAvailability;
-        public int RefreshTimer;
+        public TimeSpan RefreshTimer = TimeSpan.FromSeconds(20);
         [IgnoreDataMember]
         public string ApiUrl;
 
