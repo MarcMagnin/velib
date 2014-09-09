@@ -790,10 +790,6 @@ namespace Velib
 
         public void SelectItem(object item, bool skipFlyout)
         {
-                
-
-            
-            
 
             //if (item == SearchLocationPoint && PreviousSelectedItem != null && PreviousSelectedItem is VelibControl)
             //{

@@ -51,8 +51,8 @@ namespace Velib.Contracts.Models.CH.PubliBike
                         HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())), tokenSource.Token);//.AsTask(cts.Token);
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
                         var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
-                                    
-                        foreach (var station in model.Stations)
+
+                        foreach (var station in model.Stations.Where(s => s.City == Name))
                         {
                             foreach (var velibModel in Velibs)
                             {
@@ -107,7 +107,7 @@ namespace Velib.Contracts.Models.CH.PubliBike
                     finally
                     {
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(20));
+                    await Task.Delay(RefreshTimer);
                 }
                         
         });
@@ -133,10 +133,10 @@ namespace Velib.Contracts.Models.CH.PubliBike
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
-                VelibCounter = model.Stations.Count.ToString() + " stations";
+                VelibCounter = model.Stations.Where(s=>s.City == Name).ToList().Count.ToString() + " stations";
                 Velibs = new List<VelibModel>();
                 //this.LastUpdate = tflModel.lastUpdate;
-                foreach (var station in model.Stations)
+                foreach (var station in model.Stations.Where(s => s.City == Name))
                 {
                     var stationModel = new VelibModel()
                     {

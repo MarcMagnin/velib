@@ -46,6 +46,10 @@ namespace Velib.Contracts.Models.CH.PubliBike
     public class Station
     {
 
+        [DataMember(Name = "city")]
+        public string City{ get; set; }
+
+
         [DataMember(Name = "terminalid")]
         public int Id { get; set; }
 

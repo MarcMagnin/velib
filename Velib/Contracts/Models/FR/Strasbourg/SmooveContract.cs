@@ -13,9 +13,7 @@ using System.Threading;
 using System.Net.Http;
 using System.Diagnostics;
 
-
 namespace Velib.Contracts.Models.Smoove
-
 {
     // New York
     public class SmooveContract: Contract
@@ -120,8 +118,6 @@ namespace Velib.Contracts.Models.Smoove
 
             try
             {
-                //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-              //Returned JSON
                 HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl)));
                 var responseBodyAsText = await response.Content.ReadAsStringAsync();
                 
@@ -129,7 +125,6 @@ namespace Velib.Contracts.Models.Smoove
                 var model = responseBodyAsText.FromXmlString<vcs>("");
                 VelibCounter = model.Node.Stations.Length.ToString() + " stations";
                 Velibs = new List<VelibModel>();
-                //this.LastUpdate = tflModel.lastUpdate;
                 foreach (var station in model.Node.Stations)
                 {
                     var stationModel = new VelibModel()
@@ -172,7 +167,6 @@ namespace Velib.Contracts.Models.Smoove
             finally
             {
                 Downloading = false;
-                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
             }
             if (failed)
             {
