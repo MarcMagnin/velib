@@ -141,6 +141,7 @@ namespace Velib.Favorits
                             });
                 MainPage.mainPage.StopCompassAndUserLocationTracking();
                 MainPage.Map.Heading = 0;
+                MainPage.Map.Routes.Clear();
                 MainPage.mainPage.GetRoute(destination, favorite);
                 if (this.Frame.CanGoBack)
                 {

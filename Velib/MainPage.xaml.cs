@@ -143,7 +143,9 @@ namespace Velib
                 searchCancellationToken.Cancel();
             this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
             HideSearch();
-
+            VisualStateManager.GoToState(this, "SearchLocationMinimize", true);
+            if (PreviousSelectedItem == SearchLocationPoint)
+                PreviousSelectedItem = null;
         }
 
         void TouchPanel_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -153,7 +155,6 @@ namespace Velib
             LocationButton.Icon = new SymbolIcon(Symbol.Target);
             LocationButton.Label = "Location";
         }
-
 
 
 
@@ -352,7 +353,7 @@ namespace Velib
             {
                 StopCompass(new SymbolIcon(Symbol.View), "Compass");
                 if (Map.Heading != 0)
-                    MapCtrl.TrySetViewAsync(MapCtrl.Center, null, Map.Heading, null, MapAnimationKind.Linear);
+                    MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
             }
             else
             {
@@ -704,46 +705,46 @@ namespace Velib
         public async void GetRouteWithToken(Geopoint endPoint, CancellationToken token, Favorite favorite = null, int retry = 0)
         {
 
-
-
             if (favorite != null)
             {
                 ShowSearchLocationPoint(endPoint, favorite.Name);
                 if (userLastLocation == null)
                 {
-                    var dialog = new MessageDialog(
-                        "To get there, the phone must find your location first. Please wait a bit an try again.");
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                    {
-                        await dialog.ShowAsync();
-                    });
-                    return;
+                    //var dialog = new MessageDialog(
+                    //    "To get there, the phone must find your location first. Please wait a bit an try again.");
+                    //await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    //{
+                    //    await dialog.ShowAsync();
+                    //});
 
-
-                    
+                    await MapCtrl.TrySetViewAsync(endPoint,15,0, null);
                 }
-                // Fit the MapControl to the route.
-                await MapCtrl.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(new List<Geopoint>() { userLastLocation, endPoint }),
-                    new Thickness(40, 40, 40, 40), MapAnimationKind.None);
+                else
+                {
+                    // Fit the MapControl to the route.
+                    await MapCtrl.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(new List<Geopoint>() { userLastLocation, endPoint }),
+                        new Thickness(40, 40, 40, 40), MapAnimationKind.None);
+                }
+                return;
 
             }
 
             if (userLastLocation == null)
                 return;
 
-            var task = FindRoute(userLastLocation,endPoint);
+          
+            var task = FindRoute(userLastLocation, endPoint);
             if (task != await Task.WhenAny(task, Task.Delay(2000, token)))
             {
                 // timout case 
                 Debug.WriteLine("get route TIMEOUT or CANCELED !");
-                if (!token.IsCancellationRequested && retry <5)
-                    GetRouteWithToken(endPoint, token, null, retry++);
+                // BUG : apparently MapRouteFinder.GetWalkingRouteAsync is on UI thread. don't recall it again
+                //  if (!token.IsCancellationRequested && retry < 5)
+                //       GetRouteWithToken(endPoint, token, null, ++retry);
                 return;
             }
-            
-
             var routeResult = task.Result;
-
+            Debug.WriteLine("get route ended with result : " + routeResult.Status);
                 if (routeResult.Status == MapRouteFinderStatus.Success)
                 {
 
@@ -806,11 +807,11 @@ namespace Velib
             {
                 LastSearchGeopoint = SearchLocationPoint.GetValue(MapControl.LocationProperty) as Geopoint;
                 ReverseGeocode(true);
-
+                VisualStateManager.GoToState(this, "SearchLocationNormal", true);
             }
 
-            
 
+          
 
             if (item is VelibControl)
             {
@@ -854,20 +855,26 @@ namespace Velib
 
 
             }
-            if (PreviousSelectedItem == item && !skipFlyout)
-            {
-                VelibFlyout.ShowAt(this);
-            }
 
-            // Show the route if the user is at least 15 KM from the selected item
-            if (userLastLocation != null && LastSearchGeopoint != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 15)
+            // Show the route if the user is at least 3 KM from the selected item
+            if (userLastLocation != null && LastSearchGeopoint != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 3)
             {
                 GetRoute(LastSearchGeopoint);
+                if (PreviousSelectedItem == item && !skipFlyout)
+                {
+                    VelibFlyout.ShowAt(this);
+                }
             }
             else
             {
-            //    VelibFlyout.ShowAt(this);
+                if (!skipFlyout)
+                {
+                    VelibFlyout.ShowAt(this);
+                }
             }
+         
+          
+            
 
             
 
@@ -892,10 +899,12 @@ namespace Velib
                 {
                     VisualStateManager.GoToState(this, "SearchAddressPinSearching", true);
                 }
-                    
-                VisualStateManager.GoToState(this, "SearchLocationHide", true);
-                VisualStateManager.GoToState(this, "SearchLocationShow", true);
 
+               
+                VisualStateManager.GoToState(this, "SearchLocationHide", true);
+                VisualStateManager.GoToState(this, "SearchLocationNormal", true);
+                VisualStateManager.GoToState(this, "SearchLocationShow", true);
+              
                 
 
 
@@ -967,6 +976,7 @@ namespace Velib
             }
             Debug.WriteLine("searching adress...");
             var task = FindLocationsAt(LastSearchGeopoint);
+
             if (task != await Task.WhenAny(task, Task.Delay(2000, token)))
             {
                 // timout case 

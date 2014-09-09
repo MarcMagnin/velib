@@ -1041,6 +1041,27 @@
             		</Storyboard>
             	</VisualState>
             </VisualStateGroup>
+            <VisualStateGroup x:Name="VisualStateGroup5">
+            	<VisualStateGroup.Transitions>
+            		<VisualTransition GeneratedDuration="0:0:0.2">
+            			<VisualTransition.GeneratedEasingFunction>
+            				<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
+            			</VisualTransition.GeneratedEasingFunction>
+            		</VisualTransition>
+            	</VisualStateGroup.Transitions>
+            	<VisualState x:Name="SearchLocationNormal"/>
+            	<VisualState x:Name="SearchLocationMinimize">
+            		<Storyboard>
+            			<DoubleAnimation Duration="0" To="0.2" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="grid1" d:IsOptimized="True"/>
+            			<DoubleAnimation Duration="0" To="0.45" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="grid1" d:IsOptimized="True"/>
+            			<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grid1" d:IsOptimized="True"/>
+            			<DoubleAnimation Duration="0" To="20" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="grid1" d:IsOptimized="True"/>
+            			<ColorAnimation Duration="0" To="Transparent" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SearchLocationText" d:IsOptimized="True"/>
+            			<ColorAnimation Duration="0" To="Transparent" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SearchingText" d:IsOptimized="True"/>
+            			<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="____Text" d:IsOptimized="True"/>
+            		</Storyboard>
+            	</VisualState>
+            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <Maps:MapControl x:Name="MapCtrl"
@@ -1080,8 +1101,7 @@
 
 
         <Canvas x:Name="SearchLocationPoint" RenderTransformOrigin="0,0" 
-		 Opacity="0" 
-		Maps:MapControl.NormalizedAnchorPoint="0.5,1" Tapped="SearchLocationPoint_Tapped" Margin="0" IsHitTestVisible="False" ManipulationStarting="SearchLocationPoint_ManipulationStarting" ManipulationMode="All" >
+		Maps:MapControl.NormalizedAnchorPoint="0.5,1" Tapped="SearchLocationPoint_Tapped" Margin="0" IsHitTestVisible="False" ManipulationStarting="SearchLocationPoint_ManipulationStarting" ManipulationMode="All" Opacity="0" >
             <Canvas.RenderTransform>
                 <CompositeTransform/>
             </Canvas.RenderTransform>
@@ -1089,28 +1109,30 @@
 
             <Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6" IsHitTestVisible="False"/>
             <Path Data="M28.6295,13.5002 L44.2042,13.5002 L36.4169,21.2875 z" Stretch="Fill" UseLayoutRounding="False" Fill="#CC1F1F1F" Width="16" Height="9.295" Canvas.Left="-8" Canvas.Top="-10" IsHitTestVisible="False"/>
-
-
-
-            <Grid HorizontalAlignment="Left" Background="#CC1F1F1F" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
+            <Grid x:Name="grid1" HorizontalAlignment="Left" Background="#CC1F1F1F" Canvas.Left="-100" Canvas.Top="-83" MinWidth="100" RenderTransformOrigin="0.5,0.5" Height="74" Width="200">
 
                 <Grid.RenderTransform>
                     <CompositeTransform/>
                 </Grid.RenderTransform>
 
-                <TextBlock x:Name="SearchLocationText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center"  FontSize="18.667" MaxLines="3" Margin="3,0" RenderTransformOrigin="0.5,0.5" Foreground="White">
-                    <TextBlock.RenderTransform>
-                        <CompositeTransform/>
-                    </TextBlock.RenderTransform>
-                </TextBlock>
-                <TextBlock x:Name="SearchingText" HorizontalAlignment="Center" TextWrapping="Wrap" 
-    				Text="Searching..." VerticalAlignment="Center" FontSize="18.667" 
-					RenderTransformOrigin="0.5,0.5" Foreground="White">
-                    <TextBlock.RenderTransform>
-                        <CompositeTransform/>
-                    </TextBlock.RenderTransform>
-                </TextBlock>
+            	<TextBlock x:Name="SearchLocationText" HorizontalAlignment="Center" TextWrapping="Wrap" Text="txt" VerticalAlignment="Center"  FontSize="18.667" MaxLines="3" Margin="3,0" RenderTransformOrigin="0.5,0.5" Foreground="White">
+            		<TextBlock.RenderTransform>
+            			<CompositeTransform/>
+            		</TextBlock.RenderTransform>
+            	</TextBlock>
+            	<TextBlock x:Name="SearchingText" HorizontalAlignment="Center" TextWrapping="Wrap" 
+            		Text="Searching..." VerticalAlignment="Center" FontSize="18.667" 
+            		RenderTransformOrigin="0.5,0.5" Foreground="White">
+            		<TextBlock.RenderTransform>
+            			<CompositeTransform/>
+            		</TextBlock.RenderTransform>
+            	</TextBlock>
             </Grid>
+            <TextBlock x:Name="____Text" HorizontalAlignment="Center" TextWrapping="Wrap" Text="..." VerticalAlignment="Center"  FontSize="26.667" MaxLines="3" RenderTransformOrigin="0.5,0.5" Foreground="White" Canvas.Left="-9" Canvas.Top="-49" Opacity="0">
+            	<TextBlock.RenderTransform>
+            		<CompositeTransform/>
+            	</TextBlock.RenderTransform>
+            </TextBlock>
 
 
 
