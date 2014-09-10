@@ -133,10 +133,13 @@ namespace Velib.Contracts.Models.CH.PubliBike
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
-                VelibCounter = model.Stations.Where(s=>s.City == Name).ToList().Count.ToString() + " stations";
+                VelibCounter = model.Stations.Where(s=>s.City == TechnicalName).ToList().Count.ToString() + " stations";
+
+                //var test = model.Stations.GroupBy(s => s.City).Select(t => t.First()).Select(s => s.City).OrderBy(s=>s).Aggregate((c, next) => c + " \r\n" + next);
+                //Debug.WriteLine(test);
                 Velibs = new List<VelibModel>();
                 //this.LastUpdate = tflModel.lastUpdate;
-                foreach (var station in model.Stations.Where(s => s.City == Name))
+                foreach (var station in model.Stations.Where(s => s.City == TechnicalName))
                 {
                     var stationModel = new VelibModel()
                     {

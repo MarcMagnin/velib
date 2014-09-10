@@ -26,7 +26,7 @@ namespace Velib.Contracts.Models.NextBike{
         {
             DirectDownloadAvailability = true;
             ApiUrl = "http://nextbike.net/maps/nextbike-live.xml?city={0}";
-
+            ApiUrl = "http://nextbike.net/maps/nextbike-live.xml";
         }
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
@@ -132,6 +132,14 @@ namespace Velib.Contracts.Models.NextBike{
                 // require Velib.Common
                 var model = responseBodyAsText.FromXmlString<markers>("");
                 VelibCounter = model.Items.FirstOrDefault().city.FirstOrDefault().place.Length.ToString() + " stations";
+                var test =model.Items;
+                var coolstring ="";
+                foreach (var t in test){
+                    coolstring += t.city.Select(v=>t.country +" : "+ v.name+ " : " + v.uid ).Aggregate((v1, v2)=> v1 + "\r\n"+ v2);
+                    coolstring += "\r\n";
+                }
+                Debug.WriteLine(coolstring);
+
                 Velibs = new List<VelibModel>();
                 //this.LastUpdate = tflModel.lastUpdate;
                 foreach (var station in model.Items.FirstOrDefault().city.FirstOrDefault().place)

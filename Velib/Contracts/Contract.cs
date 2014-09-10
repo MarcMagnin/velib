@@ -23,6 +23,18 @@ namespace Velib.Contracts
         public string ApiUrl;
 
         public string Name { get; set; }
+        private string technicalName;
+        public string TechnicalName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(technicalName))
+                    return Name;
+                else
+                    return technicalName;
+            }
+            set { technicalName = value; }
+        }
         public string Id { get; set; }
         public string Pays { get; set; }
         public string Description { get; set; }

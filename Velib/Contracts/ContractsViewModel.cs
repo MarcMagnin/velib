@@ -39,16 +39,22 @@ namespace Velib
             new PubliBikeContract{Name = "Agglo Fribourg",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"}, 
-               new PubliBikeContract{Name = "Lausanne-Morges", //name
+               new PubliBikeContract{Name = "Bern", //name
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
                new PubliBikeContract{Name = "Lausanne", //city
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-               new PubliBikeContract{Name = "Morat", // city
+               new PubliBikeContract{Name = "Murten Morat", // city
+               TechnicalName= "Murten/Morat",
+               PaysImage = paysImagesRootPath+ "/CH.png"},
+
+               new PubliBikeContract{Name = "La Tour-de-Peilz", // city
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-               new PubliBikeContract{Name = "Bahnhof Murten - Gare de Morat", // name
+
+               new PubliBikeContract{Name = "Ecublens", // name
+               TechnicalName= "Ecublens PL4",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
          
