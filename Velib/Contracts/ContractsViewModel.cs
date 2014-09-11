@@ -327,19 +327,19 @@ namespace Velib
 // LV BOTTOM
 
 // LT TOP
-               new ContractJCDecauxVelib{Name = "Vilnius",
+            new ContractJCDecauxVelib{Name = "Vilnius",
                PaysImage = paysImagesRootPath+ "/LT.png",
                Pays = "Lithuania"},
 // LT BOTTOM
 
 // LU TOP
-               new ContractJCDecauxVelib{Name = "Luxembourg",
+            new ContractJCDecauxVelib{Name = "Luxembourg",
                PaysImage = paysImagesRootPath+ "/LU.png",
                Pays = "Luxembourg"},
 // LU BOTTOM
 
 // NZ TOP
-               new NextBikeContract{Name = "Auckland",
+            new NextBikeContract{Name = "Auckland",
                PaysImage = paysImagesRootPath+ "/NZ.png",
                Pays = "New Zealand", Id= "34"},
                new NextBikeContract{Name = "Christchurch",
@@ -348,19 +348,56 @@ namespace Velib
 // NZ BOTTOM
 
 // NO TOP
-               new ContractJCDecauxVelib{Name = "Lillestrom",
+            new ContractJCDecauxVelib{Name = "Lillestrom",
                PaysImage = paysImagesRootPath+ "/NO.png",
                Pays = "Norway"},
 // NO BOTTOM
 
+// PL TOP
+            new NextBikeContract{Name = "Bemowo",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "197"},
+               new NextBikeContract{Name = "Białystok",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "245"},
+               new NextBikeContract{Name = "Konstancin Jeziorna",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "247"},
+               new NextBikeContract{Name = "Kraków",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "232"},
+               new NextBikeContract{Name = "Lublin",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "251"},
+               new NextBikeContract{Name = "Opole",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "202"},
+               new NextBikeContract{Name = "Poznan",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "192"},
+               new NextBikeContract{Name = "Sopot",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "227"},
+               new NextBikeContract{Name = "Warszawa", // Biggest one 199 stations
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "210"},
+               new NextBikeContract{Name = "Wrocław",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "148"},
+               new NextBikeContract{Name = "Wroclaw", // Other Stations near & in
+               TechnicalName= "WROCŁAW 61",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "187"},
+// PL BOTTOM
+
 // RU TOP
-               new ContractJCDecauxVelib{Name = "Kazan",
+            new ContractJCDecauxVelib{Name = "Kazan",
                PaysImage = paysImagesRootPath+ "/RU.png",
                Pays = "Russia"},
 //RU BOTTOM
 
 // SE TOP
-               new ContractJCDecauxVelib{Name = "Goteborg",
+             new ContractJCDecauxVelib{Name = "Goteborg",
                PaysImage = paysImagesRootPath+ "/SE.png",
                Pays = "Sweden"},
                new ContractJCDecauxVelib{Name = "Stockholm",
@@ -369,7 +406,7 @@ namespace Velib
 // SE BOTTOM
 
 // SI TOP
-               new ContractJCDecauxVelib{Name = "Ljubljana",
+             new ContractJCDecauxVelib{Name = "Ljubljana",
                PaysImage = paysImagesRootPath+ "/SI.png",
                Pays = "Slovenia"},
 // SI BOTTOM
@@ -405,7 +442,7 @@ namespace Velib
 // AE BOTTOM
 
 // GB TOP
-               new NextBikeContract{Name = "Bath",
+             new NextBikeContract{Name = "Bath",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom", Id= "236"},
                new NextBikeContract{Name = "Glasgow",
@@ -429,7 +466,7 @@ namespace Velib
             new NextBikeContract{Name = "Pittsburgh",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "254"},
-               new CapitalBikeShareContract{Name = "Washington",
+            new CapitalBikeShareContract{Name = "Washington",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
 // US BOTTOM
