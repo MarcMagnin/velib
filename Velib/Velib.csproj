@@ -165,12 +165,15 @@
     <Content Include="Assets\ombre.png" />
     <Content Include="Assets\Pays\AE.png" />
     <Content Include="Assets\Pays\AT.png" />
+    <Content Include="Assets\Pays\AZ.png" />
     <Content Include="Assets\Pays\BE.png" />
+    <Content Include="Assets\Pays\BG.png" />
     <Content Include="Assets\Pays\CH.png" />
     <Content Include="Assets\Pays\CY.png" />
     <Content Include="Assets\Pays\DE.png" />
     <Content Include="Assets\Pays\ES.png" />
     <Content Include="Assets\Pays\FR.png" />
+    <Content Include="Assets\Pays\HR.png" />
     <Content Include="Assets\Pays\JP.png" />
     <Content Include="Assets\Pays\LT.png" />
     <Content Include="Assets\Pays\LU.png" />
@@ -181,6 +184,7 @@
     <Content Include="Assets\Pays\SE.png" />
     <Content Include="Assets\Pays\SI.png" />
     <Content Include="Assets\Pays\GB.png" />
+    <Content Include="Assets\Pays\TR.png" />
     <Content Include="Assets\Pays\US.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-140.png" />

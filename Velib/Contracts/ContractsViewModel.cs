@@ -124,6 +124,12 @@ namespace Velib
                Pays = "Austria", Id= "151"},
 // AT BOTTOM
 
+// AZ TOP
+            new NextBikeContract{Name = "Baku",
+               PaysImage = paysImagesRootPath+ "/AZ.png",
+               Pays = "Azerbaijan", Id= "205"},
+// AZ BOTTOM
+
 // BE TOP
             new ContractJCDecauxVelib{Name = "Bruxelles-Capitale",
                PaysImage = paysImagesRootPath+ "/BE.png",
@@ -132,6 +138,21 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/BE.png",
                Pays = "Belgium"},
 // BE BOTTOM
+
+// BG TOP
+            new NextBikeContract{Name = "Dobrich",
+               PaysImage = paysImagesRootPath+ "/BG.png",
+               Pays = "Bulgaria", Id= "215"},
+// BG BOTTOM
+
+// HR TOP
+            new NextBikeContract{Name = "Šibenik",
+               PaysImage = paysImagesRootPath+ "/HR.png",
+               Pays = "Croatia", Id= "248"},
+               new NextBikeContract{Name = "Zagreb",
+               PaysImage = paysImagesRootPath+ "/HR.png",
+               Pays = "Croatia", Id= "220"},
+// HR BOTTOM
 
 // CY TOP
             new NextBikeContract{Name = "Limassol",
@@ -364,6 +385,15 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
 // ES BOTTOM
+
+// TR TOP
+            new NextBikeContract{Name = "Konya",
+               PaysImage = paysImagesRootPath+ "/TR.png",
+               Pays = "Turkey", Id= "183"},
+               new NextBikeContract{Name = "Seferihisar",
+               PaysImage = paysImagesRootPath+ "/TR.png",
+               Pays = "Turkey", Id= "249"},
+// TR BOTTOM
 
 // AE TOP
             new NextBikeContract{Name = "Al Sharjah",
