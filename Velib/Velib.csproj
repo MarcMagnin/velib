@@ -164,6 +164,7 @@
     <Content Include="Assets\HubBackground.theme-light.png" />
     <Content Include="Assets\ombre.png" />
     <Content Include="Assets\Pays\AE.png" />
+    <Content Include="Assets\Pays\AT.png" />
     <Content Include="Assets\Pays\BE.png" />
     <Content Include="Assets\Pays\CH.png" />
     <Content Include="Assets\Pays\CY.png" />
