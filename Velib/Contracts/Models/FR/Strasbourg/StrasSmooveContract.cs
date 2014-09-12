@@ -13,16 +13,16 @@ using System.Threading;
 using System.Net.Http;
 using System.Diagnostics;
 
-namespace Velib.Contracts.Models.Smoove
+namespace Velib.Contracts.Models.Stras.Smoove
 {
     // New York
-    public class SmooveContract: Contract
+    public class StrasSmooveContract: Contract
     {
         [IgnoreDataMember]
         private CancellationTokenSource tokenSource;
         [IgnoreDataMember]
         private Task Updater;
-        public SmooveContract()
+        public StrasSmooveContract()
         {
             DirectDownloadAvailability = true;
             ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml";
@@ -178,12 +178,12 @@ namespace Velib.Contracts.Models.Smoove
 
         public override Contract GetSimpleContract()
         {
-            return (SmooveContract)base.GetSimpleContract();
+            return (StrasSmooveContract)base.GetSimpleContract();
         }
 
         protected override Contract GetInstanceForSimpleClone()
         {
-            return new SmooveContract();
+            return new StrasSmooveContract();
         }
     }
 }

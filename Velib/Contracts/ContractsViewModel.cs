@@ -20,7 +20,7 @@ using Velib.Contracts.Models.US;
 using Velib.Contracts.Models.US.Washington;
 using Velib.Contracts.Models.CH.PubliBike;
 using Velib.Contracts.Models.NextBike;
-using Velib.Contracts.Models.Smoove;
+using Velib.Contracts.Models.Stras.Smoove;
 namespace Velib
 {
     public class ContractsViewModel
@@ -161,7 +161,7 @@ namespace Velib
 // CY BOTTOM
 
 // FR TOP
-               new ContractJCDecauxVelib{Name = "Amiens",
+             new ContractJCDecauxVelib{Name = "Amiens",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Besancon",
@@ -173,6 +173,7 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Creteil",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
+             
                new ContractJCDecauxVelib{Name = "Lyon",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
@@ -194,16 +195,16 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Rouen",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-               new SmooveContract{Name = "Strasbourg",
+             new StrasSmooveContract{Name = "Strasbourg",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-               new ContractJCDecauxVelib{Name = "Toulouse",
+             new ContractJCDecauxVelib{Name = "Toulouse",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
 // FR BOTTOM
 
 // DE TOP
-            new NextBikeContract{Name = "Augsburg",
+             new NextBikeContract{Name = "Augsburg",
                PaysImage = paysImagesRootPath+ "/DE.png",
                Pays = "Germany", Id= "178"},
                new NextBikeContract{Name = "Berlin",
@@ -312,13 +313,13 @@ namespace Velib
 // DE BOTTOM
 
 // JP TOP
-            new ContractJCDecauxVelib{Name = "Toyama",
+             new ContractJCDecauxVelib{Name = "Toyama",
                PaysImage = paysImagesRootPath+ "/JP.png",
                Pays = "Japan"},
 // JP BOTTOM
 
 // LV TOP
-            new NextBikeContract{Name = "Jurmala",
+             new NextBikeContract{Name = "Jurmala",
                PaysImage = paysImagesRootPath+ "/LV.png",
                Pays = "Latvia", Id= "140"},
                new NextBikeContract{Name = "Riga",
@@ -412,7 +413,7 @@ namespace Velib
 // SI BOTTOM
 
 // ES TOP
-            new ContractJCDecauxVelib{Name = "Santander",
+             new ContractJCDecauxVelib{Name = "Santander",
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
                new ContractJCDecauxVelib{Name = "Seville",

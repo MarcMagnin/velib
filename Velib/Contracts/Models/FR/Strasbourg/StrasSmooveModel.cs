@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Velib.Contracts.Models.Smoove
+namespace Velib.Contracts.Models.Stras.Smoove
 {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
@@ -12,7 +12,7 @@ namespace Velib.Contracts.Models.Smoove
     {
 
         [System.Xml.Serialization.XmlElementAttribute("sl", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public strassStation Node
+        public GrenoStation Node
         {
             get;
             set;
@@ -20,7 +20,7 @@ namespace Velib.Contracts.Models.Smoove
 
     }
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public class strassStation
+    public class GrenoStation
     {
         [System.Xml.Serialization.XmlElementAttribute("si", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public station[] Stations
