@@ -20,6 +20,7 @@ using Velib.Contracts.Models.US;
 using Velib.Contracts.Models.US.Washington;
 using Velib.Contracts.Models.CH.PubliBike;
 using Velib.Contracts.Models.NextBike;
+using Velib.Contracts.Models.Greno.Smoove;
 using Velib.Contracts.Models.Stras.Smoove;
 namespace Velib
 {
@@ -173,7 +174,9 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Creteil",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-             
+             new GrenoSmooveContract{Name = "Grenoble",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"},
                new ContractJCDecauxVelib{Name = "Lyon",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},

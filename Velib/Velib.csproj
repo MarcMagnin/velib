@@ -101,8 +101,18 @@
     <Compile Include="Common\SerializationExtensions.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
-    <Compile Include="Contracts\Models\FR\Strasbourg\StrasSmooveContract.cs" />
-    <Compile Include="Contracts\Models\FR\Strasbourg\StrasSmooveModel.cs" />
+    <Compile Include="Contracts\Models\FR\Grenoble\GrenoSmooveContract.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Contracts\Models\FR\Grenoble\GrenoSmooveModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Contracts\Models\FR\Strasbourg\StrasSmooveContract.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Contracts\Models\FR\Strasbourg\StrasSmooveModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Contracts\Models\NextBike\NextBikeContract.cs" />
     <Compile Include="Contracts\Models\NextBike\NextBikeModel.cs" />
     <Compile Include="Contracts\Models\CH\PubliBike\PubliBikeContract.cs" />
@@ -279,7 +289,6 @@
     <Content Include="Tutorial\path.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Contracts\Models\FR\Grenoble\" />
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
