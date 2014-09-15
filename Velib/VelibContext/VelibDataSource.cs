@@ -36,8 +36,6 @@ namespace VelibContext
         }
 
         public static List<VelibModel> StaticVelibs = new List<VelibModel>();
-
-
     }
 }
 

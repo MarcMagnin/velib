@@ -38,6 +38,7 @@ namespace Velib
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
         }
 
         /// <summary>
@@ -109,8 +110,28 @@ namespace Velib
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            var collection = new ObservableCollection<Contract>();
-            this.DefaultViewModel["Group"] = ContractsViewModel.Contracts;
+            
+
+            var contractGroup = new List<ContractGroup>();
+            foreach(var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c=>c.Pays)){
+               var group = new ContractGroup(){Title = contract.Pays, ImagePath = contract.PaysImage};
+               group.Items = new ObservableCollection<Contract>();
+               foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays))
+               {
+                   group.Items.Add(c);
+                   group.ItemsCounter++;
+               }
+               contractGroup.Add(group);
+            }
+            CollectionViewSource t = new CollectionViewSource
+            {
+                IsSourceGrouped = true,
+                Source = contractGroup,
+                ItemsPath = new PropertyPath("Items")
+
+            }; 
+            
+            this.DefaultViewModel["Group"] = t;
             //new Task(async () =>
             //{
             //    foreach (var contract in ContractsViewModel.Contracts)

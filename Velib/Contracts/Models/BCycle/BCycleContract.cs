@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VelibContext;
 using Windows.UI.Core;
-using Velib.Common;
 using Windows.UI.Popups;
+using Velib.Common;
 using Windows.Devices.Geolocation;
-using System.Threading;
-using System.Net.Http;
-using System.Diagnostics;
 
-namespace Velib.Contracts.Models.Stras.Smoove
+namespace Velib.Contracts.Models.BCycle
 {
-    // New York
-    public class StrasSmooveContract: Contract
+    public class BCycleContract: Contract
     {
         [IgnoreDataMember]
         private CancellationTokenSource tokenSource;
-        [IgnoreDataMember]
         private Task Updater;
-        public StrasSmooveContract()
+        private string ApiKey = "A231E49A-920B-4C20-8752-E1B650ED1A49";
+        public BCycleContract()
         {
+            this.ServiceProvider = "B-cycle";
             DirectDownloadAvailability = true;
-            ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml";
-            this.ServiceProvider = "Smoove";
+            ApiUrl = "https://publicapi.bcycle.com/api/1.0/ListProgramKiosks/{0}";
         }
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
@@ -40,14 +38,16 @@ namespace Velib.Contracts.Models.Stras.Smoove
                     if (tokenSource != null)
                         tokenSource.Cancel();
                     tokenSource = new CancellationTokenSource();
+
                     var httpClient = new HttpClient();
+                    bool failed = true;
                     try
                     {
-                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())), tokenSource.Token);//.AsTask(cts.Token);
+                        httpClient.DefaultRequestHeaders.Add("ApiKey", ApiKey);
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id)), tokenSource.Token);//.AsTask(cts.Token);
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
-                        var model = responseBodyAsText.FromXmlString<vcs>("");
-
-                        foreach (var station in model.Node.Stations)
+                        var model = responseBodyAsText.FromJsonString<List<BCycleModel>>();
+                        foreach (var station in model)
                         {
                             foreach (var velibModel in Velibs)
                             {
@@ -60,7 +60,6 @@ namespace Velib.Contracts.Models.Stras.Smoove
                                     if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.AvailableDocks)
                                     {
                                         velibModel.Reload = true;
-
                                     }
                                     velibModel.AvailableBikes = station.AvailableBikes;
                                     velibModel.AvailableBikeStands = station.AvailableDocks;
@@ -70,7 +69,6 @@ namespace Velib.Contracts.Models.Stras.Smoove
 
                             }
                         }
-
                         await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
                             foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
@@ -82,7 +80,6 @@ namespace Velib.Contracts.Models.Stras.Smoove
                                     control.ShowStationColor();
                                 }
                                 station.Reload = false;
-
                             }
 
                         });
@@ -94,6 +91,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
                     }
                     catch (Exception ex)
                     {
+                        failed = true;
                     }
                     finally
                     {
@@ -119,31 +117,43 @@ namespace Velib.Contracts.Models.Stras.Smoove
 
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl)));
+                httpClient.DefaultRequestHeaders.Add("ApiKey", ApiKey);
+                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl,Id)));
                 var responseBodyAsText = await response.Content.ReadAsStringAsync();
                 
                 // require Velib.Common
-                var model = responseBodyAsText.FromXmlString<vcs>("");
-                VelibCounter = model.Node.Stations.Length.ToString() + " stations";
+                var model = responseBodyAsText.FromJsonString<List<BCycleModel>>();
+                VelibCounter = model.Count.ToString() + " stations";
+               
+               // var test =model.Items;
+               // var coolstring ="";
+               // foreach (var t in test){
+               //   coolstring += t.city.Select(v=>t.country +" : "+ v.name+ " : " + v.uid ).Aggregate((v1, v2)=> v1 + "\r\n"+ v2);
+               //   coolstring += "\r\n";
+               // }
+               // Debug.WriteLine(coolstring);
+
                 Velibs = new List<VelibModel>();
-                foreach (var station in model.Node.Stations)
+                //this.LastUpdate = tflModel.lastUpdate;
+                foreach (var station in model)
                 {
                     var stationModel = new VelibModel()
                     {
                         Contract = this,
                         Number = station.Id,
-                        //Name = station.Label,
+                        Name = station.Label,
                         AvailableBikes = station.AvailableBikes,
                         AvailableBikeStands = station.AvailableDocks,
                         Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
-                    {
-                        Latitude = station.Latitude,
-                        Longitude = station.Longitude
-                    }),
-                        Latitude = station.Latitude,
-                        Longitude = station.Longitude,
+                        {
+                            Latitude = station.Location.Latitude,
+                            Longitude = station.Location.Longitude
+                        }),
+                        Latitude = station.Location.Latitude,
+                        Longitude = station.Location.Longitude,
                         Loaded = true
                     };
+
 
                     if (MainPage.BikeMode)
                         stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
@@ -168,6 +178,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
             finally
             {
                 Downloading = false;
+                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
             }
             if (failed)
             {
@@ -179,12 +190,12 @@ namespace Velib.Contracts.Models.Stras.Smoove
 
         public override Contract GetSimpleContract()
         {
-            return (StrasSmooveContract)base.GetSimpleContract();
+            return (BCycleContract)base.GetSimpleContract();
         }
 
         protected override Contract GetInstanceForSimpleClone()
         {
-            return new StrasSmooveContract();
+            return new BCycleContract();
         }
     }
 }

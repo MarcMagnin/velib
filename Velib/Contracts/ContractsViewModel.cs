@@ -22,6 +22,7 @@ using Velib.Contracts.Models.CH.PubliBike;
 using Velib.Contracts.Models.NextBike;
 using Velib.Contracts.Models.Greno.Smoove;
 using Velib.Contracts.Models.Stras.Smoove;
+using Velib.Contracts.Models.BCycle;
 namespace Velib
 {
     public class ContractsViewModel
@@ -37,6 +38,10 @@ namespace Velib
         private static List<string> downloadedContract;
         private static List<Contract> contracts = new List<Contract>()
         {
+            new BCycleContract{Name = "Austin",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States", Id= "72"},
+
 // AT TOP
             new NextBikeContract{Name = "Haag",
                PaysImage = paysImagesRootPath+ "/AT.png",

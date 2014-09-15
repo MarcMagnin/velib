@@ -863,7 +863,11 @@ namespace Velib
             }
             else
             {
-                if (!skipFlyout)
+                if (item == SearchLocationPoint && item == PreviousSelectedItem)
+                {
+                    VelibFlyout.ShowAt(this);
+                }
+                else if (item != SearchLocationPoint && !skipFlyout)
                 {
                     VelibFlyout.ShowAt(this);
                 }

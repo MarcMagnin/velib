@@ -26,6 +26,7 @@ namespace Velib.Contracts.Models.NextBike{
         {
             DirectDownloadAvailability = true;
             ApiUrl = "http://nextbike.net/maps/nextbike-live.xml?city={0}";
+            this.ServiceProvider = "Next Bike";
         }
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)

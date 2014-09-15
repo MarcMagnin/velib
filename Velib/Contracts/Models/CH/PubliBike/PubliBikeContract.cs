@@ -27,6 +27,7 @@ namespace Velib.Contracts.Models.CH.PubliBike
         {
             ApiUrl = "http://customers2011.ssmservice.ch/publibike/getterminals_v2.php";
             DirectDownloadAvailability = true;
+            this.ServiceProvider = "PubliBike";
         }
 
    

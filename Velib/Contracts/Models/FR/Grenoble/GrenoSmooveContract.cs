@@ -26,6 +26,7 @@ namespace Velib.Contracts.Models.Greno.Smoove
         {
             DirectDownloadAvailability = true;
             ApiUrl = "http://vms.metrovelo.fr/vcstations.xml";
+            this.ServiceProvider = "Smoove";
         }
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)

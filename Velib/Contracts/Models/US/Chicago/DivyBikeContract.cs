@@ -29,7 +29,7 @@ namespace Velib.Contracts.Models.US
         public DivyBikeContract()
         {
             DirectDownloadAvailability = true;
-            
+            this.ServiceProvider = "DivyBike";
 
         }
         // Barclays refresh every 3 minutes the stations informations :/

@@ -19,6 +19,12 @@ namespace Velib.Contracts
         [IgnoreDataMember]
         public string ApiUrl = "https://developer.jcdecaux.com/rest/vls/stations/{0}.json";
         private static string dataURL = "https://api.jcdecaux.com/vls/v1/stations/{0}?contract={1}&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed";
+
+        public ContractJCDecauxVelib()
+        {
+            this.ServiceProvider = "JCDecaux";
+        }
+
         public override async void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
         {
             var httpClient = new HttpClient();

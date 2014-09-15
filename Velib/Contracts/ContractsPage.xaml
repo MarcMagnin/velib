@@ -6,12 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:SampleData="using:Blend.SampleData.SampleDataSource"
     x:Class="Velib.ContractsPage"
     mc:Ignorable="d"
 	DataContext="{Binding DefaultViewModel.Group, RelativeSource={RelativeSource Mode=Self}}"
-	d:DataContext="{Binding Source={d:DesignData Source=/Contracts/SampleData.json}}  "
+	d:DataContext="{Binding Source={d:DesignData Source=/Contracts/SampleData.json}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 	<Page.Resources>
+		<SampleData:SampleDataSource x:Key="SampleDataSource" d:IsDataSource="True"/>
 		<FontFamily x:Key="ContentControlThemeFontFamily">Segoe WP</FontFamily>
 		<x:Double x:Key="ControlContentThemeFontSize">12</x:Double>
 		<Thickness x:Key="ListViewItemMargin">0</Thickness>
@@ -184,12 +186,12 @@
 							</VisualStateManager.VisualStateGroups>
 							<Interactivity:Interaction.Behaviors>
 								<Core:DataTriggerBehavior Binding="{Binding Downloading}" Value="True">
-<!--									<Core:GoToStateAction StateName="Disabled" />-->
+									<!--									<Core:GoToStateAction StateName="Disabled" />-->
 									<Core:ChangePropertyAction PropertyName="Opacity" Value="0,5"/>
 									<Core:ChangePropertyAction PropertyName="IsHitTestVisible" Value="False"/>
 								</Core:DataTriggerBehavior>
 								<Core:DataTriggerBehavior Binding="{Binding Downloading}" Value="False">
-								<Core:ChangePropertyAction PropertyName="Opacity" Value="1"/>
+									<Core:ChangePropertyAction PropertyName="Opacity" Value="1"/>
 									<Core:ChangePropertyAction PropertyName="IsHitTestVisible" Value="True"/>
 								</Core:DataTriggerBehavior>
 								<!--<Core:DataTriggerBehavior Binding="{Binding Downloading}" Value="False">
@@ -237,16 +239,153 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<DataTemplate x:Key="GroupHeaderDataTemplate">
+				
+					<Grid Height="40">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="53"/>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<Border BorderBrush="Black" VerticalAlignment="Top" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.5" Height="40" Grid.ColumnSpan="3"/>
+						<Image Source="{Binding ImagePath}" Height="30" HorizontalAlignment="Center" Width="40" VerticalAlignment="Center" Margin="0,5,0,4"/>
+						<TextBlock Text="{Binding Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
+						<StackPanel Height="39" VerticalAlignment="Top" Orientation="Horizontal" Grid.Column="2" Margin="0,7,0,0" HorizontalAlignment="Right">
+							<TextBlock Text="{Binding ItemsCounter}" 
+								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" VerticalAlignment="Center" />
+							<TextBlock Text="Cities" 
+								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" VerticalAlignment="Center" Margin="3,0,0,0" />
+						</StackPanel>
+					</Grid>
+                            
+			
+		</DataTemplate>
+		<DataTemplate x:Key="ContractItemDataTemplate">
+			<TextBox Text="Test"/>
+		</DataTemplate>
+		<Style x:Key="GroupItemStyle1" TargetType="GroupItem">
+			<Setter Property="IsTabStop" Value="False"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="GroupItem">
+						<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="*"/>
+								</Grid.RowDefinitions>
+								<ContentControl x:Name="HeaderContent" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" Content="{TemplateBinding Content}" IsTabStop="False" Margin="{TemplateBinding Padding}" TabIndex="0"/>
+								
+								<ItemsControl x:Name="ItemsControl" IsTabStop="False" ItemsSource="{Binding Items}" Grid.Row="1" TabIndex="1" TabNavigation="Once" ItemTemplate="{StaticResource ContractItemDataTemplate}">
+									<ItemsControl.ItemContainerTransitions>
+										<TransitionCollection>
+											<AddDeleteThemeTransition/>
+											<ReorderThemeTransition/>
+										</TransitionCollection>
+									</ItemsControl.ItemContainerTransitions>
+
+								</ItemsControl>
+							</Grid>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="SemanticZoomStyle1" TargetType="SemanticZoom">
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="IsTabStop" Value="False"/>
+			<Setter Property="TabNavigation" Value="Once"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="SemanticZoom">
+						<Grid>
+							<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+								<Grid Margin="{TemplateBinding Padding}">
+									<ContentPresenter x:Name="ZoomedInPresenter" Content="{TemplateBinding ZoomedInView}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+									<Popup x:Name="Popup">
+										<Popup.ChildTransitions>
+											<TransitionCollection>
+												<PopupThemeTransition/>
+											</TransitionCollection>
+										</Popup.ChildTransitions>
+										<Border x:Name="PopupBorder" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+											<ContentPresenter x:Name="ZoomedOutPresenter" Content="{TemplateBinding ZoomedOutView}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+										</Border>
+									</Popup>
+								</Grid>
+							</Border>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="GridViewHeaderItemContainerStyle1" TargetType="ListViewHeaderItem">
+			<Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+			<Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ListViewHeaderItem">
+						<Border x:Name="TiltContainer" Background="{TemplateBinding Background}">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="TiltContainer"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="TiltContainer"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="TiltContainer"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Disabled"/>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<PointerDownThemeAnimation Storyboard.TargetName="TiltContainer"/>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="PointerOver"/>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Page.Resources>
 
 	<Grid>
-		<ListView ItemsSource="{Binding}"
+	<SemanticZoom Style="{StaticResource SemanticZoomStyle1}">
+  <SemanticZoom.ZoomedInView>
+  		<ListView x:Name="ContractListView" ItemsSource="{Binding}"
 			SelectionMode="None"
 			IsItemClickEnabled="True"
-			ItemClick="ListView_ItemClick" ItemContainerStyle="{StaticResource ListViewItemStyle1}" Margin="20,0,0,0">
+			ItemClick="ListView_ItemClick" 
+			ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
+			Margin="0">
+			<ListView.GroupStyle>
+				<GroupStyle HeaderTemplate="{StaticResource GroupHeaderDataTemplate}" 
+				ContainerStyle="{StaticResource GroupItemStyle1}" HeaderContainerStyle="{StaticResource GridViewHeaderItemContainerStyle1}"/>
+			</ListView.GroupStyle>
 			<ListView.HeaderTemplate>
 				<DataTemplate>
-					<StackPanel>
+					<StackPanel Margin="20,0,0,10">
 						<TextBlock Grid.Row="0" 
 							Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface">
 							<Run Text="Download cities"/>
@@ -265,27 +404,27 @@
 			</ListView.HeaderTemplate>
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<Grid Height="99" Margin="0">
+					<Grid Height="80" Margin="15,0,0,0">
 						<!--<Interactivity:Interaction.Behaviors>
 							<Core:DataTriggerBehavior Binding="{Binding Downloading}">
 								<Core:GoToStateAction StateName="Disabled"/>
 							</Core:DataTriggerBehavior>
 						</Interactivity:Interaction.Behaviors>-->
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="27"/>
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
 
-						<CheckBox IsChecked="{Binding Downloaded}" MinWidth="0" VerticalAlignment="Center" Margin="0,0,0,14" IsHitTestVisible="False" />
+						<CheckBox IsChecked="{Binding Downloaded}" MinWidth="0" 
+						VerticalAlignment="Center" Margin="0,0,0,14" 
+						IsHitTestVisible="False" 
+						Visibility="{Binding Downloaded, Converter={StaticResource BoolToVisConverter}}" />
 
                         
 						<StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
-							<StackPanel Orientation="Horizontal" >
-								<Image Source="{Binding PaysImage}" Width="60" Height="40"/>
-								<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
-							</StackPanel>
+							<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}"/>
                             
-							<TextBlock Text="{Binding Pays}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+							<TextBlock Text="{Binding ServiceProvider}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
 							<TextBlock Text="{Binding VelibCounter}" 
 								Visibility="{Binding Downloaded, Converter={StaticResource BoolToVisConverter}}"
 								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
@@ -301,5 +440,33 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+    </SemanticZoom.ZoomedInView>
+  <SemanticZoom.ZoomedOutView>
+   <ListView
+      ItemsSource="{Binding CollectionGroups}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+        <StackPanel VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
+							<StackPanel Orientation="Horizontal" >
+								<Image Source="{Binding ImagePath}" Width="60" Height="40"/>
+								<TextBlock Text="{Binding Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
+							</StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+							<TextBlock Text="{Binding ItemsCounter}" 
+								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+							<TextBlock Text="Cities" 
+								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+							</StackPanel>
+                            
+							
+						</StackPanel>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+
+    </SemanticZoom.ZoomedOutView>
+</SemanticZoom>
+
 	</Grid>
 </Page>

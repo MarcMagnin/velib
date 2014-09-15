@@ -29,7 +29,7 @@ namespace Velib.Contracts.Models.US.Washington
         public CapitalBikeShareContract()
         {
             DirectDownloadAvailability = true;
-            
+            this.ServiceProvider = "CapitalBikeShare";
 
         }
         // Barclays refresh every 3 minutes the stations informations :/
