@@ -248,7 +248,7 @@
 							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
 						<Border BorderBrush="Black" VerticalAlignment="Top" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.5" Height="40" Grid.ColumnSpan="3"/>
-						<Image Source="{Binding ImagePath}" Height="30" HorizontalAlignment="Center" Width="40" VerticalAlignment="Center" Margin="0,5,0,4"/>
+						<Image Source="{Binding ImagePath}" Height="30" HorizontalAlignment="Center" Width="40" VerticalAlignment="Center"/>
 						<TextBlock Text="{Binding Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
 						<StackPanel Height="39" VerticalAlignment="Top" Orientation="Horizontal" Grid.Column="2" Margin="0,7,0,0" HorizontalAlignment="Right">
 							<TextBlock Text="{Binding ItemsCounter}" 
