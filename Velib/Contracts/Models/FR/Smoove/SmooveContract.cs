@@ -12,20 +12,20 @@ using Windows.Devices.Geolocation;
 using System.Threading;
 using System.Net.Http;
 using System.Diagnostics;
+using System.Globalization;
 
-namespace Velib.Contracts.Models.Stras.Smoove
+namespace Velib.Contracts.Models.Smoove
 {
     // New York
-    public class StrasSmooveContract: Contract
+    public class SmooveContract: Contract
     {
         [IgnoreDataMember]
         private CancellationTokenSource tokenSource;
         [IgnoreDataMember]
         private Task Updater;
-        public StrasSmooveContract()
+        public SmooveContract()
         {
             DirectDownloadAvailability = true;
-            ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml";
             this.ServiceProvider = "Smoove";
         }
         // Barclays refresh every 3 minutes the stations informations :/
@@ -51,7 +51,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
                         {
                             foreach (var velibModel in Velibs)
                             {
-                                if (velibModel.Number == station.Id)
+                                if (velibModel.Number == int.Parse(station.Latitude.ToString(CultureInfo.InvariantCulture).Split('.')[1]) + station.TotalDocks)
                                 {
                                     if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                     {
@@ -131,7 +131,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
                     var stationModel = new VelibModel()
                     {
                         Contract = this,
-                        Number = station.Id,
+                        Number = int.Parse(station.Latitude.ToString(CultureInfo.InvariantCulture).Split('.')[1]) + station.TotalDocks,
                         //Name = station.Label,
                         AvailableBikes = station.AvailableBikes,
                         AvailableBikeStands = station.AvailableDocks,
@@ -179,12 +179,12 @@ namespace Velib.Contracts.Models.Stras.Smoove
 
         public override Contract GetSimpleContract()
         {
-            return (StrasSmooveContract)base.GetSimpleContract();
+            return (SmooveContract)base.GetSimpleContract();
         }
 
         protected override Contract GetInstanceForSimpleClone()
         {
-            return new StrasSmooveContract();
+            return new SmooveContract();
         }
     }
 }

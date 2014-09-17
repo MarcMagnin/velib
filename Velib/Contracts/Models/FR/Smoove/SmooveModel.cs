@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Velib.Contracts.Models.Stras.Smoove
+namespace Velib.Contracts.Models.Smoove
 {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
@@ -12,7 +12,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
     {
 
         [System.Xml.Serialization.XmlElementAttribute("sl", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public StrasStation Node
+        public GrenoStation Node
         {
             get;
             set;
@@ -20,7 +20,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
 
     }
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public class StrasStation
+    public class GrenoStation
     {
         [System.Xml.Serialization.XmlElementAttribute("si", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public station[] Stations
@@ -35,7 +35,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
     public class station
     {
 
-        private int idField;
+        private string idField;
 
         private double latField;
 
@@ -48,7 +48,7 @@ namespace Velib.Contracts.Models.Stras.Smoove
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute("id", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int Id
+        public string Id
         {
             get
             {
@@ -59,7 +59,13 @@ namespace Velib.Contracts.Models.Stras.Smoove
                 this.idField = value;
             }
         }
-
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute("to", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int TotalDocks
+        {
+            get;
+            set;
+        }
        
 
         /// <remarks/>

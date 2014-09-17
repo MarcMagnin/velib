@@ -20,8 +20,7 @@ using Velib.Contracts.Models.US;
 using Velib.Contracts.Models.US.Washington;
 using Velib.Contracts.Models.CH.PubliBike;
 using Velib.Contracts.Models.NextBike;
-using Velib.Contracts.Models.Greno.Smoove;
-using Velib.Contracts.Models.Stras.Smoove;
+using Velib.Contracts.Models.Smoove;
 using Velib.Contracts.Models.BCycle;
 namespace Velib
 {
@@ -179,9 +178,11 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Creteil",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-             new GrenoSmooveContract{Name = "Grenoble",
+             new SmooveContract{Name = "Grenoble",
+                 ApiUrl = "http://vms.metrovelo.fr/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
+              
                new ContractJCDecauxVelib{Name = "Lyon",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
@@ -203,7 +204,8 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Rouen",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-             new StrasSmooveContract{Name = "Strasbourg",
+               new SmooveContract{Name = "Strasbourg",
+            ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
              new ContractJCDecauxVelib{Name = "Toulouse",
@@ -480,7 +482,7 @@ namespace Velib
                Pays = "United States"},
 // US BOTTOM
 
-// CH TOP   
+// CH TOP    
             new PubliBikeContract{Name = "Aigle",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},         
@@ -542,11 +544,11 @@ namespace Velib
                new PubliBikeContract{Name = "Lugano",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-               new PubliBikeContract{Name = "Luzern PubliBike",
+               new PubliBikeContract{Name = "Luzern",
                TechnicalName= "Luzern",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-            new NextBikeContract{Name = "Luzern NextBike",
+            new NextBikeContract{Name = "Luzern",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland", Id= "126"},
                new PubliBikeContract{Name = "Marly",

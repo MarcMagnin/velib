@@ -104,16 +104,10 @@
     <Compile Include="Contracts\ContractGroup.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleContract.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleModel.cs" />
-    <Compile Include="Contracts\Models\FR\Grenoble\GrenoSmooveContract.cs">
+    <Compile Include="Contracts\Models\FR\Smoove\SmooveContract.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Contracts\Models\FR\Grenoble\GrenoSmooveModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Contracts\Models\FR\Strasbourg\StrasSmooveContract.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Contracts\Models\FR\Strasbourg\StrasSmooveModel.cs">
+    <Compile Include="Contracts\Models\FR\Smoove\SmooveModel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Contracts\Models\NextBike\NextBikeContract.cs" />
