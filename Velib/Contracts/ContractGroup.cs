@@ -15,6 +15,9 @@ namespace Velib.Contracts
         public string Description { get; set; }
         public string ImagePath { get; set; }
         public int ItemsCounter { get; set; }
+        public string ItemsCounterStr { get {
+            return ItemsCounter > 1 ? ItemsCounter + " cities" : ItemsCounter + " city";
+        } }
         public ObservableCollection<Contract> Items { get; set; }
 
         public override string ToString()

@@ -240,22 +240,20 @@
 			</Setter>
 		</Style>
 		<DataTemplate x:Key="GroupHeaderDataTemplate">
-				
-					<Grid Height="40">
+				<!-- Source="{Binding ImagePath}" -->
+					<Grid Height="50">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="53"/>
+							<ColumnDefinition Width="65"/>
 							<ColumnDefinition/>
 							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
-						<Border BorderBrush="Black" VerticalAlignment="Top" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.5" Height="40" Grid.ColumnSpan="3"/>
-						<Image Source="{Binding ImagePath}" Height="30" HorizontalAlignment="Center" Width="40" VerticalAlignment="Center"/>
+						<Border BorderBrush="Black" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.4" Grid.ColumnSpan="3"/>
+						<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding ImagePath}" Margin="8"/>
 						<TextBlock Text="{Binding Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
-						<StackPanel Height="39" VerticalAlignment="Top" Orientation="Horizontal" Grid.Column="2" Margin="0,7,0,0" HorizontalAlignment="Right">
-							<TextBlock Text="{Binding ItemsCounter}" 
-								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" VerticalAlignment="Center" />
-							<TextBlock Text="Cities" 
-								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" VerticalAlignment="Center" Margin="3,0,0,0" />
-						</StackPanel>
+						
+                    <TextBlock Text="{Binding ItemsCounterStr}"  Grid.Column="2"
+								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" VerticalAlignment="Bottom" Margin="0,0,5,5"/>
+              
 					</Grid>
                             
 			
@@ -404,7 +402,7 @@
 			</ListView.HeaderTemplate>
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<Grid Height="80" Margin="15,0,0,0">
+					<Grid Height="80" Margin="27,0,0,0">
 						<!--<Interactivity:Interaction.Behaviors>
 							<Core:DataTriggerBehavior Binding="{Binding Downloading}">
 								<Core:GoToStateAction StateName="Disabled"/>
@@ -448,15 +446,13 @@
         <DataTemplate>
         <StackPanel VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
 							<StackPanel Orientation="Horizontal" >
-								<Image Source="{Binding ImagePath}" Width="60" Height="40"/>
-								<TextBlock Text="{Binding Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
+                                    <Image Source="{Binding Group.ImagePath}" Width="60" Height="40"/>
+                                    <TextBlock Text="{Binding Group.Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
 							</StackPanel>
-                            <StackPanel Orientation="Horizontal" >
-							<TextBlock Text="{Binding ItemsCounter}" 
+                          
+                             <TextBlock Text="{Binding Group.ItemsCounterStr}" 
 								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-							<TextBlock Text="Cities" 
-								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-							</StackPanel>
+							
                             
 							
 						</StackPanel>

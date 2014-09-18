@@ -131,7 +131,7 @@ namespace Velib
 
             }; 
             
-            this.DefaultViewModel["Group"] = t;
+            this.DefaultViewModel["Group"] = t.View;
             //new Task(async () =>
             //{
             //    foreach (var contract in ContractsViewModel.Contracts)
