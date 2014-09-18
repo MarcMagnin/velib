@@ -31,6 +31,7 @@ namespace Velib
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private CollectionViewSource ContractCollectionViewSource;
         public ContractsPage()
         {
             this.InitializeComponent();
@@ -110,39 +111,31 @@ namespace Velib
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            
 
-            var contractGroup = new List<ContractGroup>();
-            foreach(var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c=>c.Pays)){
-               var group = new ContractGroup(){Title = contract.Pays, ImagePath = contract.PaysImage};
-               group.Items = new ObservableCollection<Contract>();
-               foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays))
-               {
-                   group.Items.Add(c);
-                   group.ItemsCounter++;
-               }
-               contractGroup.Add(group);
-            }
-            CollectionViewSource t = new CollectionViewSource
+            if (ContractCollectionViewSource == null)
             {
-                IsSourceGrouped = true,
-                Source = contractGroup,
-                ItemsPath = new PropertyPath("Items")
+                var contractGroup = new List<ContractGroup>();
+                foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays))
+                {
+                    var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
+                    group.Items = new ObservableCollection<Contract>();
+                    foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays))
+                    {
+                        group.Items.Add(c);
+                        group.ItemsCounter++;
+                    }
+                    contractGroup.Add(group);
+                }
+                ContractCollectionViewSource = new CollectionViewSource
+                {
+                    IsSourceGrouped = true,
+                    Source = contractGroup,
+                    ItemsPath = new PropertyPath("Items")
 
-            }; 
-            
-            this.DefaultViewModel["Group"] = t.View;
-            //new Task(async () =>
-            //{
-            //    foreach (var contract in ContractsViewModel.Contracts)
-            //    {
-            //        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //        {
-            //           // collection.Add(contract);
-            //        });
-            //        await Task.Delay(40);
-            //    }
-            //}).Start();
+                };
+            }
+
+            this.DefaultViewModel["Group"] = ContractCollectionViewSource.View;
             
 
         }
