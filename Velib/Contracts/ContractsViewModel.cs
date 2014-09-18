@@ -37,9 +37,7 @@ namespace Velib
         private static List<string> downloadedContract;
         private static List<Contract> contracts = new List<Contract>()
         {
-            new BCycleContract{Name = "Austin",
-               PaysImage = paysImagesRootPath+ "/US.png",
-               Pays = "United States", Id= "72"},
+            
 
 // AT TOP
             new NextBikeContract{Name = "Haag",
@@ -468,7 +466,19 @@ namespace Velib
 // GB BOTTOM
 
 // US TOP
-            new DivyBikeContract{Name = "Chicago",
+            new BCycleContract{Name = "Ann Arbor, MI",
+               TechnicalName= "ArborBike",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States", Id= "76"},
+               new BCycleContract{Name = "Austin, TX",
+               TechnicalName= "Austin",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States", Id= "72"},
+               //new BCycleContract{Name = "Ann Arbor, MI",
+               //TechnicalName= "ArborBike",
+               //PaysImage = paysImagesRootPath+ "/US.png",
+               //Pays = "United States", Id= "72"},
+            new DivyBikeContract{Name = "Chicago",            //Add each state in Name = "" and use TechnicalName
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
             new CitiBikeContract{Name = "New York",
