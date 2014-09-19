@@ -38,7 +38,6 @@ namespace Velib
         private static List<Contract> contracts = new List<Contract>()
         {
             
-
 // AT TOP
             new NextBikeContract{Name = "Haag",
                PaysImage = paysImagesRootPath+ "/AT.png",
@@ -466,6 +465,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom", Id= "237"},
             new ContractTFLLondon{Name = "London",
+               ServiceProvider = "Barclays Cycle Hire, Bixi",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom"},
             new NextBikeContract{Name = "Stirling",
@@ -476,6 +476,7 @@ namespace Velib
 // US TOP
             new BCycleContract{Name = "Ann Arbor, MI",
                TechnicalName= "ArborBike",
+               ServiceProvider= "ArborBike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "76"},
                new BCycleContract{Name = "Austin, TX",
@@ -498,7 +499,9 @@ namespace Velib
                TechnicalName= "Charlotte B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "61"},
-            new DivyBikeContract{Name = "Chicago",            //Add each state in Name = "" and use TechnicalName
+            new DivyBikeContract{Name = "Chicago, IL",
+               TechnicalName= "Chicago",
+               ServiceProvider = "Divvy, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
             new BCycleContract{Name = "Cincinnati, OH",
@@ -506,18 +509,33 @@ namespace Velib
                ServiceProvider= "Red Bike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "80"},
+               new BCycleContract{Name = "Columbia County, GA",
+               TechnicalName= "Columbia County B-cycle",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States", Id= "74"},
                new BCycleContract{Name = "Milwaukee, WI",
                TechnicalName= "Bublr Bikes",
                ServiceProvider= "Bublr Bikes, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "70"},
-            new CitiBikeContract{Name = "New York",
+            new CitiBikeContract{Name = "New York City, NY",
+               TechnicalName= "New York",
+               ServiceProvider= "Citi Bike, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
-            new NextBikeContract{Name = "Pittsburgh",
-               PaysImage = paysImagesRootPath+ "/US.png",
-               Pays = "United States", Id= "254"},
-            new CapitalBikeShareContract{Name = "Washington",
+
+
+            // Retrait du XML 19/09/2014 Pittsburgh Bike Share http://www.pghbikeshare.org
+            //new NextBikeContract{Name = "Pittsburgh, PA",
+            //   TechnicalName= "Pittsburgh",    
+            //   ServiceProvider= "Pittsburgh Bike Share, NextBike"
+            //   PaysImage = paysImagesRootPath+ "/US.png",
+            //   Pays = "United States", Id= "254"},
+
+
+            new CapitalBikeShareContract{Name = "Washington, D.C. area",
+               TechnicalName= "Washington",
+               ServiceProvider = "Capital BikeShare, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
 // US BOTTOM

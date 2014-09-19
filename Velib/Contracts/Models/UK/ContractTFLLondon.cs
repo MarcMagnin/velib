@@ -27,7 +27,7 @@ namespace Velib.Contracts
         public ContractTFLLondon()
         {
             DirectDownloadAvailability = true;
-            this.ServiceProvider = "TFL London";
+            this.ServiceProvider = "Barclays Cycle Hire";
 
         }
         // Barclays refresh every 3 minutes the stations informations :/

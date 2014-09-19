@@ -28,7 +28,7 @@ namespace Velib.Contracts.Models.US
         private Task Updater;
         public CitiBikeContract()
         {
-            this.ServiceProvider = "CitiBike";
+            this.ServiceProvider = "Citi Bike";
             DirectDownloadAvailability = true;
             
 
