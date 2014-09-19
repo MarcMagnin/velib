@@ -151,7 +151,7 @@ namespace Velib
 // CL TOP
                new BCycleContract{Name = "Santiago",
                TechnicalName= "Bikesantiago",
-               ServiceProvider= "bikesantiago - B-cycle",
+               ServiceProvider= "Bikesantiago, B-cycle",
                PaysImage = paysImagesRootPath+ "/CL.png",
                Pays = "Chile", Id= "68"},
 // CL BOTTOM
@@ -503,12 +503,12 @@ namespace Velib
                Pays = "United States"},
             new BCycleContract{Name = "Cincinnati, OH",
                TechnicalName= "Cincy Red Bike",
-               ServiceProvider= "Red Bike - B-cycle",
+               ServiceProvider= "Red Bike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "80"},
                new BCycleContract{Name = "Milwaukee, WI",
                TechnicalName= "Bublr Bikes",
-               ServiceProvider= "Bublr Bikes - B-cycle",
+               ServiceProvider= "Bublr Bikes, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "70"},
             new CitiBikeContract{Name = "New York",
