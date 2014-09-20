@@ -210,7 +210,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new SmooveContract{Name = "Strasbourg",
-            ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml",
+                ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
              new ContractJCDecauxVelib{Name = "Toulouse",
@@ -473,8 +473,8 @@ namespace Velib
                Pays = "United Kingdom", Id= "243"},
 // GB BOTTOM
 
-// US TOP
-            new BCycleContract{Name = "Ann Arbor, MI",
+          #region US
+		  new BCycleContract{Name = "Ann Arbor, MI",
                TechnicalName= "ArborBike",
                ServiceProvider= "ArborBike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
@@ -537,10 +537,10 @@ namespace Velib
                TechnicalName= "Washington",
                ServiceProvider = "Capital BikeShare, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
-               Pays = "United States"},
-// US BOTTOM
+               Pays = "United States"}, 
+	#endregion
 
-// CH TOP    
+        #region CH  
             new PubliBikeContract{Name = "Aigle",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},         
@@ -685,7 +685,7 @@ namespace Velib
                new PubliBikeContract{Name = "Zürich",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-// CH BOTTOM
+#endregion CH
         };
 
         public static List<Contract> Contracts

@@ -10,8 +10,8 @@ using Velib.Common;
 using Windows.UI.Popups;
 using Windows.Devices.Geolocation;
 using System.Threading;
-using System.Net.Http;
 using System.Diagnostics;
+using Windows.Web.Http;
 
 namespace Velib.Contracts.Models.US
 {
@@ -20,17 +20,12 @@ namespace Velib.Contracts.Models.US
     public class CitiBikeContract: Contract
     {
         [IgnoreDataMember]
-        public string StationsUrl = "http://appservices.citibikenyc.com/data2/stations.php/";
-
-        public string ApiUrl = "http://appservices.citibikenyc.com/data2/stations.php?updateOnly=true";
-        private DateTime nextUpdate;
         private CancellationTokenSource tokenSource;
         private Task Updater;
         public CitiBikeContract()
         {
-            this.ServiceProvider = "Citi Bike";
             DirectDownloadAvailability = true;
-            
+            ApiUrl = "http://www.citibikenyc.com/stations/json";
 
         }
         // Barclays refresh every 3 minutes the stations informations :/
@@ -45,7 +40,7 @@ namespace Velib.Contracts.Models.US
                                 tokenSource.Cancel();
                             tokenSource = new CancellationTokenSource();
 
-                            var httpClient = new GZipHttpClient();
+                            var httpClient = new HttpClient();
 
 
                             
@@ -53,15 +48,15 @@ namespace Velib.Contracts.Models.US
                                 int count = 0;
                                 try
                                 {
-                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())), tokenSource.Token);//.AsTask(cts.Token);
+                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString()))).AsTask(tokenSource.Token);
                                     var responseBodyAsText = await response.Content.ReadAsStringAsync();
-                                    var model = responseBodyAsText.FromJsonString<CitiBikeModel>();
+                                    var model = responseBodyAsText.FromJsonString<DivyBikeModel>();
 
-                                    foreach (var station in model.Results)
+                                    foreach (var station in model.Stations)
                                     {
                                         foreach (var velibModel in Velibs)
                                         {
-                                            if (velibModel.Number == station.Id)
+                                            if (velibModel.Latitude == station.Latitude && velibModel.Longitude == station.Longitude)
                                             {
                                                 if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                                 {
@@ -119,81 +114,44 @@ namespace Velib.Contracts.Models.US
                     Updater.Start();
         }
 
-
-        public override async Task DownloadContract()
+        public override async Task InnerDownloadContract()
         {
-            var httpClient = new GZipHttpClient();
-            var velibs = new List<VelibModel>();
-            Downloading = true;
-            bool failed = false;
-            
-            if(tokenSource != null)
-                tokenSource.Cancel();
-            tokenSource = new CancellationTokenSource();
-
-            try
+            //downloadContractHttpClient.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("application/json"));
+            //downloadContractHttpClient.DefaultRequestHeaders.AcceptEncoding.Add(new Windows.Web.Http.Headers.HttpContentCodingWithQualityHeaderValue("gzip"));
+            //downloadContractHttpClient.DefaultRequestHeaders.AcceptEncoding.Add(new Windows.Web.Http.Headers.HttpContentCodingWithQualityHeaderValue("deflate"));
+            HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(ApiUrl));
+            var responseBodyAsText = await response.Content.ReadAsStringAsync();
+            // require Velib.Common
+            var model = responseBodyAsText.FromJsonString<DivyBikeModel>();
+            Velibs = new List<VelibModel>();
+            foreach (var station in model.Stations)
             {
-                //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-              //Returned JSON
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(StationsUrl)));
-                var responseBodyAsText = await response.Content.ReadAsStringAsync();
-                
-                // require Velib.Common
-                var model = responseBodyAsText.FromJsonString<CitiBikeModel>();
-                VelibCounter = model.Results.Length;
-                Velibs = new List<VelibModel>();
-                //this.LastUpdate = tflModel.lastUpdate;
-                foreach (var station in model.Results)
+                var stationModel = new VelibModel()
                 {
-                    var stationModel = new VelibModel()
-                    {
-                        Contract = this,
-                        Number = station.Id,
-                        Name = station.Label,
-                        AvailableBikes = station.AvailableBikes,
-                        AvailableBikeStands = station.AvailableDocks,
-                        Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
+                    Contract = this,
+                    Number = station.Id,
+                    Name = station.Label,
+                    AvailableBikes = station.AvailableBikes,
+                    AvailableBikeStands = station.AvailableDocks,
+                    Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                     {
                         Latitude = station.Latitude,
                         Longitude = station.Longitude
                     }),
-                        Latitude = station.Latitude,
-                        Longitude = station.Longitude,
-                        Loaded = true
-                    };
+                    Latitude = station.Latitude,
+                    Longitude = station.Longitude,
+                    Loaded = true
+                };
 
-                    if (MainPage.BikeMode)
-                        stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
-                    else
-                        stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
+                if (MainPage.BikeMode)
+                    stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
+                else
+                    stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
 
-                    Velibs.Add(stationModel);
-                }
-
-                Downloaded = true;
-                VelibDataSource.StaticVelibs.AddRange(Velibs);
-                httpClient.Dispose();
-            }
-            catch (TaskCanceledException)
-            {
-                failed = true;
-            }
-            catch (Exception ex)
-            {
-                failed = true;
-            }
-            finally
-            {
-                Downloading = false;
-                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
-            }
-            if (failed)
-            {
-                DownloadContractFail();
+                Velibs.Add(stationModel);
             }
         }
-
-
+      
         public override Contract GetSimpleContract()
         {
             return (CitiBikeContract)base.GetSimpleContract();

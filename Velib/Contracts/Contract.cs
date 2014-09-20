@@ -10,18 +10,22 @@ using VelibContext;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Web.Http;
 
 namespace Velib.Contracts
 {
-
+    /// <summary>
+    /// Note : for the http stack, we will probably have to use Windows.Web.Http.HttpClient instead of  System.Net.Http
+    /// </summary>
     public class Contract : INotifyPropertyChanged
     {
         [IgnoreDataMember]
         public DateTime LastUpdate;
         public bool DirectDownloadAvailability;
         public TimeSpan RefreshTimer = TimeSpan.FromSeconds(20);
-        [IgnoreDataMember]
         public string ApiUrl;
+        [IgnoreDataMember]
+        protected HttpClient downloadContractHttpClient;
 
         public string ServiceProvider { get; set; }
         public string Name { get; set; }
@@ -107,6 +111,41 @@ namespace Velib.Contracts
 
 
         public async virtual Task DownloadContract()
+        {
+            var velibs = new List<VelibModel>();
+            Downloading = true;
+            bool failed = false;
+            try
+            {
+                await Task.Run(async () =>
+                {
+                    downloadContractHttpClient = new HttpClient();
+                    await InnerDownloadContract();
+                });
+
+                VelibCounter = Velibs.Count;
+                Downloaded = true;
+                VelibDataSource.StaticVelibs.AddRange(Velibs);
+            }
+            catch (TaskCanceledException)
+            {
+                failed = true;
+            }
+            catch (Exception ex)
+            {
+                failed = true;
+            }
+            finally
+            {
+                downloadContractHttpClient.Dispose();
+                Downloading = false;
+            }
+            if (failed)
+            {
+                DownloadContractFail();
+            }
+        }
+        public async virtual Task InnerDownloadContract()
         {
         }
 

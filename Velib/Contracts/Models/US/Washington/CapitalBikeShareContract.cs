@@ -10,8 +10,8 @@ using Velib.Common;
 using Windows.UI.Popups;
 using Windows.Devices.Geolocation;
 using System.Threading;
-using System.Net.Http;
 using System.Diagnostics;
+using Windows.Web.Http;
 
 
 namespace Velib.Contracts.Models.US.Washington
@@ -22,14 +22,13 @@ namespace Velib.Contracts.Models.US.Washington
         [IgnoreDataMember]
         public string StationsUrl = "http://www.capitalbikeshare.com/data/stations/bikeStations.xml";
 
-        public string ApiUrl = "http://www.capitalbikeshare.com/data/stations/bikeStations.xml";
         private DateTime nextUpdate;
         private CancellationTokenSource tokenSource;
         private Task Updater;
         public CapitalBikeShareContract()
         {
             DirectDownloadAvailability = true;
-            this.ServiceProvider = "Capital BikeShare";
+            ApiUrl = "http://www.capitalbikeshare.com/data/stations/bikeStations.xml";
 
         }
         // Barclays refresh every 3 minutes the stations informations :/
@@ -44,15 +43,13 @@ namespace Velib.Contracts.Models.US.Washington
                                 tokenSource.Cancel();
                             tokenSource = new CancellationTokenSource();
 
-                            var httpClient = new GZipHttpClient();
+                            var httpClient = new HttpClient();
 
-
-                            
                                 bool failed = true;
                                 int count = 0;
                                 try
                                 {
-                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())), tokenSource.Token);//.AsTask(cts.Token);
+                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString()))).AsTask(tokenSource.Token);
                                     var responseBodyAsText = await response.Content.ReadAsStringAsync();
                                     var model = responseBodyAsText.FromXmlString<stations>("");
 
@@ -60,7 +57,7 @@ namespace Velib.Contracts.Models.US.Washington
                                     {
                                         foreach (var velibModel in Velibs)
                                         {
-                                            if (velibModel.Number == station.Id)
+                                            if (velibModel.Latitude == station.Latitude && velibModel.Longitude == station.Longitude)
                                             {
                                                 if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                                 {
@@ -118,80 +115,44 @@ namespace Velib.Contracts.Models.US.Washington
                     Updater.Start();
         }
 
-
-        public override async Task DownloadContract()
+        public override async Task InnerDownloadContract()
         {
-            var httpClient = new GZipHttpClient();
-            var velibs = new List<VelibModel>();
-            Downloading = true;
-            bool failed = false;
-            
-            if(tokenSource != null)
-                tokenSource.Cancel();
-            tokenSource = new CancellationTokenSource();
+            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //Returned JSON
+            HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(string.Format(StationsUrl)));
+            var responseBodyAsText = await response.Content.ReadAsStringAsync();
 
-            try
+            // require Velib.Common
+            var model = responseBodyAsText.FromXmlString<stations>("");
+            Velibs = new List<VelibModel>();
+            //this.LastUpdate = tflModel.lastUpdate;
+            foreach (var station in model.Stations)
             {
-                //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-              //Returned JSON
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(StationsUrl)));
-                var responseBodyAsText = await response.Content.ReadAsStringAsync();
-                
-                // require Velib.Common
-                var model = responseBodyAsText.FromXmlString<stations>("");
-                VelibCounter = model.Stations.Length;
-                Velibs = new List<VelibModel>();
-                //this.LastUpdate = tflModel.lastUpdate;
-                foreach (var station in model.Stations)
+                var stationModel = new VelibModel()
                 {
-                    var stationModel = new VelibModel()
-                    {
-                        Contract = this,
-                        Number = station.Id,
-                        //Name = station.Label,
-                        AvailableBikes = station.AvailableBikes,
-                        AvailableBikeStands = station.AvailableDocks,
-                        Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
+                    Contract = this,
+                    Number = station.Id,
+                    //Name = station.Label,
+                    AvailableBikes = station.AvailableBikes,
+                    AvailableBikeStands = station.AvailableDocks,
+                    Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                     {
                         Latitude = station.Latitude,
                         Longitude = station.Longitude
                     }),
-                        Latitude = station.Latitude,
-                        Longitude = station.Longitude,
-                        Loaded = true
-                    };
+                    Latitude = station.Latitude,
+                    Longitude = station.Longitude,
+                    Loaded = true
+                };
 
-                    if (MainPage.BikeMode)
-                        stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
-                    else
-                        stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
+                if (MainPage.BikeMode)
+                    stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
+                else
+                    stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
 
-                    Velibs.Add(stationModel);
-                }
-
-                Downloaded = true;
-                VelibDataSource.StaticVelibs.AddRange(Velibs);
-                httpClient.Dispose();
-            }
-            catch (TaskCanceledException)
-            {
-                failed = true;
-            }
-            catch (Exception ex)
-            {
-                failed = true;
-            }
-            finally
-            {
-                Downloading = false;
-                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
-            }
-            if (failed)
-            {
-                DownloadContractFail();
+                Velibs.Add(stationModel);
             }
         }
-
 
         public override Contract GetSimpleContract()
         {

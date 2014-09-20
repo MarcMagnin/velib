@@ -122,7 +122,6 @@
     <Compile Include="Contracts\Models\UK\ContractTFLLondon.cs" />
     <Compile Include="Contracts\Models\UK\TFLModel.cs" />
     <Compile Include="Contracts\Models\US\New York\CitiBikeContract.cs" />
-    <Compile Include="Contracts\Models\US\New York\CitiBikeModel.cs" />
     <Compile Include="Contracts\Models\US\Chicago\DivyBikeContract.cs" />
     <Compile Include="Contracts\Models\US\Chicago\DivyBikeModel.cs" />
     <Compile Include="Contracts\Models\US\Washington\CapitalBikeShareModel.cs" />

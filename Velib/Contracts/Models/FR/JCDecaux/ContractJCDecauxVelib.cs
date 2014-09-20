@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VelibContext;
-using Windows.Web.Http;
 using Velib.Common;
 using Windows.UI.Popups;
 using Windows.Devices.Geolocation;
 using System.Runtime.Serialization;
 using Windows.UI.Core;
+using Windows.Web.Http;
 
 namespace Velib.Contracts
 {
     public class ContractJCDecauxVelib : Contract
     {
         [IgnoreDataMember]
-        public string ApiUrl = "https://developer.jcdecaux.com/rest/vls/stations/{0}.json";
         private static string dataURL = "https://api.jcdecaux.com/vls/v1/stations/{0}?contract={1}&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed";
 
         public ContractJCDecauxVelib()
         {
             this.ServiceProvider = "JCDecaux";
+            ApiUrl = "https://developer.jcdecaux.com/rest/vls/stations/{0}.json";
         }
 
         public override async void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
@@ -129,56 +129,26 @@ namespace Velib.Contracts
             }
         }
 
-        public override async Task DownloadContract()
+        public override async Task InnerDownloadContract()
         {
-            var httpClient = new HttpClient();
-            var cts = new CancellationTokenSource();
-            var velibs = new List<VelibModel>();
-            Downloading = true;
-            bool failed = false;
-            try
+            HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(string.Format(ApiUrl, Name)));
+            var  responseBodyAsText = await response.Content.ReadAsStringAsync();
+            // require Velib.Common
+            Velibs = responseBodyAsText.FromJsonString<List<VelibModel>>();
+            foreach (var velib in Velibs)
             {
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Name))).AsTask(cts.Token);
-                var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
-                // require Velib.Common
-                Velibs = responseBodyAsText.FromJsonString<List<VelibModel>>();
-                VelibCounter = Velibs.Count;
-                foreach (var velib in Velibs)
+
+                velib.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                 {
-                    
-                    velib.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
-                    {
-                        Latitude = velib.Latitude,
-                        Longitude = velib.Longitude
-                    });
-                    velib.Contract = this;
-                    velib.AvailableBikes = -1;
-                    velib.AvailableBikeStands = -1;
-                }
-                
-                Downloaded = true;
-                VelibDataSource.StaticVelibs.AddRange(Velibs);
-                httpClient.Dispose();
-                cts.Token.ThrowIfCancellationRequested();
-            }
-            catch (TaskCanceledException)
-            {
-                failed = true;
-            }
-            catch (Exception ex)
-            {
-                failed = true;
-            }
-            finally
-            {
-                Downloading = false;
-                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
-            }
-            if (failed)
-            {
-                DownloadContractFail();
+                    Latitude = velib.Latitude,
+                    Longitude = velib.Longitude
+                });
+                velib.Contract = this;
+                velib.AvailableBikes = -1;
+                velib.AvailableBikeStands = -1;
             }
         }
+
         public override Contract GetSimpleContract()
         {
             return (ContractJCDecauxVelib)base.GetSimpleContract();

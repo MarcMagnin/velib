@@ -119,7 +119,7 @@ namespace VelibContext
 
         public override int GetHashCode()
         {
-         return Number.GetHashCode();
+         return (Longitude+Latitude).GetHashCode();
         }
         public override bool Equals(object obj)
         {
@@ -128,7 +128,7 @@ namespace VelibContext
                 return false;
             }
 
-            return this.Number == ((obj as VelibModel).Number) ;
+            return this.Longitude == ((obj as VelibModel).Longitude) && this.Latitude == ((obj as VelibModel).Latitude);
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
