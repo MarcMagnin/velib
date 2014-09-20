@@ -92,7 +92,6 @@
     <Compile Include="Common\Cluster\ClusterGenerator.cs" />
     <Compile Include="Common\Converters\BoolToVisConverter.cs" />
     <Compile Include="Common\Converters\NullOrEmptyToVisibilityConverter.cs" />
-    <Compile Include="Common\GZipHttpClient.cs" />
     <Compile Include="Common\MapElementData.cs" />
     <Compile Include="Common\MapExtensions.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
@@ -164,13 +163,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\DarkGray.png" />
     <Content Include="Assets\icons\light\appbar.next.rest.png" />
-    <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\Logo.png" />
-    <Content Include="Assets\MediumGray.png" />
-    <Content Include="Assets\HubBackground.theme-dark.png" />
-    <Content Include="Assets\HubBackground.theme-light.png" />
     <Content Include="Assets\ombre.png" />
     <Content Include="Assets\Pays\AE.png" />
     <Content Include="Assets\Pays\AT.png" />
@@ -210,7 +204,6 @@
     <Content Include="Assets\velo.png" />
     <Content Include="Assets\WideLogo.png" />
     <Content Include="Assets\WideLogo.scale-100.png" />
-    <Content Include="Assets\wplogo.png" />
     <Content Include="Common\ReadMe.txt" />
     <Content Include="SampleData\SampleDataSource\SampleDataSource_Files\image01.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
