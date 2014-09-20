@@ -125,8 +125,37 @@ namespace Velib
             
             MapCtrl.MapTapped += MyMap_MapTapped;
             MapCtrl.DoubleTapped += MapCtrl_DoubleTapped;
-            MapCtrl.PitchChanged += MapCtrl_PitchChanged;
-            MapCtrl.HeadingChanged += MapCtrl_HeadingChanged;
+            //MapCtrl.PitchChanged += MapCtrl_PitchChanged;
+            //MapCtrl.HeadingChanged += MapCtrl_HeadingChanged;
+            //MapCtrl.ZoomLevelChanged += MapCtrl_ZoomLevelChanged;
+            Observable.FromEventPattern(MapCtrl, "HeadingChanged")
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Subscribe(x =>
+                {
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        if (MapCtrl.Heading != 0)
+                        {
+                            VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
+                        }
+                        else
+                        {
+                            VisualStateManager.GoToState(this, "NorthIndicatorHidden", true);
+                        }
+                        UpdateNorthElementAngle(MapCtrl.Heading);
+                    });
+                });
+       
+
+            Observable.FromEventPattern(MapCtrl, "ZoomLevelChanged")
+                        .Throttle(TimeSpan.FromMilliseconds(200))
+                        .Subscribe(x =>
+                        {
+                            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                            {
+                                refreshAccuracyIndicator();
+                            });
+                        });
             //MapCtrl.ManipulationStarted += MapCtrl_ManipulationStarted;
             TouchPanel.Holding += TouchPanel_Holding;
             TouchPanel.ManipulationStarted += TouchPanel_ManipulationStarted;
@@ -138,6 +167,9 @@ namespace Velib
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             this.Loaded += MainPage_Loaded;
         }
+
+
+    
 
         void gl_StatusChanged(Geolocator sender, StatusChangedEventArgs args)
         {
@@ -173,11 +205,11 @@ namespace Velib
             Debug.WriteLine("Page LOADED");
         }
 
-        void MapCtrl_PitchChanged(MapControl sender, object args)
-        {
-            //(UserLocation.Projection as PlaneProjection).RotationX = MapCtrl.Pitch; 
-             //UserLocationProjection.RotationX = MapCtrl.Pitch;
-        }
+        //void MapCtrl_PitchChanged(MapControl sender, object args)
+        //{
+        //    //(UserLocation.Projection as PlaneProjection).RotationX = MapCtrl.Pitch; 
+        //     //UserLocationProjection.RotationX = MapCtrl.Pitch;
+        //}
 
 
 
@@ -447,9 +479,24 @@ namespace Velib
             });
 
         }
+
+        private void refreshAccuracyIndicator()
+        {
+            if (lastPositionChangedEventArgs != null)
+            {
+                double metersPerPixels = MapExtensions.GroundResolution(lastPositionChangedEventArgs.Position.Coordinate.Point.Position.Latitude, Map.ZoomLevel);
+                double radius = lastPositionChangedEventArgs.Position.Coordinate.Accuracy / metersPerPixels;
+                AccuracyScaleX.To = radius;
+                AccuracyScaleY.To = radius;
+                AccuracyStoryboard.Begin();
+            }
+        }
+
         Geopoint previousBigChangeInUserLocation;
+        PositionChangedEventArgs lastPositionChangedEventArgs;
         async void gl_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
+            lastPositionChangedEventArgs = args;
             userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Point.Position.Longitude, Latitude = args.Position.Coordinate.Point.Position.Latitude });
 
             if (previousBigChangeInUserLocation == null)
@@ -457,12 +504,7 @@ namespace Velib
             
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                // set accuracy indicator
-                double metersPerPixels = MapExtensions.GroundResolution(args.Position.Coordinate.Point.Position.Latitude, Map.ZoomLevel);
-                double radius = args.Position.Coordinate.Accuracy / metersPerPixels;
-                AccuracyScaleX.To = radius;
-                AccuracyScaleY.To = radius; 
-                AccuracyStoryboard.Begin();
+                refreshAccuracyIndicator();
 
                 var pixelDistance = userLastLocation.Position.GetDistancePixel(MapCtrl.Center.Position, MapCtrl.ZoomLevel);
                 // recalculate route if there is any big change in the position
@@ -483,7 +525,8 @@ namespace Velib
                         // only move center if the userlocation is far from the center
                         if (pixelDistance > 50)
                         {
-                            SetView(userLastLocation, null, null, null, MapAnimationKind.Linear);
+                            Map.TrySetViewAsync(userLastLocation, null, null, null, MapAnimationKind.Linear);
+                            //SetView(userLastLocation, null, null, null, MapAnimationKind.Linear);
                         }
                     }
                 }
