@@ -123,7 +123,7 @@ namespace Velib.Contracts.Models.CH.PubliBike
             var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
             Velibs = new List<VelibModel>();
             //var test = model.Stations.GroupBy(s => s.City).Select(t => t.First()).Select(s => s.City).OrderBy(s=>s).Aggregate((c, next) => c + " \r\n" + next);
-            foreach (var station in model.Stations.Where(s => s.City == TechnicalName))
+            foreach (var station in model.Stations.Where(s => TechnicalName.Split(',').Contains(s.City)))
             {
                 var stationModel = new VelibModel()
                 {

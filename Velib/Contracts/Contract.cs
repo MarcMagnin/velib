@@ -41,6 +41,19 @@ namespace Velib.Contracts
             }
             set { technicalName = value; }
         }
+
+        private string storageName;
+        public string StorageName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(storageName))
+                    return Name;
+                else
+                    return storageName;
+            }
+            set { storageName = value; }
+        }
         public string Id { get; set; }
         public string Pays { get; set; }
         public string Description { get; set; }

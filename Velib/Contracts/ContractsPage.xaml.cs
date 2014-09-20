@@ -40,7 +40,42 @@ namespace Velib
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            this.Loaded += ContractsPage_Loaded;
+            
+        }
 
+        async void ContractsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.DefaultViewModel["CityCounter"] = 0;
+            await Task.Run(async()=>{
+               await Task.Delay(100);
+            });
+            if (ContractCollectionViewSource == null)
+            {
+                var contractGroup = new List<ContractGroup>();
+                foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays).ToList())
+                {
+                    var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
+                    group.Items = new ObservableCollection<Contract>();
+                    foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).ToList())
+                    {
+                        cityCounter++;
+                        group.Items.Add(c);
+                        group.ItemsCounter++;
+                    }
+                    contractGroup.Add(group);
+                }
+                ContractCollectionViewSource = new CollectionViewSource
+                {
+                    IsSourceGrouped = true,
+                    Source = contractGroup,
+                    ItemsPath = new PropertyPath("Items")
+
+                };
+            }
+
+            this.DefaultViewModel["Group"] = ContractCollectionViewSource.View;
+            this.DefaultViewModel["CityCounter"] = cityCounter;
         }
 
         /// <summary>
@@ -114,32 +149,7 @@ namespace Velib
             this.navigationHelper.OnNavigatedTo(e);
 
             
-            if (ContractCollectionViewSource == null)
-            {
-                var contractGroup = new List<ContractGroup>();
-                foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays).ToList())
-                {
-                    var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
-                    group.Items = new ObservableCollection<Contract>();
-                    foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).ToList())
-                    {
-                        cityCounter++;
-                        group.Items.Add(c);
-                        group.ItemsCounter++;
-                    }
-                    contractGroup.Add(group);
-                }
-                ContractCollectionViewSource = new CollectionViewSource
-                {
-                    IsSourceGrouped = true,
-                    Source = contractGroup,
-                    ItemsPath = new PropertyPath("Items")
-
-                };
-            }
-
-            this.DefaultViewModel["Group"] = ContractCollectionViewSource.View;
-            this.DefaultViewModel["CityCounter"] = cityCounter;
+          
             
 
         }

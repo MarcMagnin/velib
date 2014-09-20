@@ -6,14 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:SampleData="using:Blend.SampleData.SampleDataSource"
+    
     x:Class="Velib.ContractsPage"
     mc:Ignorable="d"
 	DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Mode=Self}}"
-	d:DataContext="{Binding Source={d:DesignData Source=/Contracts/SampleData.json}}"
+	
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <!--xmlns:SampleData="using:Blend.SampleData.SampleDataSource"-->
+    <!--d:DataContext="{Binding Source={d:DesignData Source=/Contracts/SampleData.json}}"-->
 	<Page.Resources>
-		<SampleData:SampleDataSource x:Key="SampleDataSource" d:IsDataSource="True"/>
+		<!--<SampleData:SampleDataSource x:Key="SampleDataSource" d:IsDataSource="True"/>-->
 		<FontFamily x:Key="ContentControlThemeFontFamily">Segoe WP</FontFamily>
 		<x:Double x:Key="ControlContentThemeFontSize">12</x:Double>
 		<Thickness x:Key="ListViewItemMargin">0</Thickness>
@@ -297,11 +299,12 @@
 			<Setter Property="BorderThickness" Value="0"/>
 			<Setter Property="IsTabStop" Value="False"/>
 			<Setter Property="TabNavigation" Value="Once"/>
+			
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="SemanticZoom">
 						<Grid>
-							<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+							<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" >
 								<Grid Margin="{TemplateBinding Padding}">
 									<ContentPresenter x:Name="ZoomedInPresenter" Content="{TemplateBinding ZoomedInView}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 									<Popup x:Name="Popup">

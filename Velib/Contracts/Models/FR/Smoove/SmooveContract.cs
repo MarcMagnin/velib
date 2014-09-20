@@ -47,18 +47,23 @@ namespace Velib.Contracts.Models.Smoove
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
                         var models = responseBodyAsText.FromXmlString<vcs>("").Node.Stations.ToList();
                         // for duplicates :/
-                        var dupplicates = models.GroupBy(x => x.Id).Where(g => g.Count() > 1).ToList();
-                        var aggregatedStation = dupplicates.Select(t=> 
-                            new station{ AvailableBikes = t.Sum(b=>b.AvailableBikes),
-                                        AvailableDocks = t.Sum(b=>b.AvailableDocks),
-                                        Id =t.FirstOrDefault().Id,
-                                        Latitude = t.FirstOrDefault().Latitude,
-                                        Longitude = t.FirstOrDefault().Longitude,
-                                        TotalDocks = t.Sum(b=>b.TotalDocks)
-                        
-                        });
-                        models.RemoveAll(t => aggregatedStation.Any(v =>v.Id == t.Id));
-                        models.Add(aggregatedStation.FirstOrDefault());
+                        var dupplicates = models.GroupBy(x => x.Latitude).Where(g => g.Count() > 1).ToList();
+                        if (dupplicates.Count > 0)
+                        {
+                            var aggregatedStation = dupplicates.Select(t =>
+                                new station
+                                {
+                                    AvailableBikes = t.Sum(b => b.AvailableBikes),
+                                    AvailableDocks = t.Sum(b => b.AvailableDocks),
+                                    Id = t.FirstOrDefault().Id,
+                                    Latitude = t.FirstOrDefault().Latitude,
+                                    Longitude = t.FirstOrDefault().Longitude,
+                                    TotalDocks = t.Sum(b => b.TotalDocks)
+
+                                });
+                            models.RemoveAll(t => aggregatedStation.Any(v => v.Latitude == t.Latitude));
+                            models.Add(aggregatedStation.FirstOrDefault());
+                        }
                         foreach (var station in models)
                         {
                             foreach (var velibModel in Velibs)
@@ -126,21 +131,23 @@ namespace Velib.Contracts.Models.Smoove
             var models = responseBodyAsText.FromXmlString<vcs>("").Node.Stations.ToList();
             Velibs = new List<VelibModel>();
             // for duplicates :/
-            var dupplicates = models.GroupBy(x => x.Id).Where(g => g.Count() > 1).ToList();
-            var aggregatedStation = dupplicates.Select(t =>
-                new station
-                {
-                    AvailableBikes = t.Sum(b => b.AvailableBikes),
-                    AvailableDocks = t.Sum(b => b.AvailableDocks),
-                    Id = t.FirstOrDefault().Id,
-                    Latitude = t.FirstOrDefault().Latitude,
-                    Longitude = t.FirstOrDefault().Longitude,
-                    TotalDocks = t.Sum(b => b.TotalDocks)
+            
+            var dupplicates = models.GroupBy(x => x.Latitude).Where(g => g.Count() > 1).ToList();
+            if (dupplicates.Count > 0) { 
+                var aggregatedStation = dupplicates.Select(t =>
+                    new station
+                    {
+                        AvailableBikes = t.Sum(b => b.AvailableBikes),
+                        AvailableDocks = t.Sum(b => b.AvailableDocks),
+                        Id = t.FirstOrDefault().Id,
+                        Latitude = t.FirstOrDefault().Latitude,
+                        Longitude = t.FirstOrDefault().Longitude,
+                        TotalDocks = t.Sum(b => b.TotalDocks)
 
-                });
-            models.RemoveAll(t => aggregatedStation.Any(v => v.Id == t.Id));
-            models.Add(aggregatedStation.FirstOrDefault());
-
+                    });
+                models.RemoveAll(t => aggregatedStation.Any(v => v.Latitude == t.Latitude));
+                models.Add(aggregatedStation.FirstOrDefault());
+            }
             foreach (var station in models)
             {
                 

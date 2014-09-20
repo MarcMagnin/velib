@@ -603,11 +603,11 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
                new PubliBikeContract{Name = "Luzern",
-               TechnicalName= "Luzern",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
             new NextBikeContract{Name = "Luzern",
                PaysImage = paysImagesRootPath+ "/CH.png",
+               StorageName= "LuzernNextBike",
                Pays = "Switzerland", Id= "126"},
                new PubliBikeContract{Name = "Marly",
                PaysImage = paysImagesRootPath+ "/CH.png",
@@ -723,12 +723,12 @@ namespace Velib
         }
         private static async Task writeJsonAsync(Contract contract)
         {
-            localSettings.Values[contract.Name] = true;
+            localSettings.Values[contract.StorageName] = true;
             try
             {
 
-           
-            StorageFile file = await installedLocation.CreateFileAsync(contract.Name, CreationCollisionOption.ReplaceExisting);
+
+                StorageFile file = await installedLocation.CreateFileAsync(contract.StorageName, CreationCollisionOption.ReplaceExisting);
             using (StorageStreamTransaction transaction = await file.OpenTransactedWriteAsync())
             {
                 using (DataWriter dataWriter = new DataWriter(transaction.Stream))
@@ -750,7 +750,7 @@ namespace Velib
         {
             var velibs = new List<VelibModel>();
 
-            foreach (var contract in Contracts.Where(c=>DownloadedContracts.Contains( c.Name)).ToList())
+            foreach (var contract in Contracts.Where(c => DownloadedContracts.Contains(c.StorageName)).ToList())
             {
                 var loadedContract = await GetContractFromFile(contract);
                  Contracts[Contracts.IndexOf(contract)] = loadedContract;
@@ -769,10 +769,10 @@ namespace Velib
 
         private static async Task<Contract> GetContractFromFile(Contract contract)
         {
-            if (localSettings.Values[contract.Name] == null)
+            if (localSettings.Values[contract.StorageName] == null)
                 return contract;
             try {
-                StorageFile file = await installedLocation.GetFileAsync(contract.Name);
+                StorageFile file = await installedLocation.GetFileAsync(contract.StorageName);
                 if (file != null) {
                     using (IRandomAccessStream readStream = await file.OpenAsync(FileAccessMode.Read))
                     {
@@ -808,62 +808,16 @@ namespace Velib
             return contract;
         }
 
-        //private static async Task DownloadContract(Contract contract){
-        //    var httpClient = new HttpClient();
-        //    var cts = new CancellationTokenSource();
-        //    var velibs = new List<VelibModel>();
-        //    contract.Downloading = true;
-        //    bool failed = false;
-        //    try
-        //    {
-        //        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(villeUri, contract.Name))).AsTask(cts.Token);
-        //        var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
-        //        contract.Velibs = responseBodyAsText.FromJsonString<List<VelibModel>>();
-        //        contract.VelibCounter = contract.Velibs.Count.ToString() + " cycles";
-        //        foreach (var velib in contract.Velibs)
-        //        {
-        //            velib.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
-        //            {
-        //                Latitude = velib.Latitude,
-        //                Longitude = velib.Longitude
-        //            });
-        //            velib.AvailableBikes = -1;
-        //            velib.AvailableBikeStands = -1;
-        //        }
-        //        contract.Downloaded = true;
-        //        VelibDataSource.StaticVelibs.AddRange(contract.Velibs);
-        //        httpClient.Dispose();
-        //        cts.Token.ThrowIfCancellationRequested();
-        //    }
-        //    catch (TaskCanceledException)
-        //    {
-        //        failed = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        failed = true;
-        //    }
-        //    finally
-        //    {
-        //        contract.Downloading = false;
-        //        //  Helpers.ScenarioCompleted(StartButton, CancelButton);
-        //    }
-        //    if (failed)
-        //    {
-        //        var dialog = new MessageDialog("Sorry, you are currently not able to download " + contract.Name);
-        //        await dialog.ShowAsync();
-        //    }
-        //}
 
         internal static async void RemoveContract(Contract contract)
         {
             try
             {
-                localSettings.Values[contract.Name] = null;
-                StorageFile file = await installedLocation.GetFileAsync(contract.Name);
+                localSettings.Values[contract.StorageName] = null;
+                StorageFile file = await installedLocation.GetFileAsync(contract.StorageName);
                 contract.Downloaded = false;
                 // remove from static velibs
-                VelibDataSource.StaticVelibs.RemoveAll(t=> contract.Velibs.Any(v=>v.Number == t.Number));
+                VelibDataSource.StaticVelibs.RemoveAll(t=> contract.Velibs.Any(v=>v.Longitude == t.Longitude && v.Latitude == t.Latitude));
                 contract.Velibs.Clear();
                 await file.DeleteAsync();
                 RemoveContractsInAppSetting(contract);
@@ -875,14 +829,14 @@ namespace Velib
 
         private static void RemoveContractsInAppSetting(Contract contract)
         {
-            DownloadedContracts.Remove(contract.Name);
+            DownloadedContracts.Remove(contract.StorageName);
             Windows.Storage.ApplicationData.Current.LocalSettings.Values["DownloadedContracts"] = DownloadedContracts.ToJson();
         }
         private static void StoreContractsInAppSetting(Contract contract)
         {
-            if (!DownloadedContracts.Contains(contract.Name))
+            if (!DownloadedContracts.Contains(contract.StorageName))
             {
-                DownloadedContracts.Add(contract.Name);
+                DownloadedContracts.Add(contract.StorageName);
             }
             Windows.Storage.ApplicationData.Current.LocalSettings.Values["DownloadedContracts"] = DownloadedContracts.ToJson();
         }

@@ -853,7 +853,7 @@ namespace Velib
             }
 
             // Show the route if the user is at least 3 KM from the selected item
-            if (userLastLocation != null && LastSearchGeopoint != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 3)
+            if (userLastLocation != null && LastSearchGeopoint != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 4)
             {
                 GetRoute(LastSearchGeopoint);
                 if (PreviousSelectedItem == item && !skipFlyout)
