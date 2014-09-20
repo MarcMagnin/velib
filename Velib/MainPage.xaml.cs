@@ -73,6 +73,9 @@ namespace Velib
         Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         Storyboard UserLocationStoryboard;
         DoubleAnimation UserLocationRotationAnimation;
+        Storyboard AccuracyStoryboard;
+        DoubleAnimation AccuracyScaleX;
+        DoubleAnimation AccuracyScaleY;
         public MainPage()
         {
             this.InitializeComponent();
@@ -100,6 +103,10 @@ namespace Velib
 
             UserLocationStoryboard = this.Resources["UserLocationStoryboard"] as Storyboard;
             UserLocationRotationAnimation = UserLocationStoryboard.Children.First() as DoubleAnimation;
+
+            AccuracyStoryboard = this.Resources["AccuracyStoryboard"] as Storyboard;
+            AccuracyScaleX = AccuracyStoryboard.Children[0] as DoubleAnimation;
+            AccuracyScaleY = AccuracyStoryboard.Children[1] as DoubleAnimation;
 
             clusterGenerator = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
             gl.PositionChanged += gl_PositionChanged;
@@ -151,9 +158,9 @@ namespace Velib
         void TouchPanel_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
             StopCompassAndUserLocationTracking();
-            MapCtrl.TrySetViewAsync(MapCtrl.Center, null, null, null, MapAnimationKind.None);
-            LocationButton.Icon = new SymbolIcon(Symbol.Target);
-            LocationButton.Label = "Location";
+           // MapCtrl.TrySetViewAsync(MapCtrl.Center, null, null, null, MapAnimationKind.None);
+            //LocationButton.Icon = new SymbolIcon(Symbol.Target);
+            //LocationButton.Label = "Location";
         }
 
 
@@ -296,10 +303,21 @@ namespace Velib
             //HideSearchLocationPoint();
         }
 
-
+        private void setCompassIcon()
+        {
+            LocationButton.Icon = SymbolView;
+            LocationButton.Label = "Compass";
+        }
+        private void setViewIcon()
+        {
+            LocationButton.Icon = SymbolTarget;
+            LocationButton.Label = "Location";
+        }
         private bool searchingLocation = false;
         private bool stickToUserLocation = false;
         public bool compassMode = false;
+        private SymbolIcon SymbolView = new SymbolIcon(Symbol.View);
+        private SymbolIcon SymbolTarget = new SymbolIcon(Symbol.Target);
         //private Geolocator glOnDemande;
         private async void LocationButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -326,9 +344,8 @@ namespace Velib
                 }
 
 
-            if (compass != null) { 
-                LocationButton.Icon = new SymbolIcon(Symbol.View);
-                LocationButton.Label = "Compass";
+            if (compass != null) {
+                setCompassIcon();
             }
             ShowUserLocation();
 
@@ -351,7 +368,7 @@ namespace Velib
 
             if (compassMode)
             {
-                StopCompass(new SymbolIcon(Symbol.View), "Compass");
+                StopCompass();
                 if (Map.Heading != 0)
                     MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
             }
@@ -365,9 +382,7 @@ namespace Velib
                         compassMode = true;
                         VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
                     }
-                    
-                LocationButton.Icon = new SymbolIcon(Symbol.Target);
-                LocationButton.Label = "Location";
+                    setViewIcon(); 
 
                 }
             }
@@ -378,16 +393,10 @@ namespace Velib
             UserLocation.SetValue(MapControl.LocationProperty, userLastLocation);
             UserLocation.Opacity = 1;
         }
-        private async void StopCompass(SymbolIcon locationButtonIcon, string locationButtonLabel)
+        private  void StopCompass()
         {
-
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                compassMode = false;
-                LocationButton.Icon = locationButtonIcon;
-                LocationButton.Label = locationButtonLabel;
-
-            });
+            compassMode = false;
+            setViewIcon();
         }
 
         void MapCtrl_HeadingChanged(MapControl sender, object args)
@@ -438,16 +447,23 @@ namespace Velib
             });
 
         }
-
         Geopoint previousBigChangeInUserLocation;
         async void gl_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
-            userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Longitude, Latitude = args.Position.Coordinate.Latitude });
+            userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Point.Position.Longitude, Latitude = args.Position.Coordinate.Point.Position.Latitude });
+
             if (previousBigChangeInUserLocation == null)
                 previousBigChangeInUserLocation = userLastLocation;
             
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                // set accuracy indicator
+                double metersPerPixels = MapExtensions.GroundResolution(args.Position.Coordinate.Point.Position.Latitude, Map.ZoomLevel);
+                double radius = args.Position.Coordinate.Accuracy / metersPerPixels;
+                AccuracyScaleX.To = radius;
+                AccuracyScaleY.To = radius; 
+                AccuracyStoryboard.Begin();
+
                 var pixelDistance = userLastLocation.Position.GetDistancePixel(MapCtrl.Center.Position, MapCtrl.ZoomLevel);
                 // recalculate route if there is any big change in the position
                 if (MapCtrl.Routes.Count > 0)
@@ -627,7 +643,8 @@ namespace Velib
 
         public void StopCompassAndUserLocationTracking()
         {
-            StopCompass(new SymbolIcon(Symbol.Target), "Location");
+            
+            StopCompass();
             stickToUserLocation = false;
         }
 
@@ -1106,13 +1123,7 @@ namespace Velib
 
         private void NorthIndicator_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (stickToUserLocation) { 
-                StopCompass(new SymbolIcon(Symbol.View), "Compass");
-            }
-            else
-            {
-                StopCompass(new SymbolIcon(Symbol.Target), "Location");
-            }
+            StopCompass();
             if (Map.Heading != 0)
                 MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
         }

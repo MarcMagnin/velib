@@ -257,10 +257,10 @@ namespace Velib.Common
         /// <param name="levelOfDetail">Level of detail, from 1 (lowest detail)
         /// to 23 (highest detail).</param>
         /// <returns>The ground resolution, in meters per pixel.</returns>
-        public static double GroundResolution(double latitude, int levelOfDetail)
+        public static double GroundResolution(double latitude, double levelOfDetail)
         {
             latitude = Clip(latitude, MinLatitude, MaxLatitude);
-            return Math.Cos(latitude * Math.PI / 180) * 2 * Math.PI * EarthRadius / MapSize(levelOfDetail);
+            return Math.Cos(latitude * Math.PI / 180) * 2 * Math.PI * EarthRadius / (256 * Math.Pow(2, levelOfDetail));
         }
         public static double CalculateAngle(this BasicGeoposition loc1, BasicGeoposition loc2)
         {

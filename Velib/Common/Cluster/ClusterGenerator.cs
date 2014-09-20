@@ -62,7 +62,7 @@ namespace Velib.Common.Cluster
                         return null;
 
                   
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                         //mapArea = _map.GetViewArea();
                         mapLocations = _map.GetViewLocations();
                         if (mapLocations != null)

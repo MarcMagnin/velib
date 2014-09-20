@@ -256,6 +256,18 @@
     						</DoubleAnimation.EasingFunction>-->
             </DoubleAnimation>
         </Storyboard>
+		 <Storyboard x:Key="AccuracyStoryboard">
+            <DoubleAnimation Duration="0:0:1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="accuracy" d:IsOptimized="True">
+                <DoubleAnimation.EasingFunction>
+    				<CircleEase EasingMode="EaseOut"/>
+    			</DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+			<DoubleAnimation Duration="0:0:1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="accuracy" d:IsOptimized="True">
+                <DoubleAnimation.EasingFunction>
+    				<CircleEase EasingMode="EaseOut"/>
+    			</DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
         <ControlTemplate x:Key="ClusterTemplate">
             <!--Maps:MapControl.NormalizedAnchorPoint="0.5,0"-->
             <Canvas x:Name="rootCanvas" Height="20" 
@@ -1084,13 +1096,22 @@
                     <CompositeTransform x:Name="UserLocationCompositeTransform" Rotation="0"/>
                 </Canvas.RenderTransform>
 
-                <Path x:Name="path" Data="M12.978,0.5 L24.3847,22.832 L24.3958,22.8558 C25.1051,24.4247 25.5,26.1662 25.5,28 C25.5,34.9036 19.9036,40.5 13,40.5 C6.09644,40.5 0.5,34.9036 0.5,28 C0.5,26.2741 0.849777,24.6299 1.48231,23.1344 L1.52754,23.031 z" Fill="Black" HorizontalAlignment="Center" Height="41" RenderTransformOrigin="0.5,0.286976" Stretch="Fill" Stroke="White" UseLayoutRounding="False" VerticalAlignment="Center" Width="26" Canvas.Top="-16"/>
-                <Ellipse x:Name="ellipse" 
-    				Width="26" Height="26" Stroke="White" Fill="Black" Canvas.Top="-1" 
+                <Ellipse x:Name="accuracy" Fill="{ThemeResource PhoneAccentBrush}" 
+            		Width="2" Height="2" Canvas.Left="12" Canvas.Top="10" Opacity="0.35" RenderTransformOrigin="0.5,0.5" StrokeThickness="0" 
+				>
+                	<Ellipse.RenderTransform>
+                		<CompositeTransform ScaleX="4" ScaleY="4"/>
+                	</Ellipse.RenderTransform>
+                </Ellipse>
+
+            	<Path x:Name="path" Data="M12.978,0.5 L24.3847,22.832 L24.3958,22.8558 C25.1051,24.4247 25.5,26.1662 25.5,28 C25.5,34.9036 19.9036,40.5 13,40.5 C6.09644,40.5 0.5,34.9036 0.5,28 C0.5,26.2741 0.849777,24.6299 1.48231,23.1344 L1.52754,23.031 z" Fill="Black" HorizontalAlignment="Center" Height="41" RenderTransformOrigin="0.5,0.286976" Stretch="Fill" Stroke="White" UseLayoutRounding="False" VerticalAlignment="Center" Width="26" Canvas.Top="-16"/>
+            	<Ellipse x:Name="ellipse" 
+            		Width="26" Height="26" Stroke="White" Fill="Black" Canvas.Top="-1" 
 				/>
-                <Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
-            	Width="20" Height="20" Stroke="White" StrokeThickness="2" Canvas.Top="2" Canvas.Left="3" 
+            	<Ellipse Fill="{ThemeResource PhoneAccentBrush}" 
+            		Width="20" Height="20" Stroke="White" StrokeThickness="2" Canvas.Top="2" Canvas.Left="3" 
 				/>
+                
             </Canvas>
 
             <!--<Maps:MapItemsControl x:Name="MapItzems" ItemTemplate="{StaticResource EventPoiTemplate}" />-->
