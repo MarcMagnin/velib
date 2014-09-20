@@ -382,7 +382,7 @@
 			Margin="0">
 			<ListView.GroupStyle>
 				<GroupStyle HeaderTemplate="{StaticResource GroupHeaderDataTemplate}" 
-				ContainerStyle="{StaticResource GroupItemStyle1}" HeaderContainerStyle="{StaticResource GridViewHeaderItemContainerStyle1}"/>
+					ContainerStyle="{StaticResource GroupItemStyle1}" HeaderContainerStyle="{StaticResource GridViewHeaderItemContainerStyle1}"/>
 			</ListView.GroupStyle>
 			<ListView.HeaderTemplate>
 				<DataTemplate>
@@ -394,7 +394,7 @@
 			
 						<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,10">
 							<Paragraph FontSize="21.333">
-								<Run  Text="Your city is not in this list ? We work on it but you can ask at "/>
+								<Run  Text="Your city is not in this list ? We work on it but you can ask at"/>
 								<Hyperlink NavigateUri="mailto:easybike@outlook.fr"  Foreground="{ThemeResource PhoneAccentBrush}">
 									<Run Text="this address."/>
 								</Hyperlink>
@@ -402,8 +402,8 @@
 							</Paragraph>
 						</RichTextBlock>
 						<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" HorizontalAlignment="Left" FontFamily="Global User Interface">
-						<Run Text="{Binding CityCounter}"/>
-						<Run Text="cities at the moment."/>
+							<Run Text="{Binding CityCounter}"/>
+							<Run Text="cities at the moment."/>
 						</TextBlock>
 					</StackPanel>
 				</DataTemplate>
@@ -422,9 +422,9 @@
 						</Grid.ColumnDefinitions>
 
 						<CheckBox IsChecked="{Binding Downloaded}" MinWidth="0" 
-						VerticalAlignment="Center" Margin="0,0,0,14" 
-						IsHitTestVisible="False" 
-						Visibility="{Binding Downloaded, Converter={StaticResource BoolToVisConverter}}" />
+							VerticalAlignment="Center" Margin="0,0,0,14" 
+							IsHitTestVisible="False" 
+							Visibility="{Binding Downloaded, Converter={StaticResource BoolToVisConverter}}" />
 
                         
 						<StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
@@ -452,18 +452,18 @@
       ItemsSource="{Binding Group.CollectionGroups}">
       <ListView.ItemTemplate>
         <DataTemplate>
-        <StackPanel VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
-							<StackPanel Orientation="Horizontal" >
-                                    <Image Source="{Binding Group.ImagePath}" Width="60" Height="40"/>
-                                    <TextBlock Text="{Binding Group.Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
-							</StackPanel>
+        	<StackPanel VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
+        		<StackPanel Orientation="Horizontal" >
+        			<Image Source="{Binding Group.ImagePath}" Width="60" Height="40"/>
+        			<TextBlock Text="{Binding Group.Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
+        		</StackPanel>
                           
-                             <TextBlock Text="{Binding Group.ItemsCounterStr}" 
-								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+        		<TextBlock Text="{Binding Group.ItemsCounterStr}" 
+        			Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
 							
                             
 							
-						</StackPanel>
+        	</StackPanel>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
