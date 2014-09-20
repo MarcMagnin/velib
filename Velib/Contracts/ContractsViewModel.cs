@@ -38,8 +38,8 @@ namespace Velib
         private static List<Contract> contracts = new List<Contract>()
         {
             
-// AT TOP
-            new NextBikeContract{Name = "Haag",
+          #region AT
+          new NextBikeContract{Name = "Haag",
                PaysImage = paysImagesRootPath+ "/AT.png",
                Pays = "Austria", Id= "167"},
                new NextBikeContract{Name = "Hollabrunn",
@@ -124,54 +124,54 @@ namespace Velib
                new NextBikeContract{Name = "Wieselburg",
                PaysImage = paysImagesRootPath+ "/AT.png",
                Pays = "Austria", Id= "151"},
-// AT BOTTOM
+          #endregion
 
-// AZ TOP
-            new NextBikeContract{Name = "Baku",
+          #region AZ
+          new NextBikeContract{Name = "Baku",
                PaysImage = paysImagesRootPath+ "/AZ.png",
                Pays = "Azerbaijan", Id= "205"},
-// AZ BOTTOM
+          #endregion
 
-// BE TOP
-            new ContractJCDecauxVelib{Name = "Bruxelles-Capitale",
+          #region BE
+          new ContractJCDecauxVelib{Name = "Bruxelles-Capitale",
                PaysImage = paysImagesRootPath+ "/BE.png",
                Pays = "Belgium"},
                new ContractJCDecauxVelib{Name = "Namur",
                PaysImage = paysImagesRootPath+ "/BE.png",
                Pays = "Belgium"},
-// BE BOTTOM
+          #endregion
 
-// BG TOP
-            new NextBikeContract{Name = "Dobrich",
+          #region BG
+          new NextBikeContract{Name = "Dobrich",
                PaysImage = paysImagesRootPath+ "/BG.png",
                Pays = "Bulgaria", Id= "215"},
-// BG BOTTOM
+          #endregion
 
-// CL TOP
-               new BCycleContract{Name = "Santiago",
+          #region CL
+          new BCycleContract{Name = "Santiago",
                TechnicalName= "Bikesantiago",
                ServiceProvider= "Bikesantiago, B-cycle",
                PaysImage = paysImagesRootPath+ "/CL.png",
                Pays = "Chile", Id= "68"},
-// CL BOTTOM
+          #endregion
 
-// HR TOP
-            new NextBikeContract{Name = "Šibenik",
+          #region HR
+          new NextBikeContract{Name = "Šibenik",
                PaysImage = paysImagesRootPath+ "/HR.png",
                Pays = "Croatia", Id= "248"},
                new NextBikeContract{Name = "Zagreb",
                PaysImage = paysImagesRootPath+ "/HR.png",
                Pays = "Croatia", Id= "220"},
-// HR BOTTOM
+          #endregion
 
-// CY TOP
-            new NextBikeContract{Name = "Limassol",
+          #region CY
+          new NextBikeContract{Name = "Limassol",
                PaysImage = paysImagesRootPath+ "/CY.png",
                Pays = "Cyprus", Id= "190"},
-// CY BOTTOM
+          #endregion
 
-// FR TOP
-             new ContractJCDecauxVelib{Name = "Amiens",
+          #region FR
+          new ContractJCDecauxVelib{Name = "Amiens",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Besancon",
@@ -183,12 +183,11 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Creteil",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-             new SmooveContract{Name = "Grenoble",
-                 ApiUrl = "http://vms.metrovelo.fr/vcstations.xml",
+          new SmooveContract{Name = "Grenoble",
+                ApiUrl = "http://vms.metrovelo.fr/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
-               Pays = "France"},
-              
-               new ContractJCDecauxVelib{Name = "Lyon",
+               Pays = "France"},    
+          new ContractJCDecauxVelib{Name = "Lyon",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Marseille",
@@ -209,17 +208,17 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Rouen",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-               new SmooveContract{Name = "Strasbourg",
+          new SmooveContract{Name = "Strasbourg",
                 ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-             new ContractJCDecauxVelib{Name = "Toulouse",
+          new ContractJCDecauxVelib{Name = "Toulouse",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
-// FR BOTTOM
+          #endregion
 
-// DE TOP
-             new NextBikeContract{Name = "Augsburg",
+          #region DE
+          new NextBikeContract{Name = "Augsburg",
                PaysImage = paysImagesRootPath+ "/DE.png",
                Pays = "Germany", Id= "178"},
                new NextBikeContract{Name = "Berlin",
@@ -325,52 +324,52 @@ namespace Velib
                new NextBikeContract{Name = "Usedom", //8 Stations côté Polonais Uznam,PL
                PaysImage = paysImagesRootPath+ "/DE.png",
                Pays = "Germany", Id= "176"},
-// DE BOTTOM
+          #endregion
 
-// JP TOP
-             new ContractJCDecauxVelib{Name = "Toyama",
+          #region JP
+          new ContractJCDecauxVelib{Name = "Toyama",
                PaysImage = paysImagesRootPath+ "/JP.png",
                Pays = "Japan"},
-// JP BOTTOM
+          #endregion
 
-// LV TOP
-             new NextBikeContract{Name = "Jurmala",
+          #region LV
+          new NextBikeContract{Name = "Jurmala",
                PaysImage = paysImagesRootPath+ "/LV.png",
                Pays = "Latvia", Id= "140"},
                new NextBikeContract{Name = "Riga",
                PaysImage = paysImagesRootPath+ "/LV.png",
                Pays = "Latvia", Id= "128"},
-// LV BOTTOM
+          #endregion
 
-// LT TOP
-            new ContractJCDecauxVelib{Name = "Vilnius",
+          #region LT
+          new ContractJCDecauxVelib{Name = "Vilnius",
                PaysImage = paysImagesRootPath+ "/LT.png",
                Pays = "Lithuania"},
-// LT BOTTOM
+          #endregion
 
-// LU TOP
-            new ContractJCDecauxVelib{Name = "Luxembourg",
+          #region LU
+          new ContractJCDecauxVelib{Name = "Luxembourg",
                PaysImage = paysImagesRootPath+ "/LU.png",
                Pays = "Luxembourg"},
-// LU BOTTOM
+          #endregion
 
-// NZ TOP
-            new NextBikeContract{Name = "Auckland",
+          #region NZ
+          new NextBikeContract{Name = "Auckland",
                PaysImage = paysImagesRootPath+ "/NZ.png",
                Pays = "New Zealand", Id= "34"},
                new NextBikeContract{Name = "Christchurch",
                PaysImage = paysImagesRootPath+ "/NZ.png",
                Pays = "New Zealand", Id= "193"},
-// NZ BOTTOM
+          #endregion
 
-// NO TOP
-            new ContractJCDecauxVelib{Name = "Lillestrom",
+          #region NO
+          new ContractJCDecauxVelib{Name = "Lillestrom",
                PaysImage = paysImagesRootPath+ "/NO.png",
                Pays = "Norway"},
-// NO BOTTOM
+          #endregion
 
-// PL TOP
-            new NextBikeContract{Name = "Bemowo",
+          #region PL
+          new NextBikeContract{Name = "Bemowo",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "197"},
                new NextBikeContract{Name = "Białystok",
@@ -404,31 +403,31 @@ namespace Velib
                TechnicalName= "WROCŁAW 61",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "187"},
-// PL BOTTOM
+          #endregion
 
-// RU TOP
-            new ContractJCDecauxVelib{Name = "Kazan",
+          #region RU
+          new ContractJCDecauxVelib{Name = "Kazan",
                PaysImage = paysImagesRootPath+ "/RU.png",
                Pays = "Russia"},
-//RU BOTTOM
+          #endregion
 
-// SE TOP
-             new ContractJCDecauxVelib{Name = "Goteborg",
+          #region SE
+          new ContractJCDecauxVelib{Name = "Goteborg",
                PaysImage = paysImagesRootPath+ "/SE.png",
                Pays = "Sweden"},
                new ContractJCDecauxVelib{Name = "Stockholm",
                PaysImage = paysImagesRootPath+ "/SE.png",
                Pays = "Sweden"},
-// SE BOTTOM
+          #endregion
 
-// SI TOP
-             new ContractJCDecauxVelib{Name = "Ljubljana",
+          #region SI
+          new ContractJCDecauxVelib{Name = "Ljubljana",
                PaysImage = paysImagesRootPath+ "/SI.png",
                Pays = "Slovenia"},
-// SI BOTTOM
+          #endregion
 
-// ES TOP
-             new ContractJCDecauxVelib{Name = "Santander",
+          #region ES
+          new ContractJCDecauxVelib{Name = "Santander",
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
                new ContractJCDecauxVelib{Name = "Seville",
@@ -437,41 +436,41 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Valence",
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
-// ES BOTTOM
+          #endregion
 
-// TR TOP
-            new NextBikeContract{Name = "Konya",
+          #region TR
+          new NextBikeContract{Name = "Konya",
                PaysImage = paysImagesRootPath+ "/TR.png",
                Pays = "Turkey", Id= "183"},
                new NextBikeContract{Name = "Seferihisar",
                PaysImage = paysImagesRootPath+ "/TR.png",
                Pays = "Turkey", Id= "249"},
-// TR BOTTOM
+          #endregion
 
-// AE TOP
-            new NextBikeContract{Name = "Al Sharjah",
+          #region AE
+          new NextBikeContract{Name = "Al Sharjah",
                PaysImage = paysImagesRootPath+ "/AE.png",
                Pays = "United Arab Emirates", Id= "233"},
                new NextBikeContract{Name = "Dubai",
                PaysImage = paysImagesRootPath+ "/AE.png",
                Pays = "United Arab Emirates", Id= "219"},
-// AE BOTTOM
+          #endregion
 
-// GB TOP
-             new NextBikeContract{Name = "Bath",
+          #region GB
+          new NextBikeContract{Name = "Bath",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom", Id= "236"},
                new NextBikeContract{Name = "Glasgow",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom", Id= "237"},
-            new ContractTFLLondon{Name = "London",
+          new ContractTFLLondon{Name = "London",
                ServiceProvider = "Barclays Cycle Hire, Bixi",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom"},
-            new NextBikeContract{Name = "Stirling",
+          new NextBikeContract{Name = "Stirling",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom", Id= "243"},
-// GB BOTTOM
+          #endregion
 
           #region US
 		  new BCycleContract{Name = "Ann Arbor, MI",
@@ -499,12 +498,12 @@ namespace Velib
                TechnicalName= "Charlotte B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "61"},
-            new DivyBikeContract{Name = "Chicago, IL",
+          new DivyBikeContract{Name = "Chicago, IL",
                TechnicalName= "Chicago",
                ServiceProvider = "Divvy, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
-            new BCycleContract{Name = "Cincinnati, OH",
+          new BCycleContract{Name = "Cincinnati, OH",
                TechnicalName= "Cincy Red Bike",
                ServiceProvider= "Red Bike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
@@ -518,7 +517,7 @@ namespace Velib
                ServiceProvider= "Bublr Bikes, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "70"},
-            new CitiBikeContract{Name = "New York City, NY",
+          new CitiBikeContract{Name = "New York City, NY",
                TechnicalName= "New York",
                ServiceProvider= "Citi Bike, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
@@ -533,15 +532,15 @@ namespace Velib
             //   Pays = "United States", Id= "254"},
 
 
-            new CapitalBikeShareContract{Name = "Washington, D.C. area",
+          new CapitalBikeShareContract{Name = "Washington, D.C. area",
                TechnicalName= "Washington",
                ServiceProvider = "Capital BikeShare, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
-	#endregion
+          #endregion
 
-        #region CH  
-            new PubliBikeContract{Name = "Aigle",
+          #region CH
+          new PubliBikeContract{Name = "Aigle",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},         
                new PubliBikeContract{Name = "Avenches",
@@ -605,7 +604,7 @@ namespace Velib
                new PubliBikeContract{Name = "Luzern",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-            new NextBikeContract{Name = "Luzern",
+          new NextBikeContract{Name = "Luzern",
                PaysImage = paysImagesRootPath+ "/CH.png",
                StorageName= "LuzernNextBike",
                Pays = "Switzerland", Id= "126"},
@@ -661,7 +660,7 @@ namespace Velib
                new PubliBikeContract{Name = "Solothurn",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-            new NextBikeContract{Name = "Sursee",
+          new NextBikeContract{Name = "Sursee",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland", Id= "88"},
                new PubliBikeContract{Name = "Tesserete",
@@ -685,7 +684,7 @@ namespace Velib
                new PubliBikeContract{Name = "Zürich",
                PaysImage = paysImagesRootPath+ "/CH.png",
                Pays = "Switzerland"},
-#endregion CH
+          #endregion CH
         };
 
         public static List<Contract> Contracts
