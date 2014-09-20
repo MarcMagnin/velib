@@ -698,13 +698,14 @@ namespace Velib
     
         public static async void DownloadAndSaveContract(Contract contract)
         {
-            await contract.DownloadContract();
-            if (contract.Downloaded)
-            {
-                StoreContractsInAppSetting(contract);
-                await writeJsonAsync(contract);
-            }
-                
+            
+                await contract.DownloadContract();
+                if (contract.Downloaded)
+                {
+                    StoreContractsInAppSetting(contract);
+                    await writeJsonAsync(contract);
+                }
+            
         }
 
 

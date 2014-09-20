@@ -139,7 +139,7 @@ namespace Velib.Contracts.Models.US.Washington
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromXmlString<stations>("");
-                VelibCounter = model.Stations.Length.ToString() + " stations";
+                VelibCounter = model.Stations.Length;
                 Velibs = new List<VelibModel>();
                 //this.LastUpdate = tflModel.lastUpdate;
                 foreach (var station in model.Stations)
@@ -188,8 +188,7 @@ namespace Velib.Contracts.Models.US.Washington
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 

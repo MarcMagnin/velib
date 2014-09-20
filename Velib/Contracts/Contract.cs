@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VelibContext;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Velib.Contracts
@@ -83,8 +84,8 @@ namespace Velib.Contracts
         }
 
 
-        private string velibCounter;
-        public string VelibCounter 
+        private int velibCounter;
+        public int VelibCounter 
         {
             get { return velibCounter; }
             set
@@ -92,10 +93,18 @@ namespace Velib.Contracts
                 if (value != this.velibCounter)
                 {
                     this.velibCounter = value;
-                    NotifyPropertyChanged("VelibCounter");
+                    NotifyPropertyChanged("VelibCounterStr");
                 }
             }
         }
+        public string VelibCounterStr
+        {
+            get
+            {
+                return  velibCounter <= 1 ? velibCounter + " station" : velibCounter + " stations";
+            }
+        }
+
 
         public async virtual Task DownloadContract()
         {
@@ -117,6 +126,16 @@ namespace Velib.Contracts
 
         protected virtual Contract GetInstanceForSimpleClone(){
             return new Contract();
+        }
+
+        protected void DownloadContractFail()
+        {
+            var dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+            dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            {
+                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
+                dialog.ShowAsync();
+            });
         }
     }
 }

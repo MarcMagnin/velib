@@ -138,7 +138,7 @@ namespace Velib.Contracts
                 var responseBodyAsText = await response.Content.ReadAsStringAsync();
                 // require Velib.Common
                 var tflModel = responseBodyAsText.FromXmlString<stations>("stations");
-                VelibCounter = tflModel.station.Length.ToString() + " stations";
+                VelibCounter = tflModel.station.Length;
                 Velibs = new List<VelibModel>();
                 //this.LastUpdate = tflModel.lastUpdate;
                 foreach (var station in tflModel.station)
@@ -195,8 +195,7 @@ namespace Velib.Contracts
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 

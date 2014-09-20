@@ -124,14 +124,20 @@ namespace Velib.Contracts.Models.NextBike{
 
             try
             {
+                var responseBodyAsText = "";
+                await Task.Run(async () =>
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id)));
+                    responseBodyAsText = await response.Content.ReadAsStringAsync();
+                });
+                
                 //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
               //Returned JSON
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl,Id)));
-                var responseBodyAsText = await response.Content.ReadAsStringAsync();
+                
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromXmlString<markers>("");
-                VelibCounter = model.Items.FirstOrDefault().city.FirstOrDefault().place.Length.ToString() + " stations";
+                VelibCounter = model.Items.FirstOrDefault().city.FirstOrDefault().place.Length;
                
                // var test =model.Items;
                // var coolstring ="";
@@ -189,8 +195,7 @@ namespace Velib.Contracts.Models.NextBike{
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 

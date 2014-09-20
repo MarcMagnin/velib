@@ -134,7 +134,7 @@ namespace Velib.Contracts.Models.CH.PubliBike
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
-                VelibCounter = model.Stations.Where(s=>s.City == TechnicalName).ToList().Count.ToString() + " stations";
+                VelibCounter = model.Stations.Where(s=>s.City == TechnicalName).ToList().Count ;
 
                 //var test = model.Stations.GroupBy(s => s.City).Select(t => t.First()).Select(s => s.City).OrderBy(s=>s).Aggregate((c, next) => c + " \r\n" + next);
                 //Debug.WriteLine(test);
@@ -186,8 +186,7 @@ namespace Velib.Contracts.Models.CH.PubliBike
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 

@@ -9,7 +9,7 @@
     xmlns:SampleData="using:Blend.SampleData.SampleDataSource"
     x:Class="Velib.ContractsPage"
     mc:Ignorable="d"
-	DataContext="{Binding DefaultViewModel.Group, RelativeSource={RelativeSource Mode=Self}}"
+	DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Mode=Self}}"
 	d:DataContext="{Binding Source={d:DesignData Source=/Contracts/SampleData.json}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 	<Page.Resources>
@@ -371,7 +371,7 @@
 	<Grid>
 	<SemanticZoom Style="{StaticResource SemanticZoomStyle1}">
   <SemanticZoom.ZoomedInView>
-  		<ListView x:Name="ContractListView" ItemsSource="{Binding}"
+  		<ListView x:Name="ContractListView" ItemsSource="{Binding Group}"
 			SelectionMode="None"
 			IsItemClickEnabled="True"
 			ItemClick="ListView_ItemClick" 
@@ -395,8 +395,13 @@
 								<Hyperlink NavigateUri="mailto:easybike@outlook.fr"  Foreground="{ThemeResource PhoneAccentBrush}">
 									<Run Text="this address."/>
 								</Hyperlink>
+								
 							</Paragraph>
 						</RichTextBlock>
+						<TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" HorizontalAlignment="Left" FontFamily="Global User Interface">
+						<Run Text="{Binding CityCounter}"/>
+						<Run Text="cities at the moment."/>
+						</TextBlock>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.HeaderTemplate>
@@ -423,7 +428,7 @@
 							<TextBlock Text="{Binding Name}" Style="{ThemeResource ListViewItemTextBlockStyle}"/>
                             
 							<TextBlock Text="{Binding ServiceProvider}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-							<TextBlock Text="{Binding VelibCounter}" 
+							<TextBlock Text="{Binding VelibCounterStr}" 
 								Visibility="{Binding Downloaded, Converter={StaticResource BoolToVisConverter}}"
 								Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
 							<TextBlock Text="Downloading..." 
@@ -441,7 +446,7 @@
     </SemanticZoom.ZoomedInView>
   <SemanticZoom.ZoomedOutView>
    <ListView
-      ItemsSource="{Binding CollectionGroups}">
+      ItemsSource="{Binding Group.CollectionGroups}">
       <ListView.ItemTemplate>
         <DataTemplate>
         <StackPanel VerticalAlignment="Center" Margin="12,0,0,0" Height="87">

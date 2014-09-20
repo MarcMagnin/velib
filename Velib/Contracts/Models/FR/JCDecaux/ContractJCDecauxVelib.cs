@@ -142,7 +142,7 @@ namespace Velib.Contracts
                 var responseBodyAsText = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
                 // require Velib.Common
                 Velibs = responseBodyAsText.FromJsonString<List<VelibModel>>();
-                VelibCounter = Velibs.Count.ToString() + " stations";
+                VelibCounter = Velibs.Count;
                 foreach (var velib in Velibs)
                 {
                     
@@ -176,8 +176,7 @@ namespace Velib.Contracts
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
         public override Contract GetSimpleContract()

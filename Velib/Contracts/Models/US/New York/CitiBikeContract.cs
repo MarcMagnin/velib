@@ -140,7 +140,7 @@ namespace Velib.Contracts.Models.US
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromJsonString<CitiBikeModel>();
-                VelibCounter = model.Results.Length.ToString() + " stations";
+                VelibCounter = model.Results.Length;
                 Velibs = new List<VelibModel>();
                 //this.LastUpdate = tflModel.lastUpdate;
                 foreach (var station in model.Results)
@@ -189,8 +189,7 @@ namespace Velib.Contracts.Models.US
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 

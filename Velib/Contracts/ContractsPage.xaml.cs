@@ -32,6 +32,7 @@ namespace Velib
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CollectionViewSource ContractCollectionViewSource;
+        private int cityCounter = 0;
         public ContractsPage()
         {
             this.InitializeComponent();
@@ -112,15 +113,17 @@ namespace Velib
         {
             this.navigationHelper.OnNavigatedTo(e);
 
+            
             if (ContractCollectionViewSource == null)
             {
                 var contractGroup = new List<ContractGroup>();
-                foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays))
+                foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays).ToList())
                 {
                     var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
                     group.Items = new ObservableCollection<Contract>();
-                    foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays))
+                    foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).ToList())
                     {
+                        cityCounter++;
                         group.Items.Add(c);
                         group.ItemsCounter++;
                     }
@@ -136,6 +139,7 @@ namespace Velib
             }
 
             this.DefaultViewModel["Group"] = ContractCollectionViewSource.View;
+            this.DefaultViewModel["CityCounter"] = cityCounter;
             
 
         }

@@ -123,7 +123,7 @@ namespace Velib.Contracts.Models.BCycle
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromJsonString<List<BCycleModel>>();
-                VelibCounter = model.Count.ToString() + " stations";
+                VelibCounter = model.Count;
                
                // var test =model.Items;
                // var coolstring ="";
@@ -182,8 +182,7 @@ namespace Velib.Contracts.Models.BCycle
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 

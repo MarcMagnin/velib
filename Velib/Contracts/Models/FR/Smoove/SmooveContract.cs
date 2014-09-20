@@ -119,12 +119,17 @@ namespace Velib.Contracts.Models.Smoove
 
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl)));
-                var responseBodyAsText = await response.Content.ReadAsStringAsync();
+                var responseBodyAsText = "";
+                await Task.Run(async () =>
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl)));
+                    responseBodyAsText = await response.Content.ReadAsStringAsync();
+                });
+                
                 
                 // require Velib.Common
                 var model = responseBodyAsText.FromXmlString<vcs>("");
-                VelibCounter = model.Node.Stations.Length.ToString() + " stations";
+                VelibCounter = model.Node.Stations.Length;
                 Velibs = new List<VelibModel>();
                 foreach (var station in model.Node.Stations)
                 {
@@ -171,8 +176,7 @@ namespace Velib.Contracts.Models.Smoove
             }
             if (failed)
             {
-                var dialog = new MessageDialog("Sorry, you are currently not able to download " + Name);
-                await dialog.ShowAsync();
+                DownloadContractFail();
             }
         }
 
