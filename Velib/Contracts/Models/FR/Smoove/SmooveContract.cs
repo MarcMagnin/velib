@@ -27,7 +27,6 @@ namespace Velib.Contracts.Models.Smoove
         {
             DirectDownloadAvailability = true;
             this.ServiceProvider = "Smoove";
-            this.RefreshTimer = TimeSpan.FromSeconds(5);
         }
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
@@ -48,7 +47,6 @@ namespace Velib.Contracts.Models.Smoove
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
                         var models = responseBodyAsText.FromXmlString<vcs>("").Node.Stations.ToList();
                         // for duplicates :/
-
                         var dupplicates = models.GroupBy(x => x.Id).Where(g => g.Count() > 1).ToList();
                         var aggregatedStation = dupplicates.Select(t=> 
                             new station{ AvailableBikes = t.Sum(b=>b.AvailableBikes),
@@ -125,9 +123,25 @@ namespace Velib.Contracts.Models.Smoove
             HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(string.Format(ApiUrl)));
             var responseBodyAsText = await response.Content.ReadAsStringAsync();
             // require Velib.Common
-            var model = responseBodyAsText.FromXmlString<vcs>("");
+            var models = responseBodyAsText.FromXmlString<vcs>("").Node.Stations.ToList();
             Velibs = new List<VelibModel>();
-            foreach (var station in model.Node.Stations)
+            // for duplicates :/
+            var dupplicates = models.GroupBy(x => x.Id).Where(g => g.Count() > 1).ToList();
+            var aggregatedStation = dupplicates.Select(t =>
+                new station
+                {
+                    AvailableBikes = t.Sum(b => b.AvailableBikes),
+                    AvailableDocks = t.Sum(b => b.AvailableDocks),
+                    Id = t.FirstOrDefault().Id,
+                    Latitude = t.FirstOrDefault().Latitude,
+                    Longitude = t.FirstOrDefault().Longitude,
+                    TotalDocks = t.Sum(b => b.TotalDocks)
+
+                });
+            models.RemoveAll(t => aggregatedStation.Any(v => v.Id == t.Id));
+            models.Add(aggregatedStation.FirstOrDefault());
+
+            foreach (var station in models)
             {
                 
                 var stationModel = new VelibModel()
