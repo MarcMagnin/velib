@@ -47,7 +47,7 @@ namespace Velib
             this.DefaultViewModel["CityCounter"] = 0;
             await Task.Run(async()=>{
                await Task.Delay(100);
-               Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+               await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                {
                    if (ContractCollectionViewSource == null)
                    {

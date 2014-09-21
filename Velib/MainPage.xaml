@@ -31,45 +31,42 @@
 
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="VisualStateGroup">
-                        <VisualStateGroup.Transitions>
-                            <VisualTransition GeneratedDuration="0"/>
-                        </VisualStateGroup.Transitions>
+                      
                         <VisualState x:Name="Normal">
                             <Storyboard>
-                                <DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
-                                <DoubleAnimation Duration="0" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="image" d:IsOptimized="True"/>
-                                <DoubleAnimation Duration="0" To="0.6" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path" d:IsOptimized="True"/>
-                            </Storyboard>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="0.6" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowGreenVelib">
                             <Storyboard>
-                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy" d:IsOptimized="True"/>
-                            </Storyboard>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy" d:IsOptimized="True"/>
+                        	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowCluster">
                             <Storyboard>
-                                <DoubleAnimation Duration="0" To="1.3" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="path" d:IsOptimized="True"/>
-                                <DoubleAnimation Duration="0" To="1.3" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="path" d:IsOptimized="True"/>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Canvas.Top)" Storyboard.TargetName="path">
-                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                        <DiscreteObjectKeyFrame.Value>
-                                            <x:Double>-55</x:Double>
-                                        </DiscreteObjectKeyFrame.Value>
-                                    </DiscreteObjectKeyFrame>
-                                </ObjectAnimationUsingKeyFrames>
-                                <DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
-                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlockClusterNumber" d:IsOptimized="True"/>
-                            </Storyboard>
+                        		<DoubleAnimation Duration="0" To="1.3" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="1.3" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="path" d:IsOptimized="True"/>
+                        		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Canvas.Top)" Storyboard.TargetName="path">
+                        			<DiscreteObjectKeyFrame KeyTime="0">
+                        				<DiscreteObjectKeyFrame.Value>
+                        					<x:Double>-55</x:Double>
+                        				</DiscreteObjectKeyFrame.Value>
+                        			</DiscreteObjectKeyFrame>
+                        		</ObjectAnimationUsingKeyFrames>
+                        		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlockClusterNumber" d:IsOptimized="True"/>
+                        	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowOrangeVelib">
                             <Storyboard>
-                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy1" d:IsOptimized="True"/>
-                            </Storyboard>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy1" d:IsOptimized="True"/>
+                        	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowRedVelib">
                             <Storyboard>
-                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy2" d:IsOptimized="True"/>
-                            </Storyboard>
+                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy2" d:IsOptimized="True"/>
+                        	</Storyboard>
                         </VisualState>
 
 
@@ -78,15 +75,15 @@
                     <VisualStateGroup x:Name="VisualStateGroup1">
                         <VisualState x:Name="Hide">
                             <Storyboard>
-                                <DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="VelibTemplateStationRootCanvas" d:IsOptimized="True"/>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
-                                    <DiscreteObjectKeyFrame KeyTime="0">
-                                        <DiscreteObjectKeyFrame.Value>
-                                            <x:Boolean>False</x:Boolean>
-                                        </DiscreteObjectKeyFrame.Value>
-                                    </DiscreteObjectKeyFrame>
-                                </ObjectAnimationUsingKeyFrames>
-                            </Storyboard>
+                        		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="VelibTemplateStationRootCanvas" d:IsOptimized="True"/>
+                        		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
+                        			<DiscreteObjectKeyFrame KeyTime="0">
+                        				<DiscreteObjectKeyFrame.Value>
+                        					<x:Boolean>False</x:Boolean>
+                        				</DiscreteObjectKeyFrame.Value>
+                        			</DiscreteObjectKeyFrame>
+                        		</ObjectAnimationUsingKeyFrames>
+                        	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="Loaded">
                             <Storyboard>
@@ -158,7 +155,7 @@
 
 
 
-                <Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.6"/>
+                <Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.4"/>
                 <Path x:Name="path" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FF9B9B9B" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25">
                     <Path.RenderTransform>
                         <CompositeTransform/>
@@ -187,16 +184,14 @@
                         <CompositeTransform/>
                     </Path.RenderTransform>
                 </Path>
-                <TextBlock x:Name="Arrow" Text="&#xE0AB;" FontSize="64" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe UI Symbol" Canvas.Left="-27" Canvas.Top="-72" IsHitTestVisible="False" Foreground="Black" Visibility="Collapsed"/>
-
-
+               
                 <!--Binding AvailableBikesStr}-->
                 <TextBlock x:Name="textBlock" Text="{Binding AvailableStr}" 
             		VerticalAlignment="Center" 
             		FontSize="16" 
             		FontWeight="Bold" 
             		TextAlignment="Center" 
-            		Canvas.Left="-11" Canvas.Top="-35" Width="23" 
+            		Canvas.Left="-12" Canvas.Top="-35" Width="24" 
             		IsColorFontEnabled="False" 
             		IsHitTestVisible="False" Foreground="Black" RenderTransformOrigin="0.5,0.5" 
 				>
@@ -1097,7 +1092,7 @@
                 </Canvas.RenderTransform>
 
                 <Ellipse x:Name="accuracy" Fill="{ThemeResource PhoneAccentBrush}" 
-            		Width="2" Height="2" Canvas.Left="12" Canvas.Top="10" Opacity="0.35" RenderTransformOrigin="0.5,0.5" StrokeThickness="0" 
+            		Width="2" Height="2" Canvas.Left="12" Canvas.Top="10" Opacity="0.25" RenderTransformOrigin="0.5,0.5" StrokeThickness="0" 
 				>
                 	<Ellipse.RenderTransform>
                 		<CompositeTransform ScaleX="4" ScaleY="4"/>
@@ -1188,20 +1183,7 @@
         </RadioButton>
 
 
-        <RadioButton x:Name="RadioButtonVelib" Style="{StaticResource RadioButtonStyle1}"
-		GroupName="VelibParkingSwitch" IsChecked="True"
-		Background="#BF000000" BorderBrush="{x:Null}" 
-		Checked="RadioButtonVelib_Checked" MinWidth="0" Margin="16,0,68,20" VerticalAlignment="Bottom" Width="40" Height="40" HorizontalAlignment="Right" Visibility="Collapsed">
-            <Image Source="Assets/velo.png" Margin="7,0"/>
-        </RadioButton>
-        <RadioButton x:Name="RadioButtonParking"
-		GroupName="VelibParkingSwitch"
-		 Checked="RadioButtonParking_Checked" 
-		 Margin="0,0,16,20" VerticalAlignment="Bottom"
-		  Style="{StaticResource RadioButtonStyle1}" 
-		  Background="#BF000000" BorderBrush="{x:Null}" MinWidth="0" Width="40" Height="40" HorizontalAlignment="Right" FontFamily="Global User Interface" Visibility="Collapsed">
-            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="P" VerticalAlignment="Center" Foreground="White" FontSize="26.667" FontFamily="Global User Interface" FontWeight="Bold" Margin="2,3,0,0"/>
-        </RadioButton>
+      
         <Border x:Name="GreyPanel" Background="Black" Width="1000" Height="1000" IsHitTestVisible="False" ManipulationMode="None" Opacity="0" RenderTransformOrigin="0.5,0.5">
             <Border.RenderTransform>
                 <CompositeTransform/>

@@ -24,10 +24,17 @@ namespace Velib.VelibContext
             this.map = map;
             this.Tapped += VelibControl_Tapped;
             this.ManipulationMode = Windows.UI.Xaml.Input.ManipulationModes.All;
-        
+            
         }
 
+        public List<VelibModel> Velibs = new List<VelibModel>();
+        public TextBlock ClusterTextBlock;
 
+        protected override void OnApplyTemplate()
+        {
+            ClusterTextBlock = GetTemplateChild("textBlockClusterNumber") as TextBlock;
+        }
+        
         private static VelibControl previousVelibTapped;
         void VelibControl_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
@@ -56,13 +63,6 @@ namespace Velib.VelibContext
         }
 
 
-        public List<VelibModel> Velibs = new List<VelibModel>();
-        public TextBlock ClusterTextBlock;
-
-        protected override void OnApplyTemplate()
-        {
-            ClusterTextBlock = GetTemplateChild("textBlockClusterNumber") as TextBlock;
-        }
 
 
         public void AddVelib(VelibModel velib)
@@ -76,14 +76,16 @@ namespace Velib.VelibContext
 
         public void FinaliseUiCycle(CoreDispatcher dispatcher, CancellationToken token)
         {
+           
             if (Velibs.Count == 0)
             {
                 Hide();
                 return;
             }
             this.SetValue(MapControl.LocationProperty, GetLocation());
-            this.DataContext = Velibs.FirstOrDefault();
-            this.Opacity = 1;
+            this.DataContext = Velibs[0];
+           
+
             if (Velibs.Count == 1)
             {
                 new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
@@ -95,21 +97,25 @@ namespace Velib.VelibContext
                 ClusterTextBlock.Text = Velibs.Count.ToString();
                 ShowCluster();
             }
+            this.Opacity = 1;
             NeedRefresh = false;
         }
 
         public void SwitchModeVelibParking()
         {
             ShowVelibStation();
-            if (Velibs[0].Loaded && MainPage.BikeMode)
+            if (Velibs[0].Loaded)
             {
-                Velibs[0].AvailableStr = Velibs[0].AvailableBikes.ToString();
-                ShowColor(Velibs[0].AvailableBikes);
-            }
-            if (Velibs[0].Loaded && !MainPage.BikeMode)
-            {
-                Velibs[0].AvailableStr = Velibs[0].AvailableBikeStands.ToString();
-                ShowColor(Velibs[0].AvailableBikeStands);
+                if (MainPage.BikeMode)
+                {
+                    Velibs[0].AvailableStr = Velibs[0].AvailableBikes.ToString();
+                    ShowColor(Velibs[0].AvailableBikes);
+                }
+                else
+                {
+                    Velibs[0].AvailableStr = Velibs[0].AvailableBikeStands.ToString();
+                    ShowColor(Velibs[0].AvailableBikeStands);
+                }
             }
         }
 
@@ -124,28 +130,27 @@ namespace Velib.VelibContext
         public Point MapLocation { get; set; }
 
         public bool alreadyHandled;
-        private bool alreadyLoaded;
         public bool Selected { get; set; }
 
         public VelibControl()
         {
             DefaultStyleKey = typeof(VelibControl);
-            
         }
 
         public void ShowCluster()
         {
+            VisualStateManager.GoToState(this, "ShowCluster", false);
             VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);
-            VisualStateManager.GoToState(this, "ShowCluster", false);
+           
         }
         public void ShowVelibStation()
         {
-           
 
+            VisualStateManager.GoToState(this, "Normal", false);
             VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);
-            VisualStateManager.GoToState(this, "Normal", false);
+          
             //if(velib!= null && velib.Selected)
             //    VisualStateManager.GoToState(this, "ShowSelected", true);
             //else
@@ -160,7 +165,6 @@ namespace Velib.VelibContext
             {
                 station.AvailableStr = station.AvailableBikes.ToString();
                 ShowColor(station.AvailableBikes);
-
             }
             else
             {

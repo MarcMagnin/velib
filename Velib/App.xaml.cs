@@ -44,7 +44,8 @@ namespace Velib
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             
-            //this.DebugSettings.EnableRedrawRegions = true;
+           // this.DebugSettings.EnableRedrawRegions = true;
+           // this.DebugSettings.IsOverdrawHeatMapEnabled = true;
             this.Resuming += App_Resuming;
             this.UnhandledException += App_UnhandledException;
         }

@@ -119,7 +119,7 @@ namespace VelibContext
 
         public override int GetHashCode()
         {
-         return (Longitude+Latitude).GetHashCode();
+          return (Longitude+Latitude).GetHashCode();
         }
         public override bool Equals(object obj)
         {
@@ -143,11 +143,6 @@ namespace VelibContext
         public async Task GetAvailableBikes(CoreDispatcher dispatcher)
         {
             this.Contract.GetAvailableBikes(this, dispatcher);
-            
-        }
-        private static async Task GetDataAsync()
-        {
-
             
         }
 

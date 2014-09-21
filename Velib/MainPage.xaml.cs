@@ -81,13 +81,10 @@ namespace Velib
             this.InitializeComponent();
             MapService.ServiceToken = "AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo";
 
-
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
            // gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
             Map = MapCtrl;
             mainPage = this;
-            // Hub est pris en charge uniquement en mode Portrait
-           // DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
             MapCtrl.Center = new Geopoint(new BasicGeoposition { Latitude = 48.8791, Longitude = 2.354 });
 
             if (Windows.Storage.ApplicationData.Current.LocalSettings.Values["PreviousMapCenterLat"] != null)
@@ -123,11 +120,7 @@ namespace Velib
                 VisualStateManager.GoToState(this, "noCompassState", true);
             }
             
-            MapCtrl.MapTapped += MyMap_MapTapped;
             MapCtrl.DoubleTapped += MapCtrl_DoubleTapped;
-            //MapCtrl.PitchChanged += MapCtrl_PitchChanged;
-            //MapCtrl.HeadingChanged += MapCtrl_HeadingChanged;
-            //MapCtrl.ZoomLevelChanged += MapCtrl_ZoomLevelChanged;
             Observable.FromEventPattern(MapCtrl, "HeadingChanged")
                 .Throttle(TimeSpan.FromMilliseconds(100))
                 .Subscribe(x =>
@@ -156,7 +149,6 @@ namespace Velib
                                 refreshAccuracyIndicator();
                             });
                         });
-            //MapCtrl.ManipulationStarted += MapCtrl_ManipulationStarted;
             TouchPanel.Holding += TouchPanel_Holding;
             TouchPanel.ManipulationStarted += TouchPanel_ManipulationStarted;
             TouchPanel.ManipulationStarting += TouchPanel_ManipulationStarting;
@@ -252,40 +244,6 @@ namespace Velib
         /// antérieure.  L'état n'aura pas la valeur Null lors de la première visite de la page.</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: créez un modèle de données approprié pour le domaine posant problème pour remplacer les exemples de données
-           // var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
-            //this.DefaultViewModel["Groups"] = sampleDataGroups;
-
-
-            //var test = await VelibDataSource.GetEventsAsync();
-            
-            
-            CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            
-            //MapItems.ItemsSource = Velibs;
-
-            //foreach (var velib in test)
-            //{
-            //    await Task.Delay(TimeSpan.FromSeconds(0.0005));
-            //    ///////////////////////////////////////////////////
-            //    // Creating the MapIcon 
-            //    //   (text, image, location, anchor point)
-            //    var shape = new MapIcon
-            //    {
-            //        Title = velib.AvailableBikesStr,
-            //        Location = velib.Location,
-            //        NormalizedAnchorPoint = anchorPoint,
-            //        Image = image,
-            //        ZIndex = 5
-            //    };
-            //    shape.AddData(velib);
-               
-            //    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-            //        MapCtrl.MapElements.Add(shape);
-            //    });
-
-                
-            //}
         }
 
 
@@ -308,21 +266,11 @@ namespace Velib
         #region Inscription de NavigationHelper
 
 
-
-        TimeSpan timeSpan = TimeSpan.FromMilliseconds(200);
-        int counter = 0;
-
-
-
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
             if (DateTime.Now.Hour > 20 || DateTime.Now.Hour < 5)
                 MapCtrl.ColorScheme = MapColorScheme.Dark;
-
-            
-            
-           
         }
 
         
@@ -330,17 +278,17 @@ namespace Velib
         {
             this.navigationHelper.OnNavigatedFrom(e);
         }
-        private void MyMap_MapTapped(MapControl sender, MapInputEventArgs args)
-        {
-            //HideSearchLocationPoint();
-        }
+        //private void MyMap_MapTapped(MapControl sender, MapInputEventArgs args)
+        //{
+        //    HideSearchLocationPoint();
+        //}
 
-        private void setCompassIcon()
+        private void SetCompassIcon()
         {
             LocationButton.Icon = SymbolView;
             LocationButton.Label = "Compass";
         }
-        private void setViewIcon()
+        private void SetTargetIcon()
         {
             LocationButton.Icon = SymbolTarget;
             LocationButton.Label = "Location";
@@ -376,27 +324,24 @@ namespace Velib
                 }
 
 
-            if (compass != null) {
-                setCompassIcon();
+                ShowUserLocation();
+
+                //SetView(userLastLocation, null, null, null, MapAnimationKind.None);
+                var zoom = MapCtrl.ZoomLevel;
+                if (MapCtrl.ZoomLevel < 13)
+                {
+                    zoom = 13;
+                }
+
+                MapCtrl.TrySetViewAsync(userLastLocation, zoom, null, null, MapAnimationKind.None);
+                //MapCtrl.TrySetViewAsync(userLastLocation, MapCtrl.ZoomLevel, null, null, MapAnimationKind.None);
+
+                SetCompassIcon();
+                stickToUserLocation = true;
+                // enable touch for relay to the map in order to abort the following of the user location
+                //TouchPanel.Visibility = Visibility.Visible;
+                return;
             }
-            ShowUserLocation();
-
-            //SetView(userLastLocation, null, null, null, MapAnimationKind.None);
-            var zoom = MapCtrl.ZoomLevel;
-            if (MapCtrl.ZoomLevel < 13 )
-            {
-                zoom = 13;
-            }
-
-            MapCtrl.TrySetViewAsync(userLastLocation, zoom, null, null, MapAnimationKind.None);
-            //MapCtrl.TrySetViewAsync(userLastLocation, MapCtrl.ZoomLevel, null, null, MapAnimationKind.None);
-            
-
-            stickToUserLocation = true;
-            // enable touch for relay to the map in order to abort the following of the user location
-            //TouchPanel.Visibility = Visibility.Visible;
-            return;
-        }
 
             if (compassMode)
             {
@@ -406,16 +351,12 @@ namespace Velib
             }
             else
             {
-                if (stickToUserLocation) { 
                 // Compass mode
-
-                    if (compass != null)
-                    {
-                        compassMode = true;
-                        VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
-                    }
-                    setViewIcon(); 
-
+                if (compass != null)
+                {
+                    compassMode = true;
+                    VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
+                    SetTargetIcon();
                 }
             }
         }
@@ -428,26 +369,17 @@ namespace Velib
         private  void StopCompass()
         {
             compassMode = false;
-            setViewIcon();
-        }
-
-        void MapCtrl_HeadingChanged(MapControl sender, object args)
-        {
-            if (MapCtrl.Heading != 0)
+            if (stickToUserLocation)
             {
-                VisualStateManager.GoToState(this, "NorthIndicatorVisible", true);
+                SetCompassIcon();
             }
             else
             {
-                VisualStateManager.GoToState(this, "NorthIndicatorHidden", true);
+                SetTargetIcon();
             }
-
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                UpdateNorthElementAngle(MapCtrl.Heading);
-            });
-        
         }
+
+      
 
         private void compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
         {
@@ -537,27 +469,27 @@ namespace Velib
         }
 
 
-        private void RadioButtonParking_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (clusterGenerator == null)
-                return;
-            BikeMode = false;
-            foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v=>v.VelibControl).ToList())
-            {
-                control.SwitchModeVelibParking();
-            }
-        }
+        //private void RadioButtonParking_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    if (clusterGenerator == null)
+        //        return;
+        //    BikeMode = false;
+        //    foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v=>v.VelibControl).ToList())
+        //    {
+        //        control.SwitchModeVelibParking();
+        //    }
+        //}
 
-        private void RadioButtonVelib_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (clusterGenerator == null)
-                return;
-            BikeMode = true;
-            foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v => v.VelibControl).ToList())
-            {
-                control.SwitchModeVelibParking();
-            }
-        }
+        //private void RadioButtonVelib_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    if (clusterGenerator == null)
+        //        return;
+        //    BikeMode = true;
+        //    foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v => v.VelibControl).ToList())
+        //    {
+        //        control.SwitchModeVelibParking();
+        //    }
+        //}
 
         private void DownloadCitiesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -686,9 +618,8 @@ namespace Velib
 
         public void StopCompassAndUserLocationTracking()
         {
-            
-            StopCompass();
             stickToUserLocation = false;
+            StopCompass();
         }
 
         private void HideSearch()
@@ -1167,6 +1098,7 @@ namespace Velib
         private void NorthIndicator_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             StopCompass();
+            
             if (Map.Heading != 0)
                 MapCtrl.TrySetViewAsync(MapCtrl.Center, null, 0, null, MapAnimationKind.Linear);
         }
@@ -1341,18 +1273,19 @@ namespace Velib
 
         public bool appLaunchedFromProtocolUri = false;
         // trigger a map center changed to refresh the view
-        internal  void DataSourceLoaded()
+        internal async void DataSourceLoaded()
         {
-            dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 if (!appLaunchedFromProtocolUri)
                 {
                     if (VelibDataSource.StaticVelibs.Count == 0)
                     {
-                        var dialog = new MessageDialog("it's a bit lonely on this map, let's check if your city is in the current list.");
+                        var dialog = new MessageDialog("It's a bit lonely on this map, let's check if your city is in the current list.");
                         dialog.Commands.Add(new UICommand("Ok", null));
                         await dialog.ShowAsync();
                         Frame.Navigate(typeof(ContractsPage));
+                        return;
                     }
                     Map.Center = new Geopoint(new BasicGeoposition() { Longitude = Map.Center.Position.Longitude + 0.000001, Latitude = Map.Center.Position.Latitude });
                 }

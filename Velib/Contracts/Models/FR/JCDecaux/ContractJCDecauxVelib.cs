@@ -28,10 +28,6 @@ namespace Velib.Contracts
         public override async void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
         {
             var httpClient = new HttpClient();
-
-            //Helpers.ScenarioStarted(StartButton, CancelButton, OutputField);
-            //rootPage.NotifyUser("In progress", NotifyType.StatusMessage);
-            bool failed = true;
             try
             {
                 HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, velibModel.Number,this.Name)));//.AsTask(cts.Token);
@@ -98,34 +94,8 @@ namespace Velib.Contracts
                 httpClient.Dispose();
                 //cts.Token.ThrowIfCancellationRequested();
             }
-            catch (TaskCanceledException)
+            catch (Exception)
             {
-
-            }
-            catch (Exception ex)
-            {
-                failed = true;
-            }
-            finally
-            {
-                //  Helpers.ScenarioCompleted(StartButton, CancelButton);
-            }
-            if (failed)
-            {
-                // load local sample data
-                //try
-                //{
-                //    //Uri dataUri = new Uri("ms-appx:///DataSample/Events.json");
-                //    //StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
-                //    //string jsonText = await FileIO.ReadTextAsync(file);
-                //    //var rootNode = jsonText.FromJsonString<EventList>();
-                //    //foreach (var evt in rootNode.Events)
-                //    //{
-                //    //    evt.Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition() { Latitude = evt.Latitude, Longitude = evt.Longitude });
-                //    //    Events.Add(evt);
-                //    //}
-                //}
-                //catch (Exception eee) { }
             }
         }
 

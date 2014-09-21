@@ -25,6 +25,11 @@
      		Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="About"/>
 
      	<StackPanel x:Name="stackPanel" Grid.Row="1" Margin="0">
+                <StackPanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </StackPanel.ChildrenTransitions>
      		<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top">
 			<Paragraph FontSize="21.333">
      				<Run Text="Version 1.0"/>

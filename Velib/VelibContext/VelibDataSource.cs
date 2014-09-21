@@ -23,16 +23,16 @@ namespace VelibContext
         private static Uri dataURL = new Uri("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=c3ae49d442f47c94ccfdb032328be969febe06ed");
 
         static VelibDataSource()
-         {
-             Task.Run(
-               async () =>
-               {
-                   await ContractsViewModel.GetContractsFromHardDrive();
-                    if(MainPage.mainPage != null)
-                       MainPage.mainPage.DataSourceLoaded();
-                       
-               });
-    
+        {
+            Task.Run(
+            async () =>
+            {
+                await ContractsViewModel.GetContractsFromHardDrive();
+                if (MainPage.mainPage != null)
+                   MainPage.mainPage.DataSourceLoaded();
+
+            });
+
         }
 
         public static List<VelibModel> StaticVelibs = new List<VelibModel>();

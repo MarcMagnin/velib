@@ -560,7 +560,14 @@
 				 
                  Margin="20,0,0,0" 
 				 
-                 ><ListView.HeaderTemplate>
+                 >
+            
+            <ListView.ItemContainerTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition/>
+                </TransitionCollection>
+            </ListView.ItemContainerTransitions>
+            <ListView.HeaderTemplate>
     			<DataTemplate>
     				<TextBlock Grid.Row="0" 
     					Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="Favorites"/>

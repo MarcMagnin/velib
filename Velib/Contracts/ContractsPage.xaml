@@ -372,7 +372,13 @@
 	</Page.Resources>
 
 	<Grid>
-	<SemanticZoom Style="{StaticResource SemanticZoomStyle1}">
+        <Grid.Transitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.Transitions>
+        <SemanticZoom Style="{StaticResource SemanticZoomStyle1}">
+           
   <SemanticZoom.ZoomedInView>
   		<ListView x:Name="ContractListView" ItemsSource="{Binding Group}"
 			SelectionMode="None"
@@ -380,6 +386,8 @@
 			ItemClick="ListView_ItemClick" 
 			ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
 			Margin="0">
+			
+
 			<ListView.GroupStyle>
 				<GroupStyle HeaderTemplate="{StaticResource GroupHeaderDataTemplate}" 
 					ContainerStyle="{StaticResource GroupItemStyle1}" HeaderContainerStyle="{StaticResource GridViewHeaderItemContainerStyle1}"/>
@@ -411,7 +419,12 @@
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<Grid Height="80" Margin="27,0,0,0">
-						<!--<Interactivity:Interaction.Behaviors>
+                        <Grid.Transitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition/>
+                            </TransitionCollection>
+                        </Grid.Transitions>
+                            <!--<Interactivity:Interaction.Behaviors>
 							<Core:DataTriggerBehavior Binding="{Binding Downloading}">
 								<Core:GoToStateAction StateName="Disabled"/>
 							</Core:DataTriggerBehavior>
@@ -448,12 +461,15 @@
 		</ListView>
     </SemanticZoom.ZoomedInView>
   <SemanticZoom.ZoomedOutView>
-   <ListView
+                
+    <ListView
       ItemsSource="{Binding Group.CollectionGroups}">
+      
       <ListView.ItemTemplate>
         <DataTemplate>
         	<StackPanel VerticalAlignment="Center" Margin="12,0,0,0" Height="87">
-        		<StackPanel Orientation="Horizontal" >
+                  
+                                <StackPanel Orientation="Horizontal" >
         			<Image Source="{Binding Group.ImagePath}" Width="60" Height="40"/>
         			<TextBlock Text="{Binding Group.Title}" Style="{ThemeResource ListViewItemTextBlockStyle}" Margin="10,0,0,0"/>
         		</StackPanel>

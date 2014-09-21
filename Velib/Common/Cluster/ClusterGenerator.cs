@@ -31,19 +31,16 @@ namespace Velib.Common.Cluster
         public ControlTemplate ItemTemplate { get; set; }
         public CancellationTokenSource cts = new CancellationTokenSource();
 
-        GeoboundingBox mapArea = null;
         BasicGeoposition leftCornerLocation;
         List<Geopoint> mapLocations = null;
         double zoomLevel=20;
         
-
-
-
         public ClustersGenerator(MapControl map, ControlTemplate itemTemplate)
         {
             _map = map;
-            GenerateMapItems();
             this.ItemTemplate = itemTemplate;
+            GenerateMapItems();
+            
             // maps event
             var mapObserver = Observable.FromEventPattern(map, "CenterChanged");
             mapObserver
@@ -282,11 +279,11 @@ namespace Velib.Common.Cluster
             // finalise the ui cycle
             foreach (var control in velibControls.Where(c=>c.NeedRefresh))
             {
-                await Task.Delay(TimeSpan.FromSeconds(0.02));
+                await Task.Delay(TimeSpan.FromMilliseconds(30));
                 if (token.IsCancellationRequested) {
                     break;
                 }
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher,token));
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher,token));
             }
 
             foreach (var velib in Items)
