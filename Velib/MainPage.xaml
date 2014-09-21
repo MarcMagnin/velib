@@ -1049,7 +1049,7 @@
 
         <Maps:MapControl x:Name="MapCtrl"
     		LandmarksVisible="True"
-    		MapServiceToken="AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo" 
+    		MapServiceToken="tGeVZzYuKle4Z7MRxr25Hg" 
                          FontFamily="Global User Interface" 
                          PedestrianFeaturesVisible="True" Background="{x:Null}" 
                          ManipulationMode="All" ScrollViewer.VerticalScrollBarVisibility="Disabled"

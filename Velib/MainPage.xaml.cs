@@ -79,8 +79,8 @@ namespace Velib
         public MainPage()
         {
             this.InitializeComponent();
-            MapService.ServiceToken = "AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo";
-
+            //MapService.ServiceToken = "AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo";
+            
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
            // gl.GetGeopositionAsync(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
             Map = MapCtrl;
