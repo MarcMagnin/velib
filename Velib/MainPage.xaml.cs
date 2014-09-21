@@ -47,6 +47,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Velib.Tutorial;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Email;
+using Windows.ApplicationModel.Store;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -1352,11 +1353,11 @@ namespace Velib
                 body = lastAddressFound + "\r\n";
             }
             body += "easybike://center/?lat=" + Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) +
-                "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+                "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=" + CurrentApp.AppId + "\r\n";
 
             body += "\r\nCan't open this location ? Check out \"Easy Bike\" for Windows Phone ";
             // body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
-            body += "http://www.windowsphone.com/s?appid=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
+            body += "http://www.windowsphone.com/s?appid=" + CurrentApp.AppId + " \r\n";
             return body;
         }
 
