@@ -146,7 +146,6 @@ namespace Velib.VelibContext
         }
         public void ShowVelibStation()
         {
-
             VisualStateManager.GoToState(this, "Normal", false);
             VisualStateManager.GoToState(this, "Clear", false);
             VisualStateManager.GoToState(this, "Loaded", false);

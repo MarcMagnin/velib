@@ -40,7 +40,6 @@ namespace Velib.Contracts.Models.BCycle
                     tokenSource = new CancellationTokenSource();
 
                     var httpClient = new HttpClient();
-                    bool failed = true;
                     try
                     {
                         httpClient.DefaultRequestHeaders.Add("ApiKey", ApiKey);
@@ -85,15 +84,7 @@ namespace Velib.Contracts.Models.BCycle
                         });
                         httpClient.Dispose();
                     }
-                    catch (TaskCanceledException)
-                    {
-
-                    }
                     catch (Exception ex)
-                    {
-                        failed = true;
-                    }
-                    finally
                     {
                     }
                     await Task.Delay(RefreshTimer);
