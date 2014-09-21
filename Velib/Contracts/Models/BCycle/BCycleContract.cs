@@ -65,7 +65,6 @@ namespace Velib.Contracts.Models.BCycle
                                     velibModel.Loaded = true;
                                     break;
                                 }
-
                             }
                         }
                         await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
