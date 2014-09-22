@@ -82,23 +82,24 @@ namespace Velib.VelibContext
                 Hide();
                 return;
             }
-            this.SetValue(MapControl.LocationProperty, GetLocation());
-            this.DataContext = Velibs[0];
-           
+            try
+            {
+                this.SetValue(MapControl.LocationProperty, GetLocation());
+                this.DataContext = Velibs[0];
+                if (Velibs.Count == 1)
+                {
+                    new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
+                    SwitchModeVelibParking();
 
-            if (Velibs.Count == 1)
-            {
-                new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
-                SwitchModeVelibParking();
-                
-            }
-            else if(Velibs.Count > 1)
-            {
-                ClusterTextBlock.Text = Velibs.Count.ToString();
-                ShowCluster();
-            }
-            this.Opacity = 1;
-            NeedRefresh = false;
+                }
+                else if (Velibs.Count > 1)
+                {
+                    ClusterTextBlock.Text = Velibs.Count.ToString();
+                    ShowCluster();
+                }
+                this.Opacity = 1;
+                NeedRefresh = false;
+            }catch(Exception e){}
         }
 
         public void SwitchModeVelibParking()

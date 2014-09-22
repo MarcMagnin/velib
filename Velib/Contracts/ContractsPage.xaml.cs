@@ -56,7 +56,7 @@ namespace Velib
                        {
                            var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
                            group.Items = new ObservableCollection<Contract>();
-                           foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).ToList())
+                           foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).OrderBy(c => c.Name).ToList())
                            {
                                cityCounter++;
                                group.Items.Add(c);

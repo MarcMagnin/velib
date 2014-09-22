@@ -35,9 +35,11 @@
      				<Run Text="Version 1.0"/>
      			</Paragraph>
      			<Paragraph FontSize="20.333">
-                        <Run Text="Created by Marc Magnin and Gaël Guix"/>
+                        <Run Text="Created by Marc Magnin and Gaël Guix."/>
      			</Paragraph>
-         
+                    <Paragraph FontSize="20.333">
+                        <Run Text="Thanks to Florie for her help and patience."/>
+                    </Paragraph>
 
                 </RichTextBlock>
 				<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,18">

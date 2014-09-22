@@ -415,7 +415,11 @@ namespace Velib
 
         private void refreshAccuracyIndicator()
         {
-            if (lastPositionChangedEventArgs != null)
+            if (lastPositionChangedEventArgs != null 
+                && lastPositionChangedEventArgs.Position != null 
+                && lastPositionChangedEventArgs.Position.Coordinate != null 
+                && lastPositionChangedEventArgs.Position.Coordinate.Accuracy != 0
+                && lastPositionChangedEventArgs.Position.Coordinate.Accuracy < 1000)
             {
                 double metersPerPixels = MapExtensions.GroundResolution(lastPositionChangedEventArgs.Position.Coordinate.Point.Position.Latitude, Map.ZoomLevel);
                 double radius = lastPositionChangedEventArgs.Position.Coordinate.Accuracy / metersPerPixels;
