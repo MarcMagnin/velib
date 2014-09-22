@@ -22,11 +22,11 @@ namespace Velib.Common.Cluster
    public class ClustersGenerator
    {
         double MAXDISTANCE = 100;
-        const int MAX_CONTROLS = 40;
+        const int MAX_CONTROLS = 30;
         private readonly List<VelibControl> velibControls = new List<VelibControl>(MAX_CONTROLS);
         public readonly List<VelibModel> Items = new List<VelibModel>();
         private MapControl _map;
-        private TimeSpan throttleTime = TimeSpan.FromMilliseconds(100);
+        private TimeSpan throttleTime = TimeSpan.FromMilliseconds(150);
         private CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
         public ControlTemplate ItemTemplate { get; set; }
         public CancellationTokenSource cts = new CancellationTokenSource();
@@ -89,7 +89,7 @@ namespace Velib.Common.Cluster
                     var collection = new VelibAddRemoveCollection();
                     collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !Items.Contains(t) 
                         && MapExtensions.Contains(mapLocations, t.Location)).Take(MAX_CONTROLS).ToList();
-                    if (Items.Count > 50)
+                    if (Items.Count > 35)
                         collection.ToAdd.Clear();
                     collection.ToRemove = Items.Where(t => !MapExtensions.Contains(mapLocations, t.Location)).ToList();
 
@@ -121,7 +121,7 @@ namespace Velib.Common.Cluster
                 while (true)
                 {
                     RequestAvailability();
-                    await Task.Delay(5000);
+                    await Task.Delay(10000);
                 }
 
             }).Start();
@@ -279,9 +279,17 @@ namespace Velib.Common.Cluster
             // finalise the ui cycle
             foreach (var control in velibControls.Where(c=>c.NeedRefresh))
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(30));
+                await Task.Delay(TimeSpan.FromMilliseconds(35));
                 if (token.IsCancellationRequested) {
                     break;
+                }
+                var stations = control.Velibs;
+                if (stations.Count == 1)
+                {
+                    var station = stations.FirstOrDefault();
+                    {
+                        station.GetAvailableBikes(dispatcher);
+                    }
                 }
                 dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher,token));
             }
@@ -289,9 +297,13 @@ namespace Velib.Common.Cluster
             foreach (var velib in Items)
             {
                  // reinit calculated location to refresh it next UI cycle
-                    velib.OffsetLocation.X =0;
-                    velib.VelibControl.Location = null;
-                    velib.VelibControl.OffsetLocation.X = 0;
+                velib.OffsetLocation.X =0;
+                var control = velib.VelibControl;
+                if (control != null)
+                {
+                    control.Location = null;
+                    control.OffsetLocation.X = 0;
+                }
             }
             
         }
@@ -299,6 +311,7 @@ namespace Velib.Common.Cluster
         {
             foreach (var velib in velibControls.Where(c=>c.Velibs.Count == 1).Select(c=>c.Velibs.FirstOrDefault()).ToList())
             {
+                if (!velib.Contract.DirectDownloadAvailability)
                 velib.GetAvailableBikes(dispatcher);
             }
         }

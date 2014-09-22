@@ -88,9 +88,7 @@ namespace Velib.VelibContext
                 this.DataContext = Velibs[0];
                 if (Velibs.Count == 1)
                 {
-                    new Task(() => Velibs[0].GetAvailableBikes(dispatcher)).Start();
                     SwitchModeVelibParking();
-
                 }
                 else if (Velibs.Count > 1)
                 {

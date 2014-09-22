@@ -48,7 +48,8 @@ namespace VelibContext
 
         public Contract Contract{ get; set; }
 
-
+        [IgnoreDataMember]
+        public bool DownloadingAvailability{get;set;}
         [IgnoreDataMember]
         public bool Selected
         {

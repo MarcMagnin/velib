@@ -27,6 +27,9 @@ namespace Velib.Contracts
 
         public override async void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
         {
+            if (velibModel.DownloadingAvailability)
+                return;
+            velibModel.DownloadingAvailability = true;
             var httpClient = new HttpClient();
             try
             {
@@ -91,11 +94,16 @@ namespace Velib.Contracts
                     });
                 }
                 velibModel.Loaded = true;
-                httpClient.Dispose();
+                
                 //cts.Token.ThrowIfCancellationRequested();
             }
             catch (Exception)
             {
+            }
+            finally
+            {
+                httpClient.Dispose();
+                velibModel.DownloadingAvailability = false;
             }
         }
 

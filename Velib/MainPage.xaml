@@ -1048,10 +1048,10 @@
         </VisualStateManager.VisualStateGroups>
 
         <Maps:MapControl x:Name="MapCtrl"
-    		LandmarksVisible="True"
+    		LandmarksVisible="False"
     		MapServiceToken="tGeVZzYuKle4Z7MRxr25Hg" 
                          FontFamily="Global User Interface" 
-                         PedestrianFeaturesVisible="True" Background="{x:Null}" 
+                         PedestrianFeaturesVisible="False" Background="{x:Null}" 
                          ManipulationMode="All" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          Opacity="1" IsHitTestVisible="True" 
                          IsDoubleTapEnabled="False"
