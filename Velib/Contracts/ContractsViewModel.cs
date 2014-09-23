@@ -22,6 +22,7 @@ using Velib.Contracts.Models.CH.PubliBike;
 using Velib.Contracts.Models.NextBike;
 using Velib.Contracts.Models.Smoove;
 using Velib.Contracts.Models.BCycle;
+using Velib.Contracts.Models.Bixi;
 namespace Velib
 {
     public class ContractsViewModel
@@ -35,6 +36,12 @@ namespace Velib
         private static List<Contract> contracts = new List<Contract>()
         {
             
+#region AU
+               new BixxiContract {Name = "Melbourne",
+               ServiceProvider="Melbourne Bike Share, Bixi",
+               PaysImage = paysImagesRootPath+ "/AU.png",
+               Pays = "Australia"},
+#endregion
           #region AT
           new NextBikeContract{Name = "Haag",
                PaysImage = paysImagesRootPath+ "/AT.png",

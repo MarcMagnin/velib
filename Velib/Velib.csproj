@@ -103,6 +103,8 @@
     <Compile Include="Contracts\ContractGroup.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleContract.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleModel.cs" />
+    <Compile Include="Contracts\Models\BIXXI\BixxiContract.cs" />
+    <Compile Include="Contracts\Models\BIXXI\BixxiModel.cs" />
     <Compile Include="Contracts\Models\FR\Smoove\SmooveContract.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -168,6 +170,7 @@
     <Content Include="Assets\ombre.png" />
     <Content Include="Assets\Pays\AE.png" />
     <Content Include="Assets\Pays\AT.png" />
+    <Content Include="Assets\Pays\AU.png" />
     <Content Include="Assets\Pays\AZ.png" />
     <Content Include="Assets\Pays\BE.png" />
     <Content Include="Assets\Pays\BG.png" />

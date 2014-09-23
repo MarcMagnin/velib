@@ -1,5 +1,5 @@
-MainPackage=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.31_Bundle\Velib_1.1.0.31_AnyCPU.appx
-SymbolPackage=C:\projets\Velib\Velib\AppPackages\Velib_1.1.0.31_Test\Velib_1.1.0.31_AnyCPU.appxsym
-ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.31_Bundle\Velib_1.1.0.31_language-fr.appx
-ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.31_Bundle\Velib_1.1.0.31_scale-100.appx
-ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.31_Bundle\Velib_1.1.0.31_scale-140.appx
+MainPackage=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.33_Bundle\Velib_1.1.0.33_AnyCPU.appx
+SymbolPackage=C:\projets\Velib\Velib\AppPackages\Velib_1.1.0.33_Test\Velib_1.1.0.33_AnyCPU.appxsym
+ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.33_Bundle\Velib_1.1.0.33_language-fr.appx
+ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.33_Bundle\Velib_1.1.0.33_scale-100.appx
+ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_1.1.0.33_Bundle\Velib_1.1.0.33_scale-140.appx

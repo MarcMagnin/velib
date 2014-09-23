@@ -312,7 +312,7 @@ namespace Velib
                     Geoposition locationGeoPos = null;
                     try
                     {
-                        locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.Default }).GetGeopositionAsync();
+                        locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.High }).GetGeopositionAsync();
                     }
                     catch (Exception ex)
                     {
