@@ -291,7 +291,8 @@ namespace Velib.Common.Cluster
                         station.GetAvailableBikes(dispatcher);
                     }
                 }
-                dispatcher.RunAsync(CoreDispatcherPriority.Normal,() => control.FinaliseUiCycle(dispatcher,token));
+                var location = control.GetLocation();
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => control.FinaliseUiCycle(dispatcher, location, token));
             }
 
             foreach (var velib in Items)

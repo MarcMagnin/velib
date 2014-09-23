@@ -74,46 +74,50 @@ namespace Velib.VelibContext
         }
        
 
-        public void FinaliseUiCycle(CoreDispatcher dispatcher, CancellationToken token)
+        public void FinaliseUiCycle(CoreDispatcher dispatcher, Geopoint location, CancellationToken token)
         {
-           
+            if (token.IsCancellationRequested)
+                return;
             if (Velibs.Count == 0)
             {
+                NeedRefresh = false;
                 Hide();
                 return;
             }
-            try
+
+            var station = Velibs.FirstOrDefault();
+            this.SetValue(MapControl.LocationProperty, location);
+            this.DataContext = station;
+                
+            if (Velibs.Count == 1)
             {
-                this.SetValue(MapControl.LocationProperty, GetLocation());
-                this.DataContext = Velibs[0];
-                if (Velibs.Count == 1)
-                {
-                    SwitchModeVelibParking();
-                }
-                else if (Velibs.Count > 1)
-                {
-                    ClusterTextBlock.Text = Velibs.Count.ToString();
-                    ShowCluster();
-                }
-                this.Opacity = 1;
-                NeedRefresh = false;
-            }catch(Exception e){}
+                SwitchModeVelibParking(station);
+            }
+            else if (Velibs.Count > 1)
+            {
+                ClusterTextBlock.Text = Velibs.Count.ToString();
+                ShowCluster();
+            }
+            this.Opacity = 1;
+            NeedRefresh = false;
         }
 
-        public void SwitchModeVelibParking()
+        public void SwitchModeVelibParking(VelibModel station)
         {
+            if (station == null)
+                return;
             ShowVelibStation();
-            if (Velibs[0].Loaded)
+            if (station.Loaded)
             {
                 if (MainPage.BikeMode)
                 {
-                    Velibs[0].AvailableStr = Velibs[0].AvailableBikes.ToString();
-                    ShowColor(Velibs[0].AvailableBikes);
+                    station.AvailableStr = station.AvailableBikes.ToString();
+                    ShowColor(station.AvailableBikes);
                 }
                 else
                 {
-                    Velibs[0].AvailableStr = Velibs[0].AvailableBikeStands.ToString();
-                    ShowColor(Velibs[0].AvailableBikeStands);
+                    station.AvailableStr = station.AvailableBikeStands.ToString();
+                    ShowColor(station.AvailableBikeStands);
                 }
             }
         }

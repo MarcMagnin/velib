@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VelibContext;
 using Windows.UI.Core;
@@ -165,6 +166,7 @@ namespace Velib.Contracts
         public virtual void GetAvailableBikes(VelibModel velibModel, CoreDispatcher dispatcher)
         {
         }
+     
 
         public virtual Contract GetSimpleContract()
         {

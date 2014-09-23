@@ -102,7 +102,6 @@ namespace Velib.Contracts
             }
             finally
             {
-                httpClient.Dispose();
                 velibModel.DownloadingAvailability = false;
             }
         }

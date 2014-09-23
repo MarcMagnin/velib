@@ -392,9 +392,10 @@ namespace Velib
             else
                 angle = args.Reading.HeadingMagneticNorth;
 
-            
-            
-            
+            angle = Math.Round(angle, 0);
+
+     
+     
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                // UpdateNorthElementAngle(MapCtrl.Heading);
@@ -533,7 +534,7 @@ namespace Velib
                 BikeMode = true;
             foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v => v.VelibControl).ToList())
             {
-                control.SwitchModeVelibParking();
+                control.SwitchModeVelibParking(control.Velibs.FirstOrDefault());
             }
         }
 
@@ -1038,12 +1039,15 @@ namespace Velib
         #endregion
         public void UpdateUserLocationElementAngle( double angle)
         {
-
+            if (angle == previousAngleUserLoc)
+                return;
             if (compassMode)
             {
                UserLocationStoryboard.Stop();
+               UserLocationRotationAnimation.From = 0;
                 UserLocationRotationAnimation.To = 0;
                 UserLocationStoryboard.Begin();
+                previousAngleUserLoc = angle;
             }
             else
             {
