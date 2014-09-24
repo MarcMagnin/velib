@@ -89,7 +89,7 @@ namespace Velib.Common.Cluster
                     var collection = new VelibAddRemoveCollection();
                     collection.ToAdd = VelibDataSource.StaticVelibs.Where(t => !Items.Contains(t) 
                         && MapExtensions.Contains(mapLocations, t.Location)).Take(MAX_CONTROLS).ToList();
-                    if (Items.Count > 35)
+                    if (Items.Count > MAX_CONTROLS + 5)
                         collection.ToAdd.Clear();
                     collection.ToRemove = Items.Where(t => !MapExtensions.Contains(mapLocations, t.Location)).ToList();
 

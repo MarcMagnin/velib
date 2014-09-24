@@ -123,8 +123,8 @@
     <Compile Include="Contracts\Models\UK\ContractTFLLondon.cs" />
     <Compile Include="Contracts\Models\UK\TFLModel.cs" />
     <Compile Include="Contracts\Models\US\New York\CitiBikeContract.cs" />
-    <Compile Include="Contracts\Models\US\Chicago\DivyBikeContract.cs" />
-    <Compile Include="Contracts\Models\US\Chicago\DivyBikeModel.cs" />
+    <Compile Include="Contracts\Models\US\DivyBikeContract.cs" />
+    <Compile Include="Contracts\Models\US\DivyBikeModel.cs" />
     <Compile Include="Contracts\Models\US\Washington\CapitalBikeShareModel.cs" />
     <Compile Include="Contracts\Models\US\Washington\CapitalBikeShareContract.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
@@ -304,6 +304,7 @@
     <Content Include="Tutorial\path.PNG" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Contracts\Models\US\Chicago\" />
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
