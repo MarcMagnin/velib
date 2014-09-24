@@ -151,9 +151,7 @@
 
                 <Image x:Name="image" Height="10" Width="32" Source="Assets/ombre.png" Canvas.Top="-5" Canvas.Left="-16" Opacity="0.4"/>
                 <Ellipse x:Name="ellipse_Copy" Fill="{ThemeResource ProgressBarBackgroundThemeBrush}" Height="58" Canvas.Left="-29" Canvas.Top="-29" Width="58" StrokeThickness="2" Opacity="0"/>
-                <Ellipse x:Name="ellipse" Fill="{ThemeResource PhoneAccentBrush}" Height="48" Canvas.Left="-24" Canvas.Top="-24" Width="48" StrokeThickness="2" Stroke="#CC000000" Opacity="0">
-                
-                </Ellipse>
+                <Ellipse x:Name="ellipse" Height="48" Canvas.Left="-24" Canvas.Top="-24" Width="48" StrokeThickness="2" Stroke="#CC000000" Opacity="0" Fill="#FF7D7D7D"/>
                 <Path x:Name="path" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FF9B9B9B" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25">
                     <Path.RenderTransform>
                         <CompositeTransform/>
