@@ -312,7 +312,7 @@ namespace Velib
                     Geoposition locationGeoPos = null;
                     try
                     {
-                        locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.High }).GetGeopositionAsync();
+                        locationGeoPos = await (new Geolocator() { DesiredAccuracy = PositionAccuracy.Default }).GetGeopositionAsync();
                     }
                     catch (Exception ex)
                     {
@@ -321,6 +321,8 @@ namespace Velib
                         return;
                     }
                     userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = locationGeoPos.Coordinate.Longitude, Latitude = locationGeoPos.Coordinate.Latitude });
+                    // for emulator only
+                    //userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = 2.3465, Latitude = 48.8494 });
                     searchingLocation = false;
                 }
 
@@ -436,7 +438,8 @@ namespace Velib
         {
             lastPositionChangedEventArgs = args;
             userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = args.Position.Coordinate.Point.Position.Longitude, Latitude = args.Position.Coordinate.Point.Position.Latitude });
-
+            // for emulator only
+            //userLastLocation = new Geopoint(new BasicGeoposition() { Longitude = 2.3465, Latitude = 48.8494 });
             if (previousBigChangeInUserLocation == null)
                 previousBigChangeInUserLocation = userLastLocation;
             
