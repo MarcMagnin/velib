@@ -24,6 +24,7 @@ using Velib.Contracts.Models.Smoove;
 using Velib.Contracts.Models.BCycle;
 using Velib.Contracts.Models.Bixi;
 using Velib.Contracts.Models.c_bike;
+using Velib.Contracts.Models.BIXXI;
 namespace Velib
 {
     public class ContractsViewModel
@@ -613,9 +614,9 @@ namespace Velib
                new BCycleContract{Name = "Madison, WI",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "55"},
-          new CapitalBikeShareContract{Name = "Minneapolis, MN",
-               ApiUrl = "https://secure.niceridemn.org/data2/bikeStations.xml",
-          //https://secure.niceridemn.org/data2/stations.json
+          new BixxiMinneapolisContract{Name = "Minneapolis, MN",
+               ApiUrl = "https://secure.niceridemn.org/data2/stations.json",
+          //https://secure.niceridemn.org/data2/bikeStations.xml
                ServiceProvider = "Nice Ride Minnesota, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
@@ -839,9 +840,9 @@ namespace Velib
             Pays = "Switzerland"},
           #endregion CH
 
-#region CN
+#region TW
              new CBikeContract{Name = "Kaohsiung",
-               ServiceProvider="C-Bike",
+               ServiceProvider="City Bike",
                ApiUrl ="http://www.c-bike.com.tw/xml/stationlistopendata.aspx",
                PaysImage = paysImagesRootPath+ "/TW.png",
                Pays = "Taiwan"},         

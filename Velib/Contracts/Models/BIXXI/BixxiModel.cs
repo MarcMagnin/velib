@@ -34,6 +34,33 @@ namespace Velib.Contracts.Models.Bixi
 
     }
 
+
+    [DataContract]
+    public class BixxiModelMinneapolis
+    {
+         [DataMember(Name = "stations")]
+        public Stations[] Stations;
+    }
+
+     [DataContract]
+    public class Stations
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "la")]
+        public double Latitude { get; set; }
+
+        [DataMember(Name = "lo")]
+        public double Longitude { get; set; }
+
+        [DataMember(Name = "ba")]
+        public int AvailableBikes { get; set; }
+
+        [DataMember(Name = "da")]
+        public int AvailableDocks { get; set; }
+
+    }
 }
 
 

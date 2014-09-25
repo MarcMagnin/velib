@@ -31,9 +31,6 @@
                     </TransitionCollection>
                 </StackPanel.ChildrenTransitions>
      		<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top">
-			<Paragraph FontSize="21.333">
-     				<Run Text="Version 1.0"/>
-     			</Paragraph>
      			<Paragraph FontSize="20.333">
                         <Run Text="Created by Marc Magnin and Gaël Guix."/>
      			</Paragraph>

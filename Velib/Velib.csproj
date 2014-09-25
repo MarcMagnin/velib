@@ -106,6 +106,7 @@
     <Compile Include="Contracts\Models\BCycle\PhiladelphiaTempContract.cs" />
     <Compile Include="Contracts\Models\BCycle\PhiladelphiaTempModel.cs" />
     <Compile Include="Contracts\Models\BIXXI\BixxiContract.cs" />
+    <Compile Include="Contracts\Models\BIXXI\BixxiMinneapolisContract.cs" />
     <Compile Include="Contracts\Models\BIXXI\BixxiModel.cs" />
     <Compile Include="Contracts\Models\c-bike\CBikeContract.cs" />
     <Compile Include="Contracts\Models\c-bike\CBikeModel.cs" />
