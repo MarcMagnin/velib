@@ -37,7 +37,6 @@ namespace Velib.Contracts.Models.US.Washington
                         {
                             var httpClient = new HttpClient();
 
-                                int count = 0;
                                 try
                                 {
                                     HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl )));
@@ -53,8 +52,6 @@ namespace Velib.Contracts.Models.US.Washington
                                                 if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                                 {
                                                     velibModel.Reload = true;
-                                                    count++;      
-
                                                 }
                                                 if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.AvailableDocks)
                                                 {
@@ -72,7 +69,6 @@ namespace Velib.Contracts.Models.US.Washington
 
                                     await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                                     {
-                                        Debug.WriteLine(count + " reload");
                                         foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1 ))
                                         {
                                             var control = station.VelibControl;

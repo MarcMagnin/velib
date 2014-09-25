@@ -23,6 +23,7 @@ using Velib.Contracts.Models.NextBike;
 using Velib.Contracts.Models.Smoove;
 using Velib.Contracts.Models.BCycle;
 using Velib.Contracts.Models.Bixi;
+using Velib.Contracts.Models.c_bike;
 namespace Velib
 {
     public class ContractsViewModel
@@ -499,6 +500,12 @@ namespace Velib
           #endregion
 
           #region US
+
+        new PhiladelphiaTempContract{Name = "Philadelphia, PA",
+               ServiceProvider= "Under construction, available on April 2015",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States"},
+
 		  new BCycleContract{Name = "Ann Arbor, MI",
                ServiceProvider= "ArborBike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
@@ -825,6 +832,14 @@ namespace Velib
             PaysImage = paysImagesRootPath+ "/CH.png",
             Pays = "Switzerland"},
           #endregion CH
+
+#region CN
+             new CBikeContract{Name = "Kaohsiung",
+               ServiceProvider="C-Bike",
+               ApiUrl ="http://www.c-bike.com.tw/xml/stationlistopendata.aspx",
+               PaysImage = paysImagesRootPath+ "/TW.png",
+               Pays = "Taiwan"},         
+#endregion
 
         };
 

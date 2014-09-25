@@ -87,6 +87,13 @@
 								</Hyperlink>
 								
 							</Paragraph>
+								<Paragraph FontSize="18.333">
+								<Run Text="Powered by B-cycle. To sign up, go to "/>
+								<Hyperlink NavigateUri="www.bcycle.com"  Foreground="{ThemeResource PhoneAccentBrush}">
+									<Run Text="www.bcycle.com"/>
+								</Hyperlink>
+								<Run Text=" This is a third party app not affiliated with B-cycle."/>
+							</Paragraph>
 						</RichTextBlock>
 			<Button Click="rateButton_Click" VerticalAlignment="Stretch" Style="{StaticResource SimpleButton}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,-4,0,0">
 				<StackPanel Orientation="Horizontal" Margin="5,0,0,0">
