@@ -152,6 +152,14 @@ namespace Velib
                Pays = "Bulgaria", Id= "215"},
           #endregion
 
+          #region CA
+          new CapitalBikeShareContract{Name = "Montréal",
+               ApiUrl = "https://montreal.bixi.com/data/bikeStations.xml",
+               ServiceProvider = "Bixi Montreal, Bixi",
+               PaysImage = paysImagesRootPath+ "/CA.png",
+               Pays = "Canada"},
+          #endregion CA
+
           #region CL
           new BCycleContract{Name = "Santiago",
                ServiceProvider= "Bikesantiago, B-cycle",
