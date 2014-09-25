@@ -613,6 +613,12 @@ namespace Velib
                new BCycleContract{Name = "Madison, WI",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "55"},
+          new CapitalBikeShareContract{Name = "Minneapolis, MN",
+               ApiUrl = "https://secure.niceridemn.org/data2/bikeStations.xml",
+          //https://secure.niceridemn.org/data2/stations.json
+               ServiceProvider = "Nice Ride Minnesota, Bixi",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States"}, 
                new BCycleContract{Name = "Nashville, TN",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "64"},
