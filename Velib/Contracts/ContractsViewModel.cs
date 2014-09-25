@@ -176,7 +176,7 @@ namespace Velib
 
           #region FR
           new ContractJCDecauxVelib{Name = "Amiens",
-              ServiceProvider="Vélam', JCDecaux",
+               ServiceProvider="Vélam', JCDecaux",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Besancon",
@@ -197,7 +197,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},    
           new ContractJCDecauxVelib{Name = "Lyon",
-                ServiceProvider="Vélo'V, JCDecaux",
+               ServiceProvider="Vélo'V, JCDecaux",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Marseille",
@@ -205,7 +205,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Mulhouse",
-              ServiceProvider="Vélocité, JCDecaux",
+               ServiceProvider="Vélocité, JCDecaux",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Nancy",
@@ -217,7 +217,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Paris", 
-                ServiceProvider="Vélib', JCDecaux",
+               ServiceProvider="Vélib', JCDecaux",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Rouen",
@@ -225,12 +225,12 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
           new SmooveContract{Name = "Strasbourg",
-              ServiceProvider="Vélhop', Smoove",
+               ServiceProvider="Vélhop', Smoove",
                 ApiUrl = "http://www.velhop.strasbourg.eu/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
           new ContractJCDecauxVelib{Name = "Toulouse",
-              ServiceProvider="VélôToulouse', JCDecaux",
+               ServiceProvider="VélôToulouse', JCDecaux",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
           #endregion
@@ -520,12 +520,12 @@ namespace Velib
                ServiceProvider = "Bay Area Bike Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
-                new DivyBikeContract{Name = "Chattanooga, TM",
+               new DivyBikeContract{Name = "Chattanooga, TM",
                ApiUrl = "http://www.bikechattanooga.com/stations/json",
                ServiceProvider = "Bike Chattanooga, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
-                new DivyBikeContract{Name = "Columbus, OH",
+               new DivyBikeContract{Name = "Columbus, OH",
                ApiUrl = "http://cogobikeshare.com/stations/json",
                ServiceProvider = "CoGo Bike Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
@@ -633,16 +633,16 @@ namespace Velib
           #endregion
 
           #region CH
-            new PubliBikeContract{Name = "Aigle",
-            ServiceProvider="Chablais, PubliBike",
-            PaysImage = paysImagesRootPath+ "/CH.png",
-            Pays = "Switzerland"},         
-            new PubliBikeContract{Name = "Avenches",
-            ServiceProvider="Les Lacs-Romont, PubliBike",
-            PaysImage = paysImagesRootPath+ "/CH.png",
-            Pays = "Switzerland"},
-            new PubliBikeContract{Name = "Basel",
-            PaysImage = paysImagesRootPath+ "/CH.png",
+          new PubliBikeContract{Name = "Aigle",
+               ServiceProvider="Chablais, PubliBike",
+               PaysImage = paysImagesRootPath+ "/CH.png",
+               Pays = "Switzerland"},         
+               new PubliBikeContract{Name = "Avenches",
+               ServiceProvider="Les Lacs-Romont, PubliBike",
+               PaysImage = paysImagesRootPath+ "/CH.png",
+               Pays = "Switzerland"},
+               new PubliBikeContract{Name = "Basel",
+               PaysImage = paysImagesRootPath+ "/CH.png",
             Pays = "Switzerland"},
             new PubliBikeContract{Name = "Bern",
             PaysImage = paysImagesRootPath+ "/CH.png",
@@ -811,7 +811,8 @@ namespace Velib
             new PubliBikeContract{Name = "Zürich",
             PaysImage = paysImagesRootPath+ "/CH.png",
             Pays = "Switzerland"},
-            #endregion CH
+          #endregion CH
+
         };
 
         public static List<Contract> Contracts
