@@ -20,10 +20,6 @@ namespace Velib.Contracts.Models.US.Washington
     public class CapitalBikeShareContract: Contract
     {
         [IgnoreDataMember]
-        public string StationsUrl = "http://www.capitalbikeshare.com/data/stations/bikeStations.xml";
-
-        private DateTime nextUpdate;
-        private CancellationTokenSource tokenSource;
         private Task Updater;
         public CapitalBikeShareContract()
         {
@@ -39,17 +35,12 @@ namespace Velib.Contracts.Models.US.Washington
                     Updater = new Task(async ()=>{
                         while (true)
                         {
-                            if(tokenSource != null)
-                                tokenSource.Cancel();
-                            tokenSource = new CancellationTokenSource();
-
                             var httpClient = new HttpClient();
 
-                                bool failed = true;
                                 int count = 0;
                                 try
                                 {
-                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString()))).AsTask(tokenSource.Token);
+                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl )));
                                     var responseBodyAsText = await response.Content.ReadAsStringAsync();
                                     var model = responseBodyAsText.FromXmlString<stations>("");
 
@@ -95,20 +86,16 @@ namespace Velib.Contracts.Models.US.Washington
                                         }
 
                                     });
-                                    httpClient.Dispose();
-                                }
-                                catch (TaskCanceledException)
-                                {
-
+                                   
                                 }
                                 catch (Exception ex)
                                 {
-                                    failed = true;
                                 }
                                 finally
                                 {
+                                    httpClient.Dispose();
                                 }
-                                await Task.Delay(TimeSpan.FromSeconds(20));
+                                await Task.Delay(RefreshTimer);
                             }
                         
                     });
@@ -119,7 +106,7 @@ namespace Velib.Contracts.Models.US.Washington
         {
             //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             //Returned JSON
-            HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(string.Format(StationsUrl)));
+            HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(ApiUrl));
             var responseBodyAsText = await response.Content.ReadAsStringAsync();
 
             // require Velib.Common
