@@ -466,6 +466,14 @@ namespace Velib
                Pays = "Spain"},
           #endregion
 
+          #region TW
+          new CBikeContract{Name = "Kaohsiung",
+               ServiceProvider="City Bike",
+               ApiUrl ="http://www.c-bike.com.tw/xml/stationlistopendata.aspx",
+               PaysImage = paysImagesRootPath+ "/TW.png",
+               Pays = "Taiwan"},         
+          #endregion
+
           #region TR
           new NextBikeContract{Name = "Konya",
                PaysImage = paysImagesRootPath+ "/TR.png",
@@ -840,13 +848,7 @@ namespace Velib
             Pays = "Switzerland"},
           #endregion CH
 
-#region TW
-             new CBikeContract{Name = "Kaohsiung",
-               ServiceProvider="City Bike",
-               ApiUrl ="http://www.c-bike.com.tw/xml/stationlistopendata.aspx",
-               PaysImage = paysImagesRootPath+ "/TW.png",
-               Pays = "Taiwan"},         
-#endregion
+
 
         };
 
