@@ -25,6 +25,7 @@ using Velib.Contracts.Models.BCycle;
 using Velib.Contracts.Models.Bixi;
 using Velib.Contracts.Models.c_bike;
 using Velib.Contracts.Models.BIXXI;
+using Velib.Contracts.Models.CallABike;
 namespace Velib
 {
     public class ContractsViewModel
@@ -246,6 +247,21 @@ namespace Velib
           #endregion
 
           #region DE
+
+            new CallABikeContract{Name = "Bremen",
+            PaysImage = paysImagesRootPath+ "/DE.png",
+            Id="100004",
+            Pays = "Germany",},
+            new CallABikeContract{Name = "Berlin",
+            PaysImage = paysImagesRootPath+ "/DE.png",
+            Id="2",
+            Pays = "Germany",},
+            new CallABikeContract{Name = "Hamburg",
+            PaysImage = paysImagesRootPath+ "/DE.png",
+            Id="75",
+            Pays = "Germany",},
+            
+
           new NextBikeContract{Name = "Augsburg",
                PaysImage = paysImagesRootPath+ "/DE.png",
                Pays = "Germany", Id= "178"},
@@ -742,7 +758,6 @@ namespace Velib
             Pays = "Switzerland"},
             new NextBikeContract{Name = "Luzern",
             PaysImage = paysImagesRootPath+ "/CH.png",
-            StorageName= "LuzernNextBike",
             Pays = "Switzerland", Id= "126"},
             new PubliBikeContract{Name = "Marly",
             ServiceProvider="Agglo Fribourg, PubliBike",

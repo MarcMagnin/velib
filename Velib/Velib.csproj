@@ -110,6 +110,8 @@
     <Compile Include="Contracts\Models\BIXXI\BixxiModel.cs" />
     <Compile Include="Contracts\Models\c-bike\CBikeContract.cs" />
     <Compile Include="Contracts\Models\c-bike\CBikeModel.cs" />
+    <Compile Include="Contracts\Models\CallABike\CallABikeContract.cs" />
+    <Compile Include="Contracts\Models\CallABike\CallABikeModel.cs" />
     <Compile Include="Contracts\Models\FR\Smoove\SmooveContract.cs">
       <SubType>Code</SubType>
     </Compile>

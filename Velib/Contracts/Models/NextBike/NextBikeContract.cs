@@ -19,8 +19,6 @@ namespace Velib.Contracts.Models.NextBike{
     // New York
     public class NextBikeContract: Contract
     {
-        [IgnoreDataMember]
-        private CancellationTokenSource tokenSource;
         private Task Updater;
         public NextBikeContract()
         {
@@ -37,16 +35,11 @@ namespace Velib.Contracts.Models.NextBike{
             {
                 while (true)
                 {
-                    if (tokenSource != null)
-                        tokenSource.Cancel();
-                    tokenSource = new CancellationTokenSource();
-
                     var httpClient = new HttpClient();
 
-                    bool failed = true;
                     try
                     {
-                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id))).AsTask(tokenSource.Token);
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id)));
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
                         var model = responseBodyAsText.FromXmlString<markers>("");
                         var city = model.Items.FirstOrDefault().city.FirstOrDefault();
@@ -58,13 +51,13 @@ namespace Velib.Contracts.Models.NextBike{
                                 {
                                     if (MainPage.BikeMode)
                                     {
-                                        if((station.bikes.Contains("+") && velibModel.AvailableBikes != 5) || !station.bikes.Contains("+") && station.bikes !=  velibModel.AvailableBikes.ToString() )
+                                        if (station.bikes != null && (station.bikes.Contains("+") && velibModel.AvailableBikes != 5) || !station.bikes.Contains("+") && station.bikes != velibModel.AvailableBikes.ToString())
                                         velibModel.Reload = true;
 
                                     }
                                     if (!MainPage.BikeMode)
                                     {
-                                        if((station.bike_racks.Contains("+") && velibModel.AvailableBikeStands!= 5) || !station.bike_racks.Contains("+") && station.bike_racks !=  velibModel.AvailableBikeStands.ToString() )
+                                        if (station.bike_racks != null && (station.bike_racks.Contains("+") && velibModel.AvailableBikeStands != 5) || !station.bike_racks.Contains("+") && station.bike_racks != velibModel.AvailableBikeStands.ToString())
                                         velibModel.Reload = true;
 
                                     }
@@ -90,18 +83,14 @@ namespace Velib.Contracts.Models.NextBike{
                             }
 
                         });
-                        httpClient.Dispose();
-                    }
-                    catch (TaskCanceledException)
-                    {
-
+                       
                     }
                     catch (Exception ex)
                     {
-                        failed = true;
                     }
                     finally
                     {
+                        httpClient.Dispose();
                     }
                     await Task.Delay(RefreshTimer);
                 }

@@ -20,8 +20,6 @@ namespace Velib.Contracts
     /// </summary>
     public class Contract : INotifyPropertyChanged
     {
-        [IgnoreDataMember]
-        public DateTime LastUpdate;
         public bool DirectDownloadAvailability;
         public TimeSpan RefreshTimer = TimeSpan.FromSeconds(20);
         public string ApiUrl;
@@ -49,7 +47,7 @@ namespace Velib.Contracts
             get
             {
                 if (string.IsNullOrEmpty(storageName))
-                    return Name;
+                    return Name + this.GetType().Name;
                 else
                     return storageName;
             }
