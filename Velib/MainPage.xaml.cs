@@ -153,12 +153,18 @@ namespace Velib
             TouchPanel.Holding += TouchPanel_Holding;
             TouchPanel.ManipulationStarted += TouchPanel_ManipulationStarted;
             TouchPanel.ManipulationStarting += TouchPanel_ManipulationStarting;
+            SearchLocationPoint.Holding += SearchLocationPoint_Holding;
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             this.Loaded += MainPage_Loaded;
+        }
+
+        void SearchLocationPoint_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            ShowFlyout(sender);
         }
 
 
@@ -478,7 +484,27 @@ namespace Velib
         }
 
 
-     
+        //private void RadioButtonParking_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    if (clusterGenerator == null)
+        //        return;
+        //    BikeMode = false;
+        //    foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v=>v.VelibControl).ToList())
+        //    {
+        //        control.SwitchModeVelibParking();
+        //    }
+        //}
+
+        //private void RadioButtonVelib_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    if (clusterGenerator == null)
+        //        return;
+        //    BikeMode = true;
+        //    foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v => v.VelibControl).ToList())
+        //    {
+        //        control.SwitchModeVelibParking();
+        //    }
+        //}
 
         private void DownloadCitiesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -764,6 +790,11 @@ namespace Velib
             SearchLocationPoint.Visibility = Visibility.Collapsed;
         }
 
+        public void ShowFlyout(object item)
+        {
+            VelibFlyout.ShowAt(this);
+        }
+
         public object PreviousSelectedItem;
         public VelibModel PreviousSelectedVelibStation;
         public CancellationTokenSource SearchRouteCancellationToken = new CancellationTokenSource();
@@ -793,7 +824,7 @@ namespace Velib
             {
                 var control = item as VelibControl;
                
-                VisualStateManager.GoToState(control, "ShowSelected", true);
+                //VisualStateManager.GoToState(control, "ShowSelected", true);
                 
                 
                 
@@ -805,25 +836,15 @@ namespace Velib
                     if (PreviousSelectedVelibStation != null)
                     {
                         var prevControl = PreviousSelectedVelibStation.VelibControl as Control;
-                        if (prevControl != null && prevControl != control)
-                            VisualStateManager.GoToState(prevControl, "HideSelected", true);
+                        //if (prevControl != null && prevControl != control)
+                        //    VisualStateManager.GoToState(prevControl, "HideSelected", true);
+                        PreviousSelectedVelibStation.Selected = false;
 
 
                     }
-                    PreviousSelectedVelibStation = velib;
+                    velib.Selected = true;
+                  
                 }
-
-                //if (PreviousSelectedItem != control)
-                //{
-                //    if (PreviousSelectedVelibStation != null) {
-                //        var prevControl = PreviousSelectedVelibStation.VelibControl as Control;
-                //        if (prevControl != null)
-                //            VisualStateManager.GoToState(prevControl, "HideSelected", true);
-                //        PreviousSelectedVelibStation.Selected = false;
-
-                //    }
-                //}
-
 
             }
 
@@ -831,27 +852,7 @@ namespace Velib
             if (userLastLocation != null && LastSearchGeopoint != null && LastSearchGeopoint.Position.GetDistanceKM(userLastLocation.Position) < 4)
             {
                 GetRoute(LastSearchGeopoint);
-                if (PreviousSelectedItem == item && !skipFlyout)
-                {
-                    VelibFlyout.ShowAt(this);
-                }
             }
-            else
-            {
-                if (item == SearchLocationPoint && item == PreviousSelectedItem && !skipFlyout)
-                {
-                    VelibFlyout.ShowAt(this);
-                }
-                else if (item != SearchLocationPoint && !skipFlyout)
-                {
-                    VelibFlyout.ShowAt(this);
-                }
-            }
-         
-          
-            
-
-            
 
             PreviousSelectedItem = item;
 
@@ -941,7 +942,7 @@ namespace Velib
 
         private string lastAddressFound;
         private Geopoint previousGeopoint;
-        private async void ReverseGeocode(bool fromSearch, CancellationToken token)
+        private async void ReverseGeocode(bool fromSearch, CancellationToken token, int retry = 0 )
         {
             lastAddressFound = string.Empty;
             if (LastSearchGeopoint == previousGeopoint)
@@ -949,15 +950,22 @@ namespace Velib
                 Debug.WriteLine("Skip reverse geocode : same location provided.");
                 return;
             }
+            previousGeopoint = LastSearchGeopoint;
             Debug.WriteLine("searching adress...");
             var task = FindLocationsAt(LastSearchGeopoint);
 
             if (task != await Task.WhenAny(task, Task.Delay(2000, token)))
             {
+                if (retry > 2)
+                {
+                    Debug.WriteLine("searching adress ended : reached retry max!");
+                    return;
+                }
+                    
                 // timout case 
                 Debug.WriteLine("searching adress TIMEOUT or CANCELED !");
                 if(!token.IsCancellationRequested)
-                    ReverseGeocode(fromSearch, token);
+                    ReverseGeocode(fromSearch, token, ++retry);
                 return;
             }
             
@@ -1010,7 +1018,7 @@ namespace Velib
             });
 
             
-            previousGeopoint = LastSearchGeopoint;
+            
         }
 
         double previousAngleUserLoc;
@@ -1359,5 +1367,7 @@ namespace Velib
             ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
             
         }
+
+        
     }
 }
