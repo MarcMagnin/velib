@@ -23,8 +23,26 @@ namespace Velib.VelibContext
         {
             this.map = map;
             this.Tapped += VelibControl_Tapped;
+            this.Holding += VelibControl_Holding;
             this.ManipulationMode = Windows.UI.Xaml.Input.ManipulationModes.All;
             
+        }
+
+        void VelibControl_Holding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
+        {
+            try
+            {
+                if (Velibs.Count <2)
+                {
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    {
+                        MainPage.mainPage.ShowFlyout(this);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public List<VelibModel> Velibs = new List<VelibModel>();
