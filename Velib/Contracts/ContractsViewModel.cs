@@ -257,8 +257,14 @@ namespace Velib
             Id="2",
             Pays = "Germany",},
             new CallABikeContract{Name = "Hamburg",
+            ServiceProvider = "StadtRAD Hamburg, Call a Bike",
             PaysImage = paysImagesRootPath+ "/DE.png",
             Id="75",
+            Pays = "Germany",},
+            new CallABikeContract{Name = "Kassel",
+            ServiceProvider = "Konrad, Call a Bike",
+            PaysImage = paysImagesRootPath+ "/DE.png",
+            Id="34100",
             Pays = "Germany",},
             
 
