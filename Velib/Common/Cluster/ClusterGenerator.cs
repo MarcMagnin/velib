@@ -273,12 +273,19 @@ namespace Velib.Common.Cluster
                     }
                 }
 
-
-       
-
-            // finalise the ui cycle
-            foreach (var control in velibControls.Where(c=>c.NeedRefresh))
+            foreach (var control in velibControls.Where(c => c.NeedRefresh && c.Velibs.Count == 0))
             {
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    control.Hide();
+                    control.NeedRefresh = false;
+                }
+                );
+            }
+            // finalise the ui cycle
+            foreach (var control in velibControls.Where(c => c.NeedRefresh && c.Velibs.Count  != 0))
+            {
+              
                 await Task.Delay(TimeSpan.FromMilliseconds(35));
                 if (token.IsCancellationRequested) {
                     break;

@@ -118,6 +118,8 @@
     <Compile Include="Contracts\Models\FR\Smoove\SmooveModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Contracts\Models\MVG\MVGContract.cs" />
+    <Compile Include="Contracts\Models\MVG\MVGModel.cs" />
     <Compile Include="Contracts\Models\NextBike\NextBikeContract.cs" />
     <Compile Include="Contracts\Models\NextBike\NextBikeModel.cs" />
     <Compile Include="Contracts\Models\CH\PubliBike\PubliBikeContract.cs" />

@@ -42,34 +42,13 @@ namespace VelibContext
         public bool Reload;
         public bool OnlyColorReload;
        
-        private bool selected;
-
         public Point MapLocation;
 
         public Contract Contract{ get; set; }
 
         [IgnoreDataMember]
         public bool DownloadingAvailability{get;set;}
-        [IgnoreDataMember]
-        public bool Selected
-        {
-            get
-            {
-                return this.selected;
-            }
-
-            set
-            {
-
-                if (value != this.selected)
-                {
-                    this.selected = value;
-                    NotifyPropertyChanged();
-                }
-            }
-
-        }
-
+       
 
         public bool Loaded { get; set; }
 
@@ -116,6 +95,8 @@ namespace VelibContext
 
         [DataMember(Name = "position")]
         public Position Position { get; set; }
+
+        public bool Locked{ get; set; }
 
 
         public override int GetHashCode()

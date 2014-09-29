@@ -478,27 +478,7 @@ namespace Velib
         }
 
 
-        //private void RadioButtonParking_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        //{
-        //    if (clusterGenerator == null)
-        //        return;
-        //    BikeMode = false;
-        //    foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v=>v.VelibControl).ToList())
-        //    {
-        //        control.SwitchModeVelibParking();
-        //    }
-        //}
-
-        //private void RadioButtonVelib_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        //{
-        //    if (clusterGenerator == null)
-        //        return;
-        //    BikeMode = true;
-        //    foreach (var control in clusterGenerator.Items.Where(v => v.VelibControl != null && v.VelibControl.Velibs.Count == 1).Select(v => v.VelibControl).ToList())
-        //    {
-        //        control.SwitchModeVelibParking();
-        //    }
-        //}
+     
 
         private void DownloadCitiesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -827,15 +807,10 @@ namespace Velib
                         var prevControl = PreviousSelectedVelibStation.VelibControl as Control;
                         if (prevControl != null && prevControl != control)
                             VisualStateManager.GoToState(prevControl, "HideSelected", true);
-                        PreviousSelectedVelibStation.Selected = false;
 
 
                     }
-                    velib.Selected = true;
                     PreviousSelectedVelibStation = velib;
-
-                    
-                  
                 }
 
                 //if (PreviousSelectedItem != control)

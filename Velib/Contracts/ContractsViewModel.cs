@@ -26,6 +26,7 @@ using Velib.Contracts.Models.Bixi;
 using Velib.Contracts.Models.c_bike;
 using Velib.Contracts.Models.BIXXI;
 using Velib.Contracts.Models.CallABike;
+using Velib.Contracts.Models.MVG;
 namespace Velib
 {
     public class ContractsViewModel
@@ -247,6 +248,10 @@ namespace Velib
           #endregion
 
           #region DE
+
+            new MVGContract{Name = "Mainz",
+            PaysImage = paysImagesRootPath+ "/DE.png",
+            Pays = "Germany",},
 
        new CallABikeContract{Name = "Aachen",
             PaysImage = paysImagesRootPath+ "/DE.png",

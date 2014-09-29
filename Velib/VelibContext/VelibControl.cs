@@ -12,16 +12,23 @@ using Velib.Common;
 using Windows.Devices.Geolocation;
 using Windows.UI.Core;
 using System.Threading;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Velib.VelibContext
 {
     public class VelibControl : ContentControl
     {
-        MapControl map;
+        static MapControl map;
+        static SolidColorBrush emptyColorBrush = new SolidColorBrush(Color.FromArgb(150, 155, 155, 155));
+        static SolidColorBrush redColorBrush = new SolidColorBrush(Color.FromArgb(255, 211, 67, 14));
+        static SolidColorBrush orangeColorBrush = new SolidColorBrush(Color.FromArgb(255, 230, 178, 0));
+        static SolidColorBrush greenColorBrush = new SolidColorBrush(Color.FromArgb(255, 95, 205, 0));
 
         public VelibControl(MapControl map)
         {
-            this.map = map;
+            VelibControl.map = map;
             this.Tapped += VelibControl_Tapped;
             this.ManipulationMode = Windows.UI.Xaml.Input.ManipulationModes.All;
             
@@ -29,10 +36,11 @@ namespace Velib.VelibContext
 
         public List<VelibModel> Velibs = new List<VelibModel>();
         public TextBlock ClusterTextBlock;
-
+        public Path StationPath;
         protected override void OnApplyTemplate()
         {
             ClusterTextBlock = GetTemplateChild("textBlockClusterNumber") as TextBlock;
+            StationPath = GetTemplateChild("path") as Path;
         }
         
         private static VelibControl previousVelibTapped;
@@ -78,12 +86,7 @@ namespace Velib.VelibContext
         {
             if (token.IsCancellationRequested)
                 return;
-            if (Velibs.Count == 0)
-            {
-                NeedRefresh = false;
-                Hide();
-                return;
-            }
+           
 
             var station = Velibs.FirstOrDefault();
             this.SetValue(MapControl.LocationProperty, location);
@@ -98,7 +101,6 @@ namespace Velib.VelibContext
                 ClusterTextBlock.Text = Velibs.Count.ToString();
                 ShowCluster();
             }
-            this.Opacity = 1;
             NeedRefresh = false;
         }
 
@@ -142,16 +144,22 @@ namespace Velib.VelibContext
 
         public void ShowCluster()
         {
+            VisualStateManager.GoToState(this, "Normal", false);
             VisualStateManager.GoToState(this, "ShowCluster", false);
-            VisualStateManager.GoToState(this, "Clear", false);
-            VisualStateManager.GoToState(this, "Loaded", false);
-           
+           // VisualStateManager.GoToState(this, "Clear", false);
+           // VisualStateManager.GoToState(this, "Loaded", false);
+            this.Opacity = 1;
+            this.IsHitTestVisible = true;
         }
         public void ShowVelibStation()
         {
             VisualStateManager.GoToState(this, "Normal", false);
-            VisualStateManager.GoToState(this, "Clear", false);
-            VisualStateManager.GoToState(this, "Loaded", false);
+            VisualStateManager.GoToState(this, "ShowStation", false);
+           // VisualStateManager.GoToState(this, "Clear", false);
+          //  VisualStateManager.GoToState(this, "Loaded", false);
+            StationPath.Fill = emptyColorBrush;
+            this.Opacity = 1;
+            this.IsHitTestVisible = true;
           
             //if(velib!= null && velib.Selected)
             //    VisualStateManager.GoToState(this, "ShowSelected", true);
@@ -176,36 +184,38 @@ namespace Velib.VelibContext
         }
 
 
-        public enum VisualStateColor
-        {
-            notLoaded,
-            other
-        }
-        public VisualStateColor CurrentVisualStateColor;
+   
         private void ShowColor(int velibNumber)
         {
             if (Velibs.Count != 1)
                 return;
 
             if (velibNumber == -1){
-                CurrentVisualStateColor = VelibControl.VisualStateColor.notLoaded;
-                VisualStateManager.GoToState(this, "Normal", false);
+                //CurrentVisualStateColor = VelibControl.VisualStateColor.notLoaded;
+                //VisualStateManager.GoToState(this, "Normal", false);
+                StationPath.Fill = emptyColorBrush;
             }
             else{
-                CurrentVisualStateColor = VelibControl.VisualStateColor.other;
+
                 if (velibNumber == 0)
-                VisualStateManager.GoToState(this, "ShowRedVelib", false);
-            else if (velibNumber < 5)
-                VisualStateManager.GoToState(this, "ShowOrangeVelib", false);
-            else if (velibNumber >= 5)
-                VisualStateManager.GoToState(this, "ShowGreenVelib", false);
+                    StationPath.Fill = redColorBrush;
+                //VisualStateManager.GoToState(this, "ShowRedVelib", false);
+                else if (velibNumber < 5)
+                    StationPath.Fill = orangeColorBrush;
+                //VisualStateManager.GoToState(this, "ShowOrangeVelib", false);
+                else if (velibNumber >= 5)
+                    StationPath.Fill = greenColorBrush;
+                    //VisualStateManager.GoToState(this, "ShowGreenVelib", false);
             }
             
         }
 
         public void Hide()
         {
-           VisualStateManager.GoToState(this, "Hide", false);
+            this.Opacity = 0;
+            this.IsHitTestVisible = false;
+        
+           //VisualStateManager.GoToState(this, "Hide", false);
         }
 
 

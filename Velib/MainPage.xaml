@@ -33,17 +33,29 @@
                     <VisualStateGroup x:Name="VisualStateGroup">
                       
                         <VisualState x:Name="Normal">
-                            <Storyboard>
-                        		<DoubleAnimation Duration="0" To="0.6" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path" d:IsOptimized="True"/>
-                        	</Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="ShowGreenVelib">
-                            <Storyboard>
-                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy" d:IsOptimized="True"/>
+                        	<Storyboard>
+							
+                        		
                         	</Storyboard>
                         </VisualState>
                         <VisualState x:Name="ShowCluster">
                             <Storyboard>
+                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
+                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                        			<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+                        				<EasingDoubleKeyFrame.EasingFunction>
+                        					<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
+                        				</EasingDoubleKeyFrame.EasingFunction>
+                        			</EasingDoubleKeyFrame>
+                        		</DoubleAnimationUsingKeyFrames>
+                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
+                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                        			<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+                        				<EasingDoubleKeyFrame.EasingFunction>
+                        					<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
+                        				</EasingDoubleKeyFrame.EasingFunction>
+                        			</EasingDoubleKeyFrame>
+                        		</DoubleAnimationUsingKeyFrames>
                         		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock" d:IsOptimized="True"/>
                         		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlockClusterNumber" d:IsOptimized="True"/>
                         		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ellipse" d:IsOptimized="True"/>
@@ -52,14 +64,24 @@
                         		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="image" d:IsOptimized="True"/>
                         	</Storyboard>
                         </VisualState>
-                        <VisualState x:Name="ShowOrangeVelib">
-                            <Storyboard>
-                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy1" d:IsOptimized="True"/>
-                        	</Storyboard>
-                        </VisualState>
-                        <VisualState x:Name="ShowRedVelib">
-                            <Storyboard>
-                        		<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="path_Copy2" d:IsOptimized="True"/>
+                        <VisualState x:Name="ShowStation">
+                        	<Storyboard>
+                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
+                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                        			<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+                        				<EasingDoubleKeyFrame.EasingFunction>
+                        					<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
+                        				</EasingDoubleKeyFrame.EasingFunction>
+                        			</EasingDoubleKeyFrame>
+                        		</DoubleAnimationUsingKeyFrames>
+                        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
+                        			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                        			<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+                        				<EasingDoubleKeyFrame.EasingFunction>
+                        					<BackEase EasingMode="EaseOut" Amplitude="0.4"/>
+                        				</EasingDoubleKeyFrame.EasingFunction>
+                        			</EasingDoubleKeyFrame>
+                        		</DoubleAnimationUsingKeyFrames>
                         	</Storyboard>
                         </VisualState>
 
@@ -67,18 +89,6 @@
 
                     </VisualStateGroup>
                     <VisualStateGroup x:Name="VisualStateGroup1">
-                        <VisualState x:Name="Hide">
-                            <Storyboard>
-                        		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="VelibTemplateStationRootCanvas" d:IsOptimized="True"/>
-                        		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsHitTestVisible)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
-                        			<DiscreteObjectKeyFrame KeyTime="0">
-                        				<DiscreteObjectKeyFrame.Value>
-                        					<x:Boolean>False</x:Boolean>
-                        				</DiscreteObjectKeyFrame.Value>
-                        			</DiscreteObjectKeyFrame>
-                        		</ObjectAnimationUsingKeyFrames>
-                        	</Storyboard>
-                        </VisualState>
                         <VisualState x:Name="Loaded">
                             <Storyboard>
                               <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" Storyboard.TargetName="VelibTemplateStationRootCanvas">
@@ -131,11 +141,9 @@
 
                     </VisualStateGroup>
                     <VisualStateGroup x:Name="VisualStateGroup2">
-                        <VisualStateGroup.Transitions>
-                            <VisualTransition GeneratedDuration="0"/>
-                        </VisualStateGroup.Transitions>
-                        <VisualState x:Name="ShowSelected"/>
-                        <VisualState x:Name="HideSelected"/>
+                    	<VisualStateGroup.Transitions>
+                    		<VisualTransition GeneratedDuration="0"/>
+                    	</VisualStateGroup.Transitions>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
 
@@ -165,21 +173,6 @@
         			Text="{Binding pa}" VerticalAlignment="Center" 
                     Foreground="{StaticResource PhoneAccentBrush}" Margin="6,3,6,0" HorizontalAlignment="Center"  />
             </Grid>-->
-                <Path x:Name="path_Copy" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FF5DCD00" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
-                    <Path.RenderTransform>
-                        <CompositeTransform/>
-                    </Path.RenderTransform>
-                </Path>
-                <Path x:Name="path_Copy1" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FFE6B200" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
-                    <Path.RenderTransform>
-                        <CompositeTransform/>
-                    </Path.RenderTransform>
-                </Path>
-                <Path x:Name="path_Copy2" Data="M89.9999,1 C94.8623,1 99.7249,2.85498 103.435,6.56496 C110.043,13.1734 110.059,24.1457 104.896,31.554 L103.435,33.4349 L89.9999,46.87 L76.2225,33.0838 C69.1468,25.6402 69.261,13.869 76.5649,6.56496 C80.2749,2.85498 85.1374,1 89.9999,1 z" Fill="#FFD3430E" Height="47.87" Stretch="Fill" Canvas.Top="-47" UseLayoutRounding="False" Width="40" RenderTransformOrigin="0.5,0.5" Canvas.Left="-20.25" Opacity="0">
-                    <Path.RenderTransform>
-                        <CompositeTransform/>
-                    </Path.RenderTransform>
-                </Path>
                
                 <!--Binding AvailableBikesStr}-->
                 <TextBlock x:Name="textBlock" Text="{Binding AvailableStr}" 

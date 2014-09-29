@@ -1,30 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using VelibContext;
 using Windows.UI.Core;
 using Velib.Common;
-using Windows.UI.Popups;
-using Windows.Devices.Geolocation;
-using System.Threading;
-using System.Diagnostics;
 using Windows.Web.Http;
+using Windows.Devices.Geolocation;
 
-namespace Velib.Contracts.Models.CH.PubliBike
+namespace Velib.Contracts.Models.MVG
 {
-    // Chicago
-    //https://docs.google.com/document/d/1gKN2Hq0-PxmMFBqg9e-xnwpRRh0GnmTVRQG3fjTxnT8/edit#
-    public class PubliBikeContract: Contract
+    public class MVGContract: Contract
     {
         private Task Updater;
-        public PubliBikeContract()
+        public MVGContract()
         {
-            ApiUrl = "http://customers2011.ssmservice.ch/publibike/getterminals_v2.php";
+            ApiUrl = "http://mobil.mvg-mainz.de/stationen-karte.html?type=1296727025&tx_mvgmeinrad_mvgmeinradstationenfull%5Baction%5D=getStationsAjax&tx_mvgmeinrad_mvgmeinradstationenfull%5Bcontroller%5D=Benutzer";
             DirectDownloadAvailability = true;
-            this.ServiceProvider = "PubliBike";
+            this.ServiceProvider = "MVG Mainzer Verkehrsgesellschaft";
         }
 
         // Barclays refresh every 3 minutes the stations informations :/
@@ -36,43 +30,39 @@ namespace Velib.Contracts.Models.CH.PubliBike
             {
                 while (true)
                 {
-
                     var httpClient = new HttpClient();
-                   // httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip");
                     try
                     {
-                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())));
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl)));
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
-                        var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
-
-                        foreach (var station in model.Stations.Where(s => s.City == Name))
+                        var model = responseBodyAsText.FromJsonString<List<MVGModel>>();
+                        foreach (var station in model)
                         {
                             foreach (var velibModel in Velibs)
                             {
                                 if (velibModel.Latitude == station.Latitude && velibModel.Longitude == station.Longitude)
                                 {
-                                    if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes.Sum(t=>t.Available))
+                                    if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                     {
                                         velibModel.Reload = true;
 
                                     }
-                                    if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.AvailableDocks.Sum(t => t.HoldersFree))
+                                    if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.AvailableDocks)
                                     {
                                         velibModel.Reload = true;
-                                                    
+
                                     }
-                                    velibModel.AvailableBikes = station.AvailableBikes.Sum(t => t.Available);
-                                    velibModel.AvailableBikeStands = station.AvailableDocks.Sum(t => t.HoldersFree);
+                                    velibModel.AvailableBikes = station.AvailableBikes;
+                                    velibModel.AvailableBikeStands = station.AvailableDocks;
                                     velibModel.Loaded = true;
                                     break;
                                 }
-                                            
                             }
                         }
 
                         await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
-                            foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1 ))
+                            foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
                             {
                                 var control = station.VelibControl;
                                 if (control != null)
@@ -81,15 +71,13 @@ namespace Velib.Contracts.Models.CH.PubliBike
                                     control.ShowStationColor();
                                 }
                                 station.Reload = false;
-                                           
                             }
 
                         });
-                       
+
                     }
                     catch (Exception)
                     {
-
                     }
                     finally
                     {
@@ -97,28 +85,28 @@ namespace Velib.Contracts.Models.CH.PubliBike
                     }
                     await Task.Delay(RefreshTimer);
                 }
-                        
-        });
-        Updater.Start();
+
+            });
+            Updater.Start();
         }
 
         public override async Task InnerDownloadContract()
         {
-            //httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip");
             HttpResponseMessage response = await downloadContractHttpClient.GetAsync(new Uri(string.Format(ApiUrl)));
             var  responseBodyAsText = await response.Content.ReadAsStringAsync();
-            var model = responseBodyAsText.FromJsonString<PubliBikeModel>();
-            Velibs = new List<VelibModel>();
-            //var test = model.Stations.GroupBy(s => s.City).Select(t => t.First()).Select(s => s.City).OrderBy(s=>s).Aggregate((c, next) => c + " \r\n" + next);
-            foreach (var station in model.Stations.Where(s => TechnicalName.Split(',').Contains(s.City)))
+            var model = responseBodyAsText.FromJsonString<List<MVGModel>>();
+            Velibs = new List<VelibModel>(model.Count);
+
+            foreach (var station in model)
             {
                 var stationModel = new VelibModel()
                 {
                     Contract = this,
                     Number = station.Id,
                     Name = station.Label,
-                    AvailableBikes = station.AvailableBikes.Sum(t => t.Available),
-                    AvailableBikeStands = station.AvailableDocks.Sum(t => t.HoldersFree),
+                    AvailableBikes = station.AvailableBikes,
+                    AvailableBikeStands = station.AvailableDocks,
+                    Locked = station.Locked,
                     Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                     {
                         Latitude = station.Latitude,
@@ -139,12 +127,12 @@ namespace Velib.Contracts.Models.CH.PubliBike
         }
         public override Contract GetSimpleContract()
         {
-            return (PubliBikeContract)base.GetSimpleContract();
+            return (MVGContract)base.GetSimpleContract();
         }
 
         protected override Contract GetInstanceForSimpleClone()
         {
-            return new PubliBikeContract();
+            return new MVGContract();
         }
     }
 }
