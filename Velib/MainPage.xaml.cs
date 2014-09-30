@@ -1340,17 +1340,20 @@ namespace Velib
 
         private string FormatShareLocationMessage()
         {
-            string body = string.Empty;
+            var latitude = Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture);
+            var longitude = Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture);
+            string body = "Check out this location :\r\n";
             if (!string.IsNullOrWhiteSpace(lastAddressFound))
             {
-                body = lastAddressFound + "\r\n";
+                body += lastAddressFound + "\r\n";
             }
-            body += "easybike://center/?lat=" + Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture) +
-                "&lon=" + Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture) + "&appID=" + CurrentApp.AppId + "\r\n";
+            body += "easybike://to/?lt=" + latitude + "&ln=" + longitude;
 
-            body += "\r\nCan't open this location ? Check out \"Easy Bike\" for Windows Phone ";
-            // body += "zune://navigate/?appID=fd4c1cb5-1dd8-43ca-911f-07713b37baf2 \r\n";
-            body += "http://www.windowsphone.com/s?appid=" + CurrentApp.AppId + " \r\n";
+            body += "\r\n\r\nCan't open this location ? Check out \"Easy Bike\" for Windows Phone ";
+            body += "http://www.windowsphone.com/s?appid=" + CurrentApp.AppId;
+
+            body += "\r\n\r\nDon't have a Windows Phone ? Check out ";
+            body += "https://maps.google.com/maps?q=loc:" + latitude + "+"+longitude+"&z=17";
             return body;
         }
 

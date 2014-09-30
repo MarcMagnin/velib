@@ -199,7 +199,7 @@ namespace Velib
                     try
                     {
 
-                        string pattern = @"(?<=lat=)-?[0-9]\d*\.*\,*\d+";
+                        string pattern = @"(?<=lt=)-?[0-9]\d*\.*\,*\d+";
                         if (Regex.IsMatch(protocolArgs.Uri.Query, pattern))
                         {
                             var regex = new Regex(pattern).Match(protocolArgs.Uri.Query);
@@ -208,7 +208,7 @@ namespace Velib
                                 lat = double.Parse(regex.Captures[0].Value.Replace(',', '.'), CultureInfo.InvariantCulture);
                             }
                         }
-                        pattern = @"(?<=lon=)-?[0-9]\d*\.*\,*\d+";
+                        pattern = @"(?<=ln=)-?[0-9]\d*\.*\,*\d+";
                         if (Regex.IsMatch(protocolArgs.Uri.Query, pattern))
                         {
                             var regex = new Regex(pattern).Match(protocolArgs.Uri.Query);
