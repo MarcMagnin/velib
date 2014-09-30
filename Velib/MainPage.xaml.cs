@@ -162,12 +162,14 @@ namespace Velib
             this.Loaded += MainPage_Loaded;
         }
 
+
+
+
+
         void SearchLocationPoint_Holding(object sender, HoldingRoutedEventArgs e)
         {
             ShowFlyout(sender);
         }
-
-
     
 
         void gl_StatusChanged(Geolocator sender, StatusChangedEventArgs args)
@@ -179,7 +181,6 @@ namespace Velib
         {
             if(searchCancellationToken != null)
                 searchCancellationToken.Cancel();
-            this.Focus(Windows.UI.Xaml.FocusState.Programmatic);
             HideSearch();
             VisualStateManager.GoToState(this, "SearchLocationMinimize", true);
             if (PreviousSelectedItem == SearchLocationPoint)
@@ -201,7 +202,7 @@ namespace Velib
         {
 
            pageLoaded = true;
-            Debug.WriteLine("Page LOADED");
+           Debug.WriteLine("Page LOADED");  
         }
 
         //void MapCtrl_PitchChanged(MapControl sender, object args)
@@ -643,7 +644,6 @@ namespace Velib
             // reenable holding
             //TouchPanel.Visibility = Visibility.Collapsed;
             VisualStateManager.GoToState(this, "SearchHidden", true);
-            SearchTextBox.Text = string.Empty;
             SearchStatusTextBlock.Text = string.Empty;
             this.Focus(Windows.UI.Xaml.FocusState.Programmatic); 
         }
@@ -838,11 +838,9 @@ namespace Velib
                         var prevControl = PreviousSelectedVelibStation.VelibControl as Control;
                         //if (prevControl != null && prevControl != control)
                         //    VisualStateManager.GoToState(prevControl, "HideSelected", true);
-                        PreviousSelectedVelibStation.Selected = false;
 
 
                     }
-                    velib.Selected = true;
                   
                 }
 
@@ -1135,6 +1133,7 @@ namespace Velib
         {
             VelibFlyout.Hide();
             FavoriteFlyout.Hide();
+            
             Frame.Navigate(typeof(FavoritsPage));
             
         }
