@@ -19,6 +19,7 @@ using Velib.Contracts;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using System.Diagnostics;
 
 // Pour en savoir plus sur le modèle d'élément Page de base, consultez la page http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -31,51 +32,62 @@ namespace Velib
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private CollectionViewSource ContractCollectionViewSource;
+        private CollectionViewSource contractCollectionViewSource;
+        private List<ContractGroup> contractGroup;
         private int cityCounter = 0;
+        private Task loadedTask = new Task(() => { });
         public ContractsPage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            this.DefaultViewModel["CityCounter"] = cityCounter;
             this.Loaded += ContractsPage_Loaded;
+            initialize();
+           
         }
 
-        async void ContractsPage_Loaded(object sender, RoutedEventArgs e)
+        private async void initialize()
         {
-            this.DefaultViewModel["CityCounter"] = 0;
-            await Task.Run(async()=>{
-               await Task.Delay(100);
-               await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            var t = Task.Run(() =>
+           {
+               contractGroup = new List<ContractGroup>();
+               foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays).ToList())
                {
-                   if (ContractCollectionViewSource == null)
+                   var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
+                   group.Items = new ObservableCollection<Contract>();
+                   foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).OrderBy(c => c.Name).ToList())
                    {
-                       var contractGroup = new List<ContractGroup>();
-                       foreach (var contract in ContractsViewModel.Contracts.GroupBy(c => c.Pays).Select(c => c.First()).OrderBy(c => c.Pays).ToList())
-                       {
-                           var group = new ContractGroup() { Title = contract.Pays, ImagePath = contract.PaysImage };
-                           group.Items = new ObservableCollection<Contract>();
-                           foreach (var c in ContractsViewModel.Contracts.Where(c => c.Pays == contract.Pays).OrderBy(c => c.Name).ToList())
-                           {
-                               cityCounter++;
-                               group.Items.Add(c);
-                               group.ItemsCounter++;
-                           }
-                           contractGroup.Add(group);
-                       }
-                       ContractCollectionViewSource = new CollectionViewSource
-                       {
-                           IsSourceGrouped = true,
-                           Source = contractGroup,
-                           ItemsPath = new PropertyPath("Items")
-                       };
+                       cityCounter++;
+                       group.Items.Add(c);
+                       group.ItemsCounter++;
                    }
-                   this.DefaultViewModel["Group"] = ContractCollectionViewSource.View;
-                   this.DefaultViewModel["CityCounter"] = cityCounter;
-               });
-            });
-          
+                   contractGroup.Add(group);
+               }
+           });
+
+            await Task.WhenAll(t, loadedTask);
+            contractCollectionViewSource = new CollectionViewSource
+            {
+                IsSourceGrouped = true,
+                Source = contractGroup,
+                ItemsPath = new PropertyPath("Items")
+            };
+            this.DefaultViewModel["Group"] = contractCollectionViewSource.View;
+            this.DefaultViewModel["CityCounter"] = cityCounter;
+
+        }
+
+        void ContractsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            loadedTask.Start();
+        }
+
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            base.OnNavigatingFrom(e);
         }
 
         /// <summary>

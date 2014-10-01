@@ -19,11 +19,7 @@ namespace Velib.Contracts.Models.CallABike
     [DataContract]
     public class Station
     {
-        //[DataMember(Name = "id")]
-        //public int Id { get; set; }
-
-        //[DataMember(Name = "statusKey")]
-        //public string Status { get; set; }
+    
 
         [DataMember(Name = "lat")]
         public double Latitude { get; set; }
@@ -34,17 +30,6 @@ namespace Velib.Contracts.Models.CallABike
         [DataMember(Name = "hal2option")]
         public Details Details { get; set; }
 
-        //[DataMember(Name = "stationName")]
-        //public string Label { get; set; }
-
-        //[DataMember(Name = "stAddress1")]
-        //public string StationAddress { get; set; }
-
-        //[DataMember(Name = "availableBikes")]
-        //public int AvailableBikes { get; set; }
-
-        //[DataMember(Name = "availableDocks")]
-        //public int AvailableDocks { get; set; }
 
     }
 

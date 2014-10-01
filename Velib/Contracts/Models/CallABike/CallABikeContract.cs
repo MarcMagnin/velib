@@ -45,7 +45,7 @@ namespace Velib.Contracts.Models.CallABike
             DirectDownloadAvailability = true;
            // ApiUrl = "https://xml.dbcarsharing-buchung.de/hal2_cabserver/hal2_cabserver_3.php ";
             ApiUrl = "http://www.callabike-interaktiv.de/kundenbuchung/hal2ajax_process.php?mapstadt_id={0}&with_staedte=N&ajxmod=hal2map&callee=getMarker";
-            this.ServiceProvider = "Call a Bike";
+            this.ServiceProvider = "Call a Bike (no dock availabilty :/)";
         //    postContent = postContent.Replace('\'', '"');
         }
         // Barclays refresh every 3 minutes the stations informations :/

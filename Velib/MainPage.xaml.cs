@@ -198,19 +198,32 @@ namespace Velib
 
 
         private bool pageLoaded = false;
-        async void MainPage_Loaded(object sender, RoutedEventArgs e)
+       public async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
 
            pageLoaded = true;
+           //var routeResult = await MapRouteFinder.GetWalkingRouteAsync(
+           //        new Geopoint(new BasicGeoposition() { Latitude = 51.494228, Longitude = -0.247820 }),
+           //         new Geopoint(new BasicGeoposition() { Latitude = 51.482809, Longitude =-0.262452 }),
+           //        ); 
+
+            //Geopoint point1 = new Geopoint(new BasicGeoposition()
+            //{
+            //    Latitude = 51.494228,
+            //    Longitude = -0.247820
+            //});
+            //Geopoint point2 = new Geopoint(new BasicGeoposition()
+            //{
+            //    Latitude = 51.482809,
+            //    Longitude = -0.262452 
+            //});
+            //var routeResult = await MapRouteFinder.GetWalkingRouteAsync(point1, point2);
+            //Debug.WriteLine(routeResult.Status);  
+        
+
+
            Debug.WriteLine("Page LOADED");  
         }
-
-        //void MapCtrl_PitchChanged(MapControl sender, object args)
-        //{
-        //    //(UserLocation.Projection as PlaneProjection).RotationX = MapCtrl.Pitch; 
-        //     //UserLocationProjection.RotationX = MapCtrl.Pitch;
-        //}
-
 
 
 
@@ -563,7 +576,6 @@ namespace Velib
                     searchCancellationToken.Cancel();
                 searchCancellationToken = new CancellationTokenSource(); 
                 SearchAddress(searchCancellationToken.Token);
-                
             }
         }
 
@@ -705,12 +717,13 @@ namespace Velib
             return await MapRouteFinder.GetWalkingRouteAsync(
                     startPoint,
                     endPoint
-                    ); 
+                    );
         }
         MapRoute previousMapRoute;
+        Geopoint previousRouteStartingPoint;
+        Geopoint previousRouteEndingPoint;
         public async void GetRouteWithToken(Geopoint endPoint, CancellationToken token, Favorite favorite = null, int retry = 0)
         {
-
             if (favorite != null)
             {
                 ShowSearchLocationPoint(endPoint, favorite.Name);
@@ -723,7 +736,7 @@ namespace Velib
                     //    await dialog.ShowAsync();
                     //});
 
-                    await MapCtrl.TrySetViewAsync(endPoint,15,0, null);
+                    await MapCtrl.TrySetViewAsync(endPoint, 15, 0, null);
                 }
                 else
                 {
@@ -738,10 +751,17 @@ namespace Velib
             if (userLastLocation == null)
                 return;
 
-          
+            if (previousRouteEndingPoint == endPoint && userLastLocation == previousRouteStartingPoint)
+            {
+                Debug.WriteLine("Skip route finder : same location provided.");
+                return;
+            }
+            previousRouteStartingPoint = userLastLocation;
+            previousRouteEndingPoint = endPoint;
             var task = FindRoute(userLastLocation, endPoint);
             if (task != await Task.WhenAny(task, Task.Delay(2000, token)))
             {
+                MapCtrl.Routes.Clear();
                 // timout case 
                 Debug.WriteLine("get route TIMEOUT or CANCELED !");
                 // BUG : apparently MapRouteFinder.GetWalkingRouteAsync is on UI thread. don't recall it again
@@ -750,37 +770,37 @@ namespace Velib
                 return;
             }
             var routeResult = task.Result;
+            //var routeResult = task.Result;
             Debug.WriteLine("get route ended with result : " + routeResult.Status);
-                if (routeResult.Status == MapRouteFinderStatus.Success)
-                {
+            if (routeResult.Status == MapRouteFinderStatus.Success)
+            {
 
-                    // Use the route to initialize a MapRouteView.
-                    MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
-                    viewOfRoute.RouteColor = new SolidColorBrush((Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color).Color;
-                    viewOfRoute.OutlineColor = Colors.Black;
-
-
-                    if (previousMapRoute == null || previousMapRoute.LengthInMeters != routeResult.Route.LengthInMeters)
-                    {
+                // Use the route to initialize a MapRouteView.
+                MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
+                viewOfRoute.RouteColor = new SolidColorBrush((Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color).Color;
+                viewOfRoute.OutlineColor = Colors.Black;
 
 
-
-                        MapCtrl.Routes.Clear();
-                        Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
-                            // Add the new MapRouteView to the Routes collection
-                            // of the MapControl.
-                            MapCtrl.Routes.Add(viewOfRoute);
-                      
-                            ShowUserLocation();
-                            
-                        });
-                    }
-                    previousMapRoute= routeResult.Route;
-                }
-                else
+                if (previousMapRoute == null || previousMapRoute.LengthInMeters != routeResult.Route.LengthInMeters)
                 {
                     MapCtrl.Routes.Clear();
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    {
+                        // Add the new MapRouteView to the Routes collection
+                        // of the MapControl.
+                        MapCtrl.Routes.Add(viewOfRoute);
+
+                        ShowUserLocation();
+
+                    });
                 }
+                previousMapRoute = routeResult.Route;
+            }
+            else
+            {
+                MapCtrl.Routes.Clear();
+            }
+
 
         }
 
@@ -911,7 +931,8 @@ namespace Velib
             
             Geopoint point;
             MapCtrl.GetLocationFromOffset(e.GetPosition(MapCtrl), out point);
-            LastSearchGeopoint = point;
+
+            LastSearchGeopoint = new Geopoint(new BasicGeoposition() { Latitude = point.Position.Latitude, Longitude = point.Position.Longitude });
 
             ShowSearchLocationPoint(LastSearchGeopoint, string.Empty);
 

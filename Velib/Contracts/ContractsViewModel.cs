@@ -1124,8 +1124,6 @@ namespace Velib
             localSettings.Values[contract.StorageName] = true;
             try
             {
-
-
                 StorageFile file = await installedLocation.CreateFileAsync(contract.StorageName, CreationCollisionOption.ReplaceExisting);
                 
             using (StorageStreamTransaction transaction = await file.OpenTransactedWriteAsync())

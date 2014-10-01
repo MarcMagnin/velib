@@ -30,7 +30,6 @@ namespace Velib.Favorits
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        AppBarButton button;
         public FavoritsPage()
         {
             
@@ -40,20 +39,11 @@ namespace Velib.Favorits
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            
-            this.Unloaded += FavoritsPage_Unloaded;
         }
 
-        void FavoritsPage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            if(button != null)
-                button.Click -= AppBarButton_Click;
-        }
+ 
 
-        void button_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+   
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
