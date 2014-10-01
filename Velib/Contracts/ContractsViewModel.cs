@@ -1193,7 +1193,8 @@ namespace Velib
                                             Longitude = velib.Longitude
                                         });
                                         velib.AvailableBikes = -1;
-                                        velib.AvailableBikeStands = -1;
+                                        if(velib.AvailableBikeStands.HasValue)
+                                            velib.AvailableBikeStands = -1;
                                         velib.Contract = contract;
                                     }
                                 }

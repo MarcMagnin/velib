@@ -136,7 +136,7 @@ namespace Velib.VelibContext
                 }
                 else
                 {
-                    station.AvailableStr = station.AvailableBikeStands.ToString();
+                    station.AvailableStr = station.AvailableBikeStands.HasValue ? station.AvailableBikeStands.ToString() : "?";
                     ShowColor(station.AvailableBikeStands);
                 }
             }
@@ -196,19 +196,19 @@ namespace Velib.VelibContext
             }
             else
             {
-                station.AvailableStr = station.AvailableBikeStands.ToString();
+                station.AvailableStr = station.AvailableBikeStands.HasValue ? station.AvailableBikeStands.ToString() : "?";
                 ShowColor(station.AvailableBikeStands);
             }
         }
 
 
    
-        private void ShowColor(int velibNumber)
+        private void ShowColor(int? velibNumber)
         {
             if (Velibs.Count != 1)
                 return;
 
-            if (velibNumber == -1){
+            if (velibNumber == -1 || !velibNumber.HasValue){
                 //CurrentVisualStateColor = VelibControl.VisualStateColor.notLoaded;
                 //VisualStateManager.GoToState(this, "Normal", false);
                 StationPath.Fill = emptyColorBrush;

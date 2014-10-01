@@ -216,6 +216,7 @@
     <Content Include="Assets\StoreLogo.scale-100.jpg" />
     <Content Include="Assets\StoreLogo.scale-140.jpg" />
     <Content Include="Assets\StoreLogo.scale-240.jpg" />
+    <Content Include="Assets\store\appTitleIcon.jpg" />
     <Content Include="Assets\velo.png" />
     <Content Include="Assets\WideLogo.png" />
     <Content Include="Assets\WideLogo.scale-100.png" />

@@ -1204,58 +1204,7 @@ namespace Velib
             await MapCtrl.TrySetViewAsync(prevCenter, prevZoomLevel, prevHeading, prevDesiredPitch, animation);
         }
 
-        internal async void GetNearestStationRoute(Favorite favorit, CancellationToken token )
-        {
-           
-                
-            var destination = new Geopoint(
-                            new BasicGeoposition() { Latitude = favorit.Latitude, 
-                                Longitude = favorit.Longitude });
-
-            ShowSearchLocationPoint(destination, favorit.Name);
-            MapCtrl.Routes.Clear();
-
-            // Fit the MapControl to the points
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                ShowUserLocation();
-                
-                    
-            });
-
-
-            // Get the route between the points.
-            MapRouteFinderResult routeResult =
-                await MapRouteFinder.GetWalkingRouteAsync(
-                userLastLocation,
-                destination
-                );
-
-            if (token.IsCancellationRequested)
-            {
-                return;
-            }
-
-
-            if (routeResult.Status == MapRouteFinderStatus.Success)
-            {
-                // Use the route to initialize a MapRouteView.
-                MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
-                viewOfRoute.RouteColor = new SolidColorBrush((Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color).Color;
-                viewOfRoute.OutlineColor = Colors.Black;
-
-
-                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    // Add the new MapRouteView to the Routes collection
-                    // of the MapControl.
-                    MapCtrl.Routes.Add(viewOfRoute);
-                   
-                });
-
-            }
-        }
-
+       
         
 
         private void SearchLocationPoint_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)

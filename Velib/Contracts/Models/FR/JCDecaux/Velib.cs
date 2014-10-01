@@ -53,7 +53,7 @@ namespace VelibContext
         public bool Loaded { get; set; }
 
         [DataMember(Name = "available_bike_stands")]
-        public int AvailableBikeStands { get; set; }
+        public int? AvailableBikeStands { get; set; }
 
 
         [DataMember(Name = "available_bikes")]

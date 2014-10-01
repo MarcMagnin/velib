@@ -51,74 +51,66 @@ namespace Velib.Contracts.Models.CallABike
         // Barclays refresh every 3 minutes the stations informations :/
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
         {
-            //if (Updater != null)
-            //    return;
-            //Updater = new Task(async () =>
-            //{
-            //    while (true)
-            //    {
-            //        var httpClient = new HttpClient();
-            //        try
-            //        {
-            //            var content = new HttpStringContent(postContent);
-            //            HttpResponseMessage response = await httpClient.PostAsync(new Uri(string.Format(ApiUrl, Id)), content);
-            //            var responseBodyAsText = await response.Content.ReadAsStringAsync();
-            //            var model = responseBodyAsText.FromXmlString<markers>("");
-            //            var city = model.Items.FirstOrDefault().city.FirstOrDefault();
-            //            foreach (var station in city.place)
-            //            {
-            //                foreach (var velibModel in Velibs)
-            //                {
-            //                    if (velibModel.Latitude == station.lat && velibModel.Longitude == station.lng)
-            //                    {
-            //                        if (MainPage.BikeMode)
-            //                        {
-            //                            if((station.bikes.Contains("+") && velibModel.AvailableBikes != 5) || !station.bikes.Contains("+") && station.bikes !=  velibModel.AvailableBikes.ToString() )
-            //                            velibModel.Reload = true;
+            if (Updater != null)
+                return;
+            Updater = new Task(async () =>
+            {
+                while (true)
+                {
+                    var httpClient = new HttpClient();
+                    try
+                    {
+                  
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id)));
+                        var responseBodyAsText = await response.Content.ReadAsStringAsync();
+                        var model = responseBodyAsText.FromJsonString<CallABikeModel>().stations;
 
-            //                        }
-            //                        if (!MainPage.BikeMode)
-            //                        {
-            //                            if((station.bike_racks.Contains("+") && velibModel.AvailableBikeStands!= 5) || !station.bike_racks.Contains("+") && station.bike_racks !=  velibModel.AvailableBikeStands.ToString() )
-            //                            velibModel.Reload = true;
+                        foreach (var station in model)
+                        {
+                            foreach (var velibModel in Velibs)
+                            {
+                                if (velibModel.Latitude == station.Latitude && velibModel.Longitude == station.Longitude)
+                                {
 
-            //                        }
-            //                        velibModel.AvailableBikes =  station.bikes.Contains('+') ? 5 : int.Parse(station.bikes);
-            //                        velibModel.AvailableBikeStands =  station.bike_racks == null ? 0 : int.Parse(station.bike_racks);
-            //                        velibModel.Loaded = true;
-            //                        break;
-            //                    }
+                                    if (MainPage.BikeMode && velibModel.AvailableBikes != station.Details.Bikelist.Length)
+                                    {
+                                        velibModel.Reload = true;
+                                    }
+                                    velibModel.AvailableBikes = station.Details.Bikelist.Length;
+                                    velibModel.Loaded = true;
+                                    break;
+                                }
 
-            //                }
-            //            }
-            //            await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-            //            {
-            //                foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
-            //                {
-            //                    var control = station.VelibControl;
-            //                    if (control != null)
-            //                    {
-            //                        control.ShowVelibStation();
-            //                        control.ShowStationColor();
-            //                    }
-            //                    station.Reload = false;
-            //                }
+                            }
+                        }
+                        await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                        {
+                            foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
+                            {
+                                var control = station.VelibControl;
+                                if (control != null)
+                                {
+                                    control.ShowVelibStation();
+                                    control.ShowStationColor();
+                                }
+                                station.Reload = false;
+                            }
 
-            //            });
-                      
-            //        }
-            //        catch (Exception)
-            //        {
-            //        }
-            //        finally
-            //        {
-            //            httpClient.Dispose();
-            //        }
-            //        await Task.Delay(RefreshTimer);
-            //    }
+                        });
 
-            //});
-            //Updater.Start();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    finally
+                    {
+                        httpClient.Dispose();
+                    }
+                    await Task.Delay(RefreshTimer);
+                }
+
+            });
+            Updater.Start();
         }
 
         public override async Task InnerDownloadContract()
@@ -149,7 +141,7 @@ namespace Velib.Contracts.Models.CallABike
                     //Number = station.Id,
                     //Name = station.Label,
                     AvailableBikes = station.Details.Bikelist.Length,
-                    //AvailableBikeStands = station.AvailableDocks,
+                    AvailableBikeStands = null,
                     Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                     {
                         Latitude = station.Latitude,
@@ -164,7 +156,7 @@ namespace Velib.Contracts.Models.CallABike
                 if (MainPage.BikeMode)
                     stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
                 else
-                    stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
+                    stationModel.AvailableStr = "?";
 
                 Velibs.Add(stationModel);
             }
