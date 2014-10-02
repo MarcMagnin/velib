@@ -49,7 +49,7 @@ namespace Velib.Tutorial
             {
                 Title = "Get directions to go somewhere",
                 Text = "Tap on a station or a searched location, it will show up a path walk to get there." +
-                            " Then tap again to show up a command panel. Press \"Drive to\"."+
+                            " Hold on a station or on a searched location to show up a command panel. Press \"Drive to\"."+
                             " It will start your favorite driving app like HERE drive.",
                 Details = "You can then get your" +
                             " headphones on, lock your phone, put it in your pocket and listen to the directions"+
@@ -59,7 +59,7 @@ namespace Velib.Tutorial
             Items.Add(new HowToModel()
             {
                 Title = "Add some favorites",
-                Text = "Press \"Add to favorites\".",
+                Text = "Hold on a station or on a searched location to show up a command panel, then press \"Add to favorites\".",
                 Details = "It will store the location of the point. You can name it as you like and manage" +
                             " favorits from the dedicated page.",
                 ImageUrl = "shareLocation1.jpg",
@@ -67,7 +67,7 @@ namespace Velib.Tutorial
             Items.Add(new HowToModel()
             {
                 Title = "Get the address from a location",
-                Text = "Hold a finger on the map. It will shows up the found address and the walk path to get there if it exist.",
+                Text = "Hold on the map. It will shows up the found address and the walk path to get there if it exist.",
                 Details = "",
                 ImageUrl = "mapHolding.png",
             });
@@ -92,7 +92,7 @@ namespace Velib.Tutorial
             Items.Add(new HowToModel()
             {
                 Text = "The message will automatically contains the address if it has been resolved."+
-                " It will also contains a direct link to the Easy Bike app to show that location on the map.",
+                " It will also contains direct link to the Easy Bike app, IPhone/IPad native map and Google map.",
                 ImageUrl = "shareLocation3.jpg",
             });
 

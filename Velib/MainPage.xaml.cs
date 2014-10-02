@@ -1310,8 +1310,8 @@ namespace Velib
 
         private string FormatShareLocationMessage()
         {
-            var latitude = Math.Round(LastSearchGeopoint.Position.Latitude, 5).ToString(CultureInfo.InvariantCulture);
-            var longitude = Math.Round(LastSearchGeopoint.Position.Longitude, 5).ToString(CultureInfo.InvariantCulture);
+            var latitude = Math.Round(LastSearchGeopoint.Position.Latitude, 6).ToString(CultureInfo.InvariantCulture);
+            var longitude = Math.Round(LastSearchGeopoint.Position.Longitude, 6).ToString(CultureInfo.InvariantCulture);
             string body = "Check out this location :\r\n";
             if (!string.IsNullOrWhiteSpace(lastAddressFound))
             {
@@ -1322,8 +1322,11 @@ namespace Velib
             body += "\r\n\r\nCan't open this location ? Check out \"Easy Bike\" for Windows Phone ";
             body += "http://www.windowsphone.com/s?appid=" + CurrentApp.AppId;
 
-            body += "\r\n\r\nDon't have a Windows Phone ? Check out ";
-            body += "https://maps.google.com/maps?q=loc:" + latitude + "+"+longitude+"&z=17";
+            body += "\r\n\r\nHave an IPhone ? Check out ";
+            body += "http://maps.apple.com/?q=" + latitude + "," + longitude + "&z=17";
+
+            body += "\r\n\r\nOtherwise check out ";
+            body += "https://maps.google.com/maps?q=loc:" + latitude + ","+longitude+"&z=17";
             return body;
         }
 
