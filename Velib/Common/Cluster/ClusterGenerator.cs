@@ -113,15 +113,40 @@ namespace Velib.Common.Cluster
 
                     RefreshView(x, cts.Token);
 
+
+
                 });
 
-            // requester
+            // auto requester and refresh
             new Task(async () =>
             {
                 while (true)
                 {
+                    
+                    await Task.Delay(15000);
                     RequestAvailability();
-                    await Task.Delay(10000);
+                    await Task.Delay(5000);
+                    // General refresh
+                    int countReload = 0;
+                    int totalNeedReload = VelibDataSource.StaticVelibs.Where(t => t.Reload).Count();
+                    foreach (var station in VelibDataSource.StaticVelibs.Where(t => t.Reload 
+                        && t.VelibControl != null 
+                        && t.VelibControl.Velibs.Count == 1
+                        && MapExtensions.Contains(mapLocations, t.Location)))
+                    {
+                        countReload++;
+                        await Task.Delay(35);
+                        dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                        {
+                            var control = station.VelibControl;
+                            if (control != null)
+                            {
+                                control.ShowVelibStation();
+                                control.ShowStationColor();
+                            }
+                        });
+                    }
+                    Debug.WriteLine(countReload + " On été reloaded sur " + totalNeedReload);
                 }
 
             }).Start();
@@ -133,8 +158,7 @@ namespace Velib.Common.Cluster
              {
                  for (int i = 0; i < MAX_CONTROLS; i++)
                  {
-                     var item = new VelibControl(_map);
-                    // item.CacheMode = new BitmapCache();
+                     var item = new VelibControl(_map);                   
                      item.Template = ItemTemplate;
                      item.Opacity = 0;
                      velibControls.Add(item);
@@ -174,10 +198,6 @@ namespace Velib.Common.Cluster
             Items.Add(velib);
         }
 
-        private void RemoveOutOfViewItems()
-        {
-
-        }
 
         double previousZoom;
         private async void RefreshView(VelibAddRemoveCollection addRemoveCollection, CancellationToken token)
@@ -188,10 +208,6 @@ namespace Velib.Common.Cluster
                     return;
                 }
 
-                if (zoomLevel > 15)
-                    MAXDISTANCE = 1;
-                else
-                    MAXDISTANCE = 100;
                 
                 // remove out of view items
                 foreach (var velib in Items.Where(t => addRemoveCollection.ToRemove.Contains(t)).ToList())
@@ -204,7 +220,14 @@ namespace Velib.Common.Cluster
                         return;
                     }
                 }
+
+
+                if (zoomLevel > 15)
+                    MAXDISTANCE = 1;
+                else
+                    MAXDISTANCE = 100;
                 
+
                 // refresh clusters by removing them from current cluster if required
                 // and send them back to the ToAddPool to be retreated
                 // (when zoom in)

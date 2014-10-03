@@ -33,7 +33,7 @@ namespace Velib.Contracts
             var httpClient = new HttpClient();
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, velibModel.Number,this.Name)));//.AsTask(cts.Token);
+                HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(dataURL, velibModel.Number,this.Name)+"&t="+Guid.NewGuid()));//.AsTask(cts.Token);
                 var responseBodyAsText = await response.Content.ReadAsStringAsync(); //.AsTask(cts.Token);
                 var rootNode = responseBodyAsText.FromJsonString<VelibModel>();
                 if ( MainPage.BikeMode && velibModel.AvailableBikes != rootNode.AvailableBikes)
@@ -103,6 +103,7 @@ namespace Velib.Contracts
             finally
             {
                 velibModel.DownloadingAvailability = false;
+                httpClient.Dispose();
             }
         }
 

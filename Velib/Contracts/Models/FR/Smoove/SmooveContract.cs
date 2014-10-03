@@ -20,8 +20,6 @@ namespace Velib.Contracts.Models.Smoove
     public class SmooveContract: Contract
     {
         [IgnoreDataMember]
-        private CancellationTokenSource tokenSource;
-        [IgnoreDataMember]
         private Task Updater;
         public SmooveContract()
         {
@@ -37,13 +35,10 @@ namespace Velib.Contracts.Models.Smoove
             {
                 while (true)
                 {
-                    if (tokenSource != null)
-                        tokenSource.Cancel();
-                    tokenSource = new CancellationTokenSource();
                     var httpClient = new HttpClient();
                     try
                     {
-                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString()))).AsTask(tokenSource.Token);
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())));
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
                         var models = responseBodyAsText.FromXmlString<vcs>("").Node.Stations.ToList();
                         // for duplicates :/
@@ -89,32 +84,13 @@ namespace Velib.Contracts.Models.Smoove
                             }
                         }
 
-                        await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                        {
-                            foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
-                            {
-                                var control = station.VelibControl;
-                                if (control != null)
-                                {
-                                    control.ShowVelibStation();
-                                    control.ShowStationColor();
-                                }
-                                station.Reload = false;
-
-                            }
-
-                        });
-                        httpClient.Dispose();
                     }
-                    catch (TaskCanceledException)
-                    {
-
-                    }
-                    catch (Exception ex)
+                    catch (Exception )
                     {
                     }
                     finally
                     {
+                        httpClient.Dispose();
                     }
                     await Task.Delay(RefreshTimer);
                 }

@@ -129,6 +129,7 @@ namespace Velib.VelibContext
             ShowVelibStation();
             if (station.Loaded)
             {
+                station.Reload = false;
                 if (MainPage.BikeMode)
                 {
                     station.AvailableStr = station.AvailableBikes.ToString();
@@ -189,6 +190,7 @@ namespace Velib.VelibContext
         public void ShowStationColor()
         {
             var station = Velibs.FirstOrDefault();
+            
             if (MainPage.BikeMode)
             {
                 station.AvailableStr = station.AvailableBikes.ToString();

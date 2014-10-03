@@ -59,24 +59,8 @@ namespace Velib.Contracts.Models.c_bike
 
                             }
                         }
-
-                        await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                        {
-                            foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
-                            {
-                                var control = station.VelibControl;
-                                if (control != null)
-                                {
-                                    control.ShowVelibStation();
-                                    control.ShowStationColor();
-                                }
-                                station.Reload = false;
-                            }
-
-                        });
-
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                     finally

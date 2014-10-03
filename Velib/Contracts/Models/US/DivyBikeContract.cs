@@ -35,16 +35,7 @@ namespace Velib.Contracts.Models.US
                     Updater = new Task(async ()=>{
                         while (true)
                         {
-                            if(tokenSource != null)
-                                tokenSource.Cancel();
-                            tokenSource = new CancellationTokenSource();
-
                             var httpClient = new HttpClient();
-
-
-                            
-                                bool failed = true;
-                                int count = 0;
                                 try
                                 {
                                     HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString()))).AsTask(tokenSource.Token);
@@ -60,13 +51,10 @@ namespace Velib.Contracts.Models.US
                                                 if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                                 {
                                                     velibModel.Reload = true;
-                                                    count++;      
-
                                                 }
                                                 if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.AvailableDocks)
                                                 {
                                                     velibModel.Reload = true;
-                                                    
                                                 }
                                                 velibModel.AvailableBikes = station.AvailableBikes;
                                                 velibModel.AvailableBikeStands = station.AvailableDocks;
@@ -76,35 +64,13 @@ namespace Velib.Contracts.Models.US
                                             
                                         }
                                     }
-
-                                    await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                                    {
-                                        Debug.WriteLine(count + " reload");
-                                        foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1 ))
-                                        {
-                                            var control = station.VelibControl;
-                                            if (control != null)
-                                            {
-                                                control.ShowVelibStation();
-                                                control.ShowStationColor();
-                                            }
-                                            station.Reload = false;
-                                           
-                                        }
-
-                                    });
-                                    httpClient.Dispose();
                                 }
-                                catch (TaskCanceledException)
+                                catch (Exception)
                                 {
-
-                                }
-                                catch (Exception ex)
-                                {
-                                    failed = true;
                                 }
                                 finally
                                 {
+                                    httpClient.Dispose();
                                 }
                                 await Task.Delay(TimeSpan.FromSeconds(20));
                             }

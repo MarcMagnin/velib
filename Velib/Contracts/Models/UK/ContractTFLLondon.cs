@@ -22,7 +22,6 @@ namespace Velib.Contracts
         public string ApiUrl = "http://www.tfl.gov.uk/tfl/syndication/feeds/cycle-hire/livecyclehireupdates.xml";
         private string ApplicationId = "37451f1f";
         private string ApplicationKeys = "b62f82ae23b105aad2ecc72c48c35c3d";
-        private DateTime nextUpdate;
         private Task Updater;
         public ContractTFLLondon()
         {
@@ -39,7 +38,6 @@ namespace Velib.Contracts
                         while (true)
                         {
                                 var httpClient = new HttpClient();
-                                bool failed = true;
                                 try
                                 {
                                     HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())));//.AsTask(cts.Token);
@@ -74,46 +72,13 @@ namespace Velib.Contracts
                                             
                                         }
                                     }
-
-                                    await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                                    {
-                                      foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1 ))
-                                        {
-                                            var control = station.VelibControl;
-                                            if (control != null)
-                                            {
-                                                control.ShowVelibStation();
-                                                control.ShowStationColor();
-                                            }
-                                            station.Reload = false;
-                                           
-                                        }
-                                           
-
-                                            //if (MainPage.BikeMode)
-                                            //{
-                                            //    velibControl.ShowColor(station.AvailableBikes);
-                                            //    station.AvailableStr = station.AvailableBikes.ToString();
-                                            //}
-                                            //else
-                                            //{
-                                            //    velibControl.ShowColor(station.AvailableBikeStands);
-                                            //    station.AvailableStr = station.AvailableBikeStands.ToString();
-                                            //}
-
-                                    });
-                                    httpClient.Dispose();
                                 }
-                                catch (TaskCanceledException)
+                                catch (Exception)
                                 {
-
-                                }
-                                catch (Exception ex)
-                                {
-                                    failed = true;
                                 }
                                 finally
                                 {
+                                    httpClient.Dispose();
                                 }
                                 await Task.Delay(TimeSpan.FromMinutes(1));
                             }

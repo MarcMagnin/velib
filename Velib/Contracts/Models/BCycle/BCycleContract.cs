@@ -67,24 +67,13 @@ namespace Velib.Contracts.Models.BCycle
                                 }
                             }
                         }
-                        await dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
-                        {
-                            foreach (var station in Velibs.Where(t => t.Reload && t.VelibControl != null && t.VelibControl.Velibs.Count == 1))
-                            {
-                                var control = station.VelibControl;
-                                if (control != null)
-                                {
-                                    control.ShowVelibStation();
-                                    control.ShowStationColor();
-                                }
-                                station.Reload = false;
-                            }
-
-                        });
-                        httpClient.Dispose();
                     }
                     catch (Exception ex)
                     {
+                    }
+                    finally
+                    {
+                        httpClient.Dispose();
                     }
                     await Task.Delay(RefreshTimer);
                 }

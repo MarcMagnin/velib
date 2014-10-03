@@ -39,7 +39,9 @@ namespace VelibContext
     [DataContract]
     public class VelibModel : INotifyPropertyChanged
     {
+        [IgnoreDataMember]
         public bool Reload;
+        [IgnoreDataMember]
         public bool OnlyColorReload;
        
         public Point MapLocation;
