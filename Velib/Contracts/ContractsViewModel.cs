@@ -42,7 +42,7 @@ namespace Velib
             
           #region AU
           new BixxiContract {Name = "Melbourne",
-               ServiceProvider="Melbourne Bike Share, Bixi",
+               ServiceProvider="Melbourne Bike Share, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/AU.png",
                Pays = "Australia"},
           #endregion
@@ -157,6 +157,11 @@ namespace Velib
           #endregion
 
           #region CA
+           new DivyBikeContract{Name = "Toronto, ON",
+               ApiUrl = "http://www.bikesharetoronto.com/stations/json",
+               ServiceProvider = "Bike Share Toronto, Alta Bicycle",
+               PaysImage = paysImagesRootPath+ "/CA.png",
+               Pays = "Canada"},
           new CapitalBikeShareContract{Name = "Montréal",
                ApiUrl = "https://montreal.bixi.com/data/bikeStations.xml",
                ServiceProvider = "Bixi Montreal, Bixi",
@@ -208,16 +213,16 @@ namespace Velib
                 ApiUrl = "http://vms.metrovelo.fr/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},    
-               //new SmooveContract{Name = "Avignon",
-               //ServiceProvider="Vélopop', Smoove",
-               // ApiUrl = "http://www.velopop.fr/vcstations.xml", // 1 station sans la et lg
-               //PaysImage = paysImagesRootPath+ "/FR.png",
-               //Pays = "France"}, 
-               //new SmooveContract{Name = "Belfort",
-               //ServiceProvider="Optymo, SMTC, Smoove",
-               // ApiUrl = "http://cli-velo-belfort.gir.fr/vcstations.xml", // 2 Station sans id, la, lg et une qui n'est pas indiqué sur la carte du site
-               //PaysImage = paysImagesRootPath+ "/FR.png",
-               //Pays = "France"}, 
+               new SmooveContract{Name = "Avignon",
+               ServiceProvider="Vélopop', Smoove",
+                ApiUrl = "http://www.velopop.fr/vcstations.xml", // 1 station sans la et lg
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Belfort",
+               ServiceProvider="Optymo, SMTC, Smoove",
+                ApiUrl = "http://cli-velo-belfort.gir.fr/vcstations.xml", // 2 Station sans id, la, lg et une qui n'est pas indiqué sur la carte du site
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
                new SmooveContract{Name = "Chalon-sur-Saône",
                ServiceProvider="Réflex, Transdev, Smoove", // http://en.wikipedia.org/wiki/Transdev
                 ApiUrl = " http://www.reflex-grandchalon.fr/vcstations.xml",
@@ -802,7 +807,7 @@ namespace Velib
                Pays = "United States", Id= "71"},
           new CapitalBikeShareContract{Name = "Boston, MA",
                ApiUrl = "http://www.thehubway.com/data/stations/bikeStations.xml",
-               ServiceProvider = "Hubway, Bixi",
+               ServiceProvider = "Hubway, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
                new BCycleContract{Name = "Boulder, CO",
@@ -816,22 +821,22 @@ namespace Velib
                Pays = "United States", Id= "61"},
           new DivyBikeContract{Name = "Chicago, IL",
                TechnicalName= "Chicago",
-               ServiceProvider = "Divvy, Bixi",
+               ServiceProvider = "Divvy, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
           new DivyBikeContract{Name = "San Francisco Bay Area, CA",
                ApiUrl = "http://www.bayareabikeshare.com/stations/json",
-               ServiceProvider = "Bay Area Bike Share, Bixi",
+               ServiceProvider = "Bay Area Bike Share, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
                new DivyBikeContract{Name = "Chattanooga, TM",
                ApiUrl = "http://www.bikechattanooga.com/stations/json",
-               ServiceProvider = "Bike Chattanooga, Bixi",
+               ServiceProvider = "Bike Chattanooga, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
                new DivyBikeContract{Name = "Columbus, OH",
                ApiUrl = "http://cogobikeshare.com/stations/json",
-               ServiceProvider = "CoGo Bike Share, Bixi",
+               ServiceProvider = "CoGo Bike Share, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
           new BCycleContract{Name = "Cincinnati, OH",
@@ -847,7 +852,7 @@ namespace Velib
                Pays = "United States", Id= "70"},
           new CitiBikeContract{Name = "New York City, NY",
                TechnicalName= "New York",
-               ServiceProvider= "Citi Bike, Bixi",
+               ServiceProvider= "Citi Bike, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
 
@@ -900,7 +905,7 @@ namespace Velib
           new BixxiMinneapolisContract{Name = "Minneapolis, MN",
                ApiUrl = "https://secure.niceridemn.org/data2/stations.json",
           //https://secure.niceridemn.org/data2/bikeStations.xml
-               ServiceProvider = "Nice Ride Minnesota, Bixi",
+               ServiceProvider = "Nice Ride Minnesota, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
                new BCycleContract{Name = "Nashville, TN",
@@ -922,7 +927,7 @@ namespace Velib
                Pays = "United States", Id= "73"},
            new BixxiMinneapolisContract{Name = "Seattle, WA",
                ApiUrl = "https://secure.prontocycleshare.com/data2/stations.json",
-               ServiceProvider = "Pronto Cycle Share, Bixi",
+               ServiceProvider = "Pronto Cycle Share, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
                new BCycleContract{Name = "Spartanburg, SC",
@@ -943,7 +948,7 @@ namespace Velib
 
           new CapitalBikeShareContract{Name = "Washington, D.C. area",
                TechnicalName= "Washington",
-               ServiceProvider = "Capital BikeShare, Bixi",
+               ServiceProvider = "Capital BikeShare, Alta Bicycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
           #endregion

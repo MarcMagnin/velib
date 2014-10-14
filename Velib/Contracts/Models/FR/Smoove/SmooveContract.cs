@@ -56,14 +56,21 @@ namespace Velib.Contracts.Models.Smoove
                                     TotalDocks = t.Sum(b => b.TotalDocks)
 
                                 });
-                            models.RemoveAll(t => aggregatedStation.Any(v => v.Latitude == t.Latitude));
+                            models.RemoveAll(t => aggregatedStation.Any(v => v.Latitude == t.Latitude && v.Longitude == t.Longitude));
                             models.Add(aggregatedStation.FirstOrDefault());
                         }
                         foreach (var station in models)
                         {
+                            double latitutde, longitude = 0;
+                            if (!double.TryParse(station.Latitude, out latitutde))
+                                continue;
+                            double.TryParse(station.Longitude, out longitude);
+
                             foreach (var velibModel in Velibs)
                             {
-                                if (velibModel.Latitude == station.Latitude && velibModel.Longitude == station.Longitude)
+
+
+                                if (velibModel.Latitude == latitutde && velibModel.Longitude == longitude)
                                 {
                                     if (MainPage.BikeMode && velibModel.AvailableBikes != station.AvailableBikes)
                                     {
@@ -121,26 +128,31 @@ namespace Velib.Contracts.Models.Smoove
                         TotalDocks = t.Sum(b => b.TotalDocks)
 
                     });
-                models.RemoveAll(t => aggregatedStation.Any(v => v.Latitude == t.Latitude));
+                models.RemoveAll(t => aggregatedStation.Any(v => v.Latitude == t.Latitude && v.Longitude == t.Longitude));
                 models.Add(aggregatedStation.FirstOrDefault());
             }
             foreach (var station in models)
             {
-                
+
+                double latitutde, longitude = 0;
+                if (!double.TryParse(station.Latitude, out latitutde))
+                    continue;
+                double.TryParse(station.Longitude, out longitude);
+
                 var stationModel = new VelibModel()
                 {
                     Contract = this,
-                    Number = int.Parse(station.Latitude.ToString(CultureInfo.InvariantCulture).Split('.')[1]) + station.TotalDocks,
+                    //Number = int.TryParse(station.Id,
                     //Name = station.Label,
                     AvailableBikes = station.AvailableBikes,
                     AvailableBikeStands = station.AvailableDocks,
                     Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                     {
-                        Latitude = station.Latitude,
-                        Longitude = station.Longitude
+                        Latitude = latitutde,
+                        Longitude = longitude
                     }),
-                    Latitude = station.Latitude,
-                    Longitude = station.Longitude,
+                    Latitude = latitutde,
+                    Longitude = longitude,
                     Loaded = true
                 };
                 if (Velibs.Contains(stationModel))
