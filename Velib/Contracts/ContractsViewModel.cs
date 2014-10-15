@@ -27,6 +27,7 @@ using Velib.Contracts.Models.c_bike;
 using Velib.Contracts.Models.BIXXI;
 using Velib.Contracts.Models.CallABike;
 using Velib.Contracts.Models.MVG;
+using Velib.Contracts.Models.PL;
 namespace Velib
 {
     public class ContractsViewModel
@@ -677,6 +678,11 @@ namespace Velib
           #endregion
 
           #region PL
+                new SzczecinContract{Name = "Szczecin",
+                ServiceProvider = "Bike_S",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland"},
+
           new NextBikeContract{Name = "Bemowo",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "197"},
