@@ -679,7 +679,7 @@ namespace Velib
 
           #region PL
                 new SzczecinContract{Name = "Szczecin",
-                ServiceProvider = "Bike_S",
+               ServiceProvider = "Bike_S, BikeU, Smoove",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland"},
 
@@ -689,6 +689,10 @@ namespace Velib
                new NextBikeContract{Name = "Białystok",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "245"},
+               new NextBikeContract{Name = "Grodzisk Mazowiecki",
+               ServiceProvider = "Grodziski Rower Miejski, NextBike",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "255"},
                new NextBikeContract{Name = "Konstancin Jeziorna",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "247"},
@@ -696,6 +700,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "232"},
                new NextBikeContract{Name = "Lublin",
+               ServiceProvider = "Lubelski Rower Miejski, NextBike",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "251"},
                new NextBikeContract{Name = "Opole",
@@ -708,6 +713,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "227"},
                new NextBikeContract{Name = "Warszawa", // Biggest one 199 stations
+               ServiceProvider = "Veturilo, NextBike",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "210"},
                new NextBikeContract{Name = "Wrocław",
