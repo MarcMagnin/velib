@@ -678,6 +678,8 @@ namespace Velib
           #endregion
 
           #region PL
+
+               // les stations peuvent etre aussi récup depuis https://www.bikes-srm.pl/LocationsMap.aspx dans la variable js : var mapDataLocations
                 new SzczecinContract{Name = "Szczecin",
                 ServiceProvider = "Bike_S",
                PaysImage = paysImagesRootPath+ "/PL.png",
