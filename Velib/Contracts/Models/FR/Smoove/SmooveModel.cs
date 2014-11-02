@@ -37,10 +37,6 @@ namespace Velib.Contracts.Models.Smoove
 
         private string idField;
 
-        private double latField;
-
-        private double longField;
-
         private int nbBikesField;
 
         private int nbEmptyDocksField;
@@ -70,30 +66,18 @@ namespace Velib.Contracts.Models.Smoove
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute("la", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public double Latitude
+        public string Latitude
         {
-            get
-            {
-                return this.latField;
-            }
-            set
-            {
-                this.latField = value;
-            }
+            get;
+            set;
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute("lg", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public double Longitude
+        public string Longitude
         {
-            get
-            {
-                return this.longField;
-            }
-            set
-            {
-                this.longField = value;
-            }
+            get;
+            set;
         }
 
         

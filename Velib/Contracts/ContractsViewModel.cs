@@ -27,6 +27,7 @@ using Velib.Contracts.Models.c_bike;
 using Velib.Contracts.Models.BIXXI;
 using Velib.Contracts.Models.CallABike;
 using Velib.Contracts.Models.MVG;
+using Velib.Contracts.Models.PL;
 namespace Velib
 {
     public class ContractsViewModel
@@ -42,7 +43,7 @@ namespace Velib
             
           #region AU
           new BixxiContract {Name = "Melbourne",
-               ServiceProvider="Melbourne Bike Share, Bixi",
+               ServiceProvider="Melbourne Bike Share, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/AU.png",
                Pays = "Australia"},
           #endregion
@@ -157,6 +158,11 @@ namespace Velib
           #endregion
 
           #region CA
+           new DivyBikeContract{Name = "Toronto, ON",
+               ApiUrl = "http://www.bikesharetoronto.com/stations/json",
+               ServiceProvider = "Bike Share Toronto, Alta Bicycle Share, Bixi",
+               PaysImage = paysImagesRootPath+ "/CA.png",
+               Pays = "Canada"},
           new CapitalBikeShareContract{Name = "Montréal",
                ApiUrl = "https://montreal.bixi.com/data/bikeStations.xml",
                ServiceProvider = "Bixi Montreal, Bixi",
@@ -204,10 +210,50 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
           new SmooveContract{Name = "Grenoble",
-              ServiceProvider="Métrovélo, Smoove",
+               ServiceProvider="Métrovélo, SMTC, Smoove", // SMTC = Syndicat Mixte des Transports en Commun
                 ApiUrl = "http://vms.metrovelo.fr/vcstations.xml",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},    
+               new SmooveContract{Name = "Avignon",
+               ServiceProvider="Vélopop', Smoove",
+                ApiUrl = "http://www.velopop.fr/vcstations.xml", // 1 station sans la et lg
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Belfort",
+               ServiceProvider="Optymo, SMTC, Smoove",
+                ApiUrl = "http://cli-velo-belfort.gir.fr/vcstations.xml", // 2 Station sans id, la, lg et une qui n'est pas indiqué sur la carte du site
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Chalon-sur-Saône",
+               ServiceProvider="Réflex, Transdev, Smoove", // http://en.wikipedia.org/wiki/Transdev
+                ApiUrl = " http://www.reflex-grandchalon.fr/vcstations.xml",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Clermont-Ferrand",
+               ServiceProvider="C.Vélo, SMTC, Smoove",
+                ApiUrl = "http://www.c-velo.fr/vcstations.xml",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Lorient",
+               ServiceProvider="Vélo an oriant, Smoove",
+                ApiUrl = "http://www.lorient-velo.fr/vcstations.xml",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Montpellier",
+               ServiceProvider="Vélomagg', Smoove",
+                ApiUrl = "http://cli-velo-montpellier.gir.fr/vcstations.xml",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"},
+               new SmooveContract{Name = "Saint-Étienne",
+               ServiceProvider="Vélivert, Smoove",
+                ApiUrl = "http://www.velivert.fr/vcstations.xml",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"}, 
+               new SmooveContract{Name = "Valence",
+               ServiceProvider="Libélo, Transdev, Smoove",
+                ApiUrl = "http://www.velo-libelo.fr/vcstations.xml",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"},
           new ContractJCDecauxVelib{Name = "Lyon",
                ServiceProvider="Vélo'V, JCDecaux",
                PaysImage = paysImagesRootPath+ "/FR.png",
@@ -242,7 +288,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
           new ContractJCDecauxVelib{Name = "Toulouse",
-               ServiceProvider="VélôToulouse', JCDecaux",
+               ServiceProvider="VélôToulouse', SMTC, JCDecaux", // SMTC = Syndicat Mixte des Transports en Commun
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
           #endregion
@@ -338,7 +384,7 @@ namespace Velib
             Id="1",
             Pays = "Germany",},
             new CallABikeContract{Name = "Hamburg",
-            ServiceProvider = "StadtRAD Hamburg, Call a Bike",
+            ServiceProvider = "StadtRAD Hamburg, Call a Bike (no dock availabilty :/)",
             PaysImage = paysImagesRootPath+ "/DE.png",
             Id="75",
             Pays = "Germany",},
@@ -371,7 +417,7 @@ namespace Velib
             Id="34000",
             Pays = "Germany",},
             new CallABikeContract{Name = "Kassel",
-            ServiceProvider = "Konrad, Call a Bike",
+            ServiceProvider = "Konrad, Call a Bike (no dock availabilty :/)",
             PaysImage = paysImagesRootPath+ "/DE.png",
             Id="34100",
             Pays = "Germany",},
@@ -388,7 +434,7 @@ namespace Velib
             Id="100023",
             Pays = "Germany",},
             new CallABikeContract{Name = "Lüneburg",
-            ServiceProvider = "StadtRAD Lüneburg, Call a Bike",
+            ServiceProvider = "StadtRAD Lüneburg, Call a Bike (no dock availabilty :/)",
             PaysImage = paysImagesRootPath+ "/DE.png",
             Id="165",
             Pays = "Germany",},
@@ -632,12 +678,23 @@ namespace Velib
           #endregion
 
           #region PL
+
+               // les stations peuvent etre aussi récup depuis https://www.bikes-srm.pl/LocationsMap.aspx dans la variable js : var mapDataLocations
+                new SzczecinContract{Name = "Szczecin",
+               ServiceProvider = "Bike_S, BikeU, Smoove",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland"},
+
           new NextBikeContract{Name = "Bemowo",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "197"},
                new NextBikeContract{Name = "Białystok",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "245"},
+               new NextBikeContract{Name = "Grodzisk Mazowiecki",
+               ServiceProvider = "Grodziski Rower Miejski, NextBike",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "Poland", Id= "255"},
                new NextBikeContract{Name = "Konstancin Jeziorna",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "247"},
@@ -645,6 +702,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "232"},
                new NextBikeContract{Name = "Lublin",
+               ServiceProvider = "Lubelski Rower Miejski, NextBike",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "251"},
                new NextBikeContract{Name = "Opole",
@@ -657,6 +715,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "227"},
                new NextBikeContract{Name = "Warszawa", // Biggest one 199 stations
+               ServiceProvider = "Veturilo, NextBike",
                PaysImage = paysImagesRootPath+ "/PL.png",
                Pays = "Poland", Id= "210"},
                new NextBikeContract{Name = "Wrocław",
@@ -762,7 +821,7 @@ namespace Velib
                Pays = "United States", Id= "71"},
           new CapitalBikeShareContract{Name = "Boston, MA",
                ApiUrl = "http://www.thehubway.com/data/stations/bikeStations.xml",
-               ServiceProvider = "Hubway, Bixi",
+               ServiceProvider = "Hubway, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
                new BCycleContract{Name = "Boulder, CO",
@@ -776,22 +835,22 @@ namespace Velib
                Pays = "United States", Id= "61"},
           new DivyBikeContract{Name = "Chicago, IL",
                TechnicalName= "Chicago",
-               ServiceProvider = "Divvy, Bixi",
+               ServiceProvider = "Divvy, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
           new DivyBikeContract{Name = "San Francisco Bay Area, CA",
                ApiUrl = "http://www.bayareabikeshare.com/stations/json",
-               ServiceProvider = "Bay Area Bike Share, Bixi",
+               ServiceProvider = "Bay Area Bike Share, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
                new DivyBikeContract{Name = "Chattanooga, TM",
                ApiUrl = "http://www.bikechattanooga.com/stations/json",
-               ServiceProvider = "Bike Chattanooga, Bixi",
+               ServiceProvider = "Bike Chattanooga, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
                new DivyBikeContract{Name = "Columbus, OH",
                ApiUrl = "http://cogobikeshare.com/stations/json",
-               ServiceProvider = "CoGo Bike Share, Bixi",
+               ServiceProvider = "CoGo Bike Share, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
           new BCycleContract{Name = "Cincinnati, OH",
@@ -807,7 +866,7 @@ namespace Velib
                Pays = "United States", Id= "70"},
           new CitiBikeContract{Name = "New York City, NY",
                TechnicalName= "New York",
-               ServiceProvider= "Citi Bike, Bixi",
+               ServiceProvider= "Citi Bike, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"},
 
@@ -860,13 +919,14 @@ namespace Velib
           new BixxiMinneapolisContract{Name = "Minneapolis, MN",
                ApiUrl = "https://secure.niceridemn.org/data2/stations.json",
           //https://secure.niceridemn.org/data2/bikeStations.xml
-               ServiceProvider = "Nice Ride Minnesota, Bixi",
+               ServiceProvider = "Nice Ride Minnesota, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
                new BCycleContract{Name = "Nashville, TN",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "64"},
                new BCycleContract{Name = "Omaha, NE",
+               ServiceProvider= "Heartland, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "56"},
                new BCycleContract{Name = "Rapid City, SD",
@@ -879,6 +939,11 @@ namespace Velib
                ServiceProvider= "CAT Bike, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "73"},
+           new BixxiMinneapolisContract{Name = "Seattle, WA",
+               ApiUrl = "https://secure.prontocycleshare.com/data2/stations.json",
+               ServiceProvider = "Pronto Cycle Share, Alta Bicycle Share, Bixi",
+               PaysImage = paysImagesRootPath+ "/US.png",
+               Pays = "United States"}, 
                new BCycleContract{Name = "Spartanburg, SC",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "57"},
@@ -897,7 +962,7 @@ namespace Velib
 
           new CapitalBikeShareContract{Name = "Washington, D.C. area",
                TechnicalName= "Washington",
-               ServiceProvider = "Capital BikeShare, Bixi",
+               ServiceProvider = "Capital BikeShare, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
           #endregion

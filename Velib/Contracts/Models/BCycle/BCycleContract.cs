@@ -17,7 +17,6 @@ namespace Velib.Contracts.Models.BCycle
     public class BCycleContract: Contract
     {
         [IgnoreDataMember]
-        private CancellationTokenSource tokenSource;
         private Task Updater;
         private string ApiKey = "A231E49A-920B-4C20-8752-E1B650ED1A49";
         public BCycleContract()
@@ -35,15 +34,11 @@ namespace Velib.Contracts.Models.BCycle
             {
                 while (true)
                 {
-                    if (tokenSource != null)
-                        tokenSource.Cancel();
-                    tokenSource = new CancellationTokenSource();
-
                     var httpClient = new HttpClient();
                     try
                     {
                         httpClient.DefaultRequestHeaders.Add("ApiKey", ApiKey);
-                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id))).AsTask(tokenSource.Token);
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl, Id)));
                         var responseBodyAsText = await response.Content.ReadAsStringAsync();
                         var model = responseBodyAsText.FromJsonString<List<BCycleModel>>();
                         foreach (var station in model)
