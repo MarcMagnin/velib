@@ -20,7 +20,6 @@ namespace Velib.Contracts.Models.US
     public class DivyBikeContract: Contract
     {
         [IgnoreDataMember]
-        private CancellationTokenSource tokenSource;
         private Task Updater;
         public DivyBikeContract()
         {
@@ -38,7 +37,7 @@ namespace Velib.Contracts.Models.US
                             var httpClient = new HttpClient();
                                 try
                                 {
-                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString()))).AsTask(tokenSource.Token);
+                                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(string.Format(ApiUrl + "?" + Guid.NewGuid().ToString())));
                                     var responseBodyAsText = await response.Content.ReadAsStringAsync();
                                     var model = responseBodyAsText.FromJsonString<DivyBikeModel>();
                                     
