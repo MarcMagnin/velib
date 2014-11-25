@@ -958,7 +958,10 @@ namespace Velib
             //   ServiceProvider= "Pittsburgh Bike Share, NextBike"
             //   PaysImage = paysImagesRootPath+ "/US.png",
             //   Pays = "United States", Id= "254"},
-
+          new NextBikeContract{Name = "Hoboken, NJ",
+               ServiceProvider= "Hudson Bike Share, NextBike",
+               PaysImage = paysImagesRootPath+ "/PL.png",
+               Pays = "United States", Id= "258"},
 
           new CapitalBikeShareContract{Name = "Washington, D.C. area",
                TechnicalName= "Washington",
