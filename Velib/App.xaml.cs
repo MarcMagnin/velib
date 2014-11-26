@@ -50,6 +50,8 @@ namespace Velib
             this.UnhandledException += App_UnhandledException;
         }
 
+
+
         async void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             var dialog = new MessageDialog(e.Message + e.Exception.InnerException + e.Exception.StackTrace);

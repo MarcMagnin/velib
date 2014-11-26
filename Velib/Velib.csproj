@@ -112,6 +112,8 @@
     <Compile Include="Contracts\Models\c-bike\CBikeModel.cs" />
     <Compile Include="Contracts\Models\CallABike\CallABikeContract.cs" />
     <Compile Include="Contracts\Models\CallABike\CallABikeModel.cs" />
+    <Compile Include="Contracts\Models\EasyBike\EasyBikeContract.cs" />
+    <Compile Include="Contracts\Models\EasyBike\EasyBikeModel.cs" />
     <Compile Include="Contracts\Models\FR\Smoove\SmooveContract.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -193,6 +195,7 @@
     <Content Include="Assets\Pays\DE.png" />
     <Content Include="Assets\Pays\ES.png" />
     <Content Include="Assets\Pays\FR.png" />
+    <Content Include="Assets\Pays\GR.png" />
     <Content Include="Assets\Pays\HR.png" />
     <Content Include="Assets\Pays\JP.png" />
     <Content Include="Assets\Pays\LT.png" />

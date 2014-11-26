@@ -28,6 +28,7 @@ using Velib.Contracts.Models.BIXXI;
 using Velib.Contracts.Models.CallABike;
 using Velib.Contracts.Models.MVG;
 using Velib.Contracts.Models.PL;
+using Velib.Contracts.Models.EasyBike;
 namespace Velib
 {
     public class ContractsViewModel
@@ -635,6 +636,11 @@ namespace Velib
                Pays = "Germany", Id= "176"},
           #endregion
 
+#region GR
+        new EasyBikeContract{Name = "All cities (from Easy Bike)",
+            PaysImage = paysImagesRootPath+ "/GR.png",
+            Pays = "Greece"},
+#endregion 
           #region JP
           new ContractJCDecauxVelib{Name = "Toyama",
                PaysImage = paysImagesRootPath+ "/JP.png",
