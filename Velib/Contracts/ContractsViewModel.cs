@@ -636,11 +636,13 @@ namespace Velib
                Pays = "Germany", Id= "176"},
           #endregion
 
-#region GR
-        new EasyBikeContract{Name = "All cities (from Easy Bike)",
+          #region GR
+               //Check trello at ToDo maybe a possiblity for make a list of each citie
+          new EasyBikeContract{Name = "All cities (from Easy Bike)",
             PaysImage = paysImagesRootPath+ "/GR.png",
             Pays = "Greece"},
-#endregion 
+          #endregion 
+
           #region JP
           new ContractJCDecauxVelib{Name = "Toyama",
                PaysImage = paysImagesRootPath+ "/JP.png",

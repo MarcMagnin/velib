@@ -101,6 +101,7 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
     <Compile Include="Contracts\ContractGroup.cs" />
+    <Compile Include="Contracts\ContractsViewModel.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleContract.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleModel.cs" />
     <Compile Include="Contracts\Models\BCycle\PhiladelphiaTempContract.cs" />
@@ -162,7 +163,6 @@
     <Compile Include="SectionPage.xaml.cs">
       <DependentUpon>SectionPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contracts\ContractsViewModel.cs" />
     <Compile Include="Tutorial\HowTo.xaml.cs">
       <DependentUpon>HowTo.xaml</DependentUpon>
     </Compile>
