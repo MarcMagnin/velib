@@ -101,6 +101,7 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Contracts\Contract.cs" />
     <Compile Include="Contracts\ContractGroup.cs" />
+    <Compile Include="Contracts\ContractsViewModel.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleContract.cs" />
     <Compile Include="Contracts\Models\BCycle\BCycleModel.cs" />
     <Compile Include="Contracts\Models\BCycle\PhiladelphiaTempContract.cs" />
@@ -112,6 +113,8 @@
     <Compile Include="Contracts\Models\c-bike\CBikeModel.cs" />
     <Compile Include="Contracts\Models\CallABike\CallABikeContract.cs" />
     <Compile Include="Contracts\Models\CallABike\CallABikeModel.cs" />
+    <Compile Include="Contracts\Models\EasyBike\EasyBikeContract.cs" />
+    <Compile Include="Contracts\Models\EasyBike\EasyBikeModel.cs" />
     <Compile Include="Contracts\Models\FR\Smoove\SmooveContract.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -160,7 +163,6 @@
     <Compile Include="SectionPage.xaml.cs">
       <DependentUpon>SectionPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Contracts\ContractsViewModel.cs" />
     <Compile Include="Tutorial\HowTo.xaml.cs">
       <DependentUpon>HowTo.xaml</DependentUpon>
     </Compile>
@@ -194,6 +196,7 @@
     <Content Include="Assets\Pays\DE.png" />
     <Content Include="Assets\Pays\ES.png" />
     <Content Include="Assets\Pays\FR.png" />
+    <Content Include="Assets\Pays\GR.png" />
     <Content Include="Assets\Pays\HR.png" />
     <Content Include="Assets\Pays\JP.png" />
     <Content Include="Assets\Pays\LT.png" />
