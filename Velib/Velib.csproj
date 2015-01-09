@@ -177,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\icons\light\appbar.next.rest.png" />
+    <Content Include="Assets\jesuischarlie.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\ombre.png" />
     <Content Include="Assets\Pays\AE.png" />

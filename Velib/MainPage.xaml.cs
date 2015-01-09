@@ -153,7 +153,7 @@ namespace Velib
             TouchPanel.Holding += TouchPanel_Holding;
             TouchPanel.ManipulationStarted += TouchPanel_ManipulationStarted;
             TouchPanel.ManipulationStarting += TouchPanel_ManipulationStarting;
-            SearchLocationPoint.Holding += SearchLocationPoint_Holding;
+           // SearchLocationPoint.Holding += SearchLocationPoint_Holding;
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
             this.navigationHelper = new NavigationHelper(this);
@@ -832,9 +832,13 @@ namespace Velib
             //}
             if (item == SearchLocationPoint )
             {
+                if (PreviousSelectedItem == SearchLocationPoint)
+                    ShowFlyout(this);
                 LastSearchGeopoint = SearchLocationPoint.GetValue(MapControl.LocationProperty) as Geopoint;
                 ReverseGeocode(true);
                 VisualStateManager.GoToState(this, "SearchLocationNormal", true);
+            }else{
+
             }
 
 

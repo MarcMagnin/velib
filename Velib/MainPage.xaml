@@ -1153,17 +1153,24 @@
         </Border>
         <Grid x:Name="grid" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+            	<ColumnDefinition Width="*"/>
+            	<ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ProgressBar x:Name="SearchingProgressBar" Height="10" VerticalAlignment="Top" Grid.ColumnSpan="2" Visibility="Collapsed" IsIndeterminate="True"/>
-            <ScrollViewer x:Name="scrollViewer" VerticalAlignment="Top" Margin="10,0" >
-                <TextBox x:Name="SearchTextBox" VerticalAlignment="Center" PlaceholderText="address" FontFamily="Global User Interface" KeyUp="AddressTextBox_KeyUp"/>
-            </ScrollViewer>
-            <TextBlock x:Name="SearchStatusTextBlock" HorizontalAlignment="Left" 
+        	<ProgressBar x:Name="SearchingProgressBar" Height="10" VerticalAlignment="Top" Grid.ColumnSpan="2" Visibility="Collapsed" IsIndeterminate="True"/>
+        	<ScrollViewer x:Name="scrollViewer" VerticalAlignment="Top" Margin="10,0" >
+        		<TextBox x:Name="SearchTextBox" VerticalAlignment="Center" PlaceholderText="address" FontFamily="Global User Interface" KeyUp="AddressTextBox_KeyUp"/>
+        	</ScrollViewer>
+        	<TextBlock x:Name="SearchStatusTextBlock" HorizontalAlignment="Left" 
     			
-    			TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Margin="10,55,0,0" IsHitTestVisible="False"/>
+        		TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="16" Margin="10,55,0,0" IsHitTestVisible="False"/>
         </Grid>
+		
+		<Border Background="#FF303030" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+		<HyperlinkButton NavigateUri="http://www.charliehebdo.fr/index.html" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="64" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0"  >
+			<Image Source="Assets/jesuischarlie.png" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
+		</HyperlinkButton>
+		
+		</Border>
         <ToggleButton x:Name="ToggleButtonVelibParking" 
 		   HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource ToggleButtonStyle1}" Background="#CC1F1F1F" MinWidth="0" MinHeight="0" BorderBrush="{x:Null}" FontFamily="Global User Interface" Margin="0,0,16,20" Click="ToggleButtonVelibParking_Click"/>
     </Grid>
