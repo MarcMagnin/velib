@@ -48,6 +48,7 @@ using Velib.Tutorial;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Email;
 using Windows.ApplicationModel.Store;
+using Velib.Settings;
 
 // Pour en savoir plus sur le modèle Application Hub, consultez la page http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -61,7 +62,7 @@ namespace Velib
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-        private Geolocator gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.High, MovementThreshold = 5, ReportInterval = 1000 };
+        public Geolocator gl ;
         private Geopoint userLastLocation;
         private ClustersGenerator clusterGenerator;
         public static CoreDispatcher dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
@@ -107,8 +108,12 @@ namespace Velib
             AccuracyScaleY = AccuracyStoryboard.Children[1] as DoubleAnimation;
 
             clusterGenerator = new ClustersGenerator(MapCtrl, this.Resources["VelibTemplate"] as ControlTemplate);
-            gl.PositionChanged += gl_PositionChanged;
-            gl.StatusChanged += gl_StatusChanged;
+            if (App.LocalSettings.Values["Localization"] == null || (bool)App.LocalSettings.Values["Localization"] == true)
+            {
+                App.LocalSettings.Values["Localization"] = true;
+                EnableLocalization();
+            }
+
             if (compass != null)
             {
                 compass.ReportInterval = 200;
@@ -163,8 +168,18 @@ namespace Velib
         }
 
 
-
-
+        public void EnableLocalization()
+        {
+            gl = new Geolocator() { DesiredAccuracy = PositionAccuracy.High, MovementThreshold = 5, ReportInterval = 1000 };
+            gl.PositionChanged += gl_PositionChanged;
+            gl.StatusChanged += gl_StatusChanged;
+        }
+        public void DisableLocalization()
+        {
+            gl.PositionChanged -= gl_PositionChanged;
+            gl.StatusChanged -= gl_StatusChanged;
+            gl = null;
+        }
 
         void SearchLocationPoint_Holding(object sender, HoldingRoutedEventArgs e)
         {
@@ -322,6 +337,18 @@ namespace Velib
         //private Geolocator glOnDemande;
         private async void LocationButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            if (App.LocalSettings.Values["Localization"] != null && (bool)App.LocalSettings.Values["Localization"] == false)
+            {
+                var dialog = new MessageDialog("Localization in disabled, go to the settings page to activate it ?");
+                //Commands
+                dialog.Commands.Add(new UICommand("Ok", new UICommandInvokedHandler((f) => Frame.Navigate(typeof(SettingsPage)))));
+                dialog.Commands.Add(new UICommand("Cancel"));
+
+
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
+                return;
+            }
+
             if (stickToUserLocation == false)
             {
                 if (userLastLocation == null)
@@ -523,6 +550,10 @@ namespace Velib
         private void DownloadCitiesButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             Frame.Navigate(typeof(ContractsPage));
+        }
+        private void SettingsButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
         }
 
         private async void MapCtrl_DoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)

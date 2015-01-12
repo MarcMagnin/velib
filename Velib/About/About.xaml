@@ -41,13 +41,14 @@
                 </RichTextBlock>
 				<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,18">
 						<Paragraph FontSize="18.333">
-								<Run  Text="Any suggestions ?"/>
+								<Run Text="Any suggestions ?"/>
 							</Paragraph>
 							<Paragraph FontSize="18.333">
 								<Run  Text="Please contact us at "/>
 								<Hyperlink NavigateUri="mailto:easybike@outlook.fr"  Foreground="{ThemeResource PhoneAccentBrush}">
 									<Run Text="easybike@outlook.fr"/>
 								</Hyperlink>
+								<LineBreak/>
 								
 							</Paragraph>
 						</RichTextBlock>
@@ -71,6 +72,8 @@
 			</Button>
 			<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,0,18" Opacity="0.7">
 						<Paragraph FontSize="18.333">
+							<Run Text="Easy Bike do not collect any personal informations belonging to its users."/>
+							<LineBreak/><LineBreak/>
 								<Run Text="Country flags copyright :"/>
 							</Paragraph>
 							<Paragraph FontSize="18.333">

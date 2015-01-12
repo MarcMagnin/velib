@@ -56,7 +56,7 @@ namespace Velib
         {
             var dialog = new MessageDialog(e.Message + e.Exception.InnerException + e.Exception.StackTrace);
 
-            localSettings.Values["CrashLog"] = localSettings.Values["CrashLog"] + e.Message + e.Exception.InnerException + e.Exception.StackTrace; 
+            LocalSettings.Values["CrashLog"] = LocalSettings.Values["CrashLog"] + e.Message + e.Exception.InnerException + e.Exception.StackTrace; 
             
             await dialog.ShowAsync();
             e.Handled = true;
@@ -155,7 +155,7 @@ namespace Velib
             rootFrame.Navigated -= this.RootFrame_FirstNavigated;
         }
 
-        public static ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        public static ApplicationDataContainer LocalSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         /// <summary>
         /// Appelé lorsque l'exécution de l'application est suspendue.  L'état de l'application est enregistré
         /// sans savoir si l'application pourra se fermer ou reprendre sans endommager
@@ -166,9 +166,9 @@ namespace Velib
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            localSettings.Values["PreviousMapCenterLat"] = MainPage.Map.Center.Position.Latitude;
-            localSettings.Values["PreviousMapCenterLon"] = MainPage.Map.Center.Position.Longitude;
-            localSettings.Values["PreviousMapZoom"] = MainPage.Map.ZoomLevel;
+            LocalSettings.Values["PreviousMapCenterLat"] = MainPage.Map.Center.Position.Latitude;
+            LocalSettings.Values["PreviousMapCenterLon"] = MainPage.Map.Center.Position.Longitude;
+            LocalSettings.Values["PreviousMapZoom"] = MainPage.Map.ZoomLevel;
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }

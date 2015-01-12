@@ -606,8 +606,8 @@
     <Page.BottomAppBar>
         <CommandBar MinHeight="25">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Icon="Download" Label="download cities" 
-					Click="DownloadCitiesButton_Click"/>
+                <AppBarButton Label="download cities" Click="DownloadCitiesButton_Click"/>
+				<AppBarButton Label="settings" Click="SettingsButton_Click"/>
                 <AppBarButton Label="how to use this app" Click="HowToUseThisAppButton_Click" />
                 <AppBarButton Label="about"  Click="AboutButton_Click"/>
                 <!--<AppBarButton Label="show crash logs" Click="CrashLogsButton_Click"/>-->
@@ -620,7 +620,7 @@
 
     <Grid x:Name="LayoutRoot" Margin="0" Background="{x:Null}">
         <FlyoutBase.AttachedFlyout>
-            <Flyout x:Name="VelibFlyout"  d:IsHidden="True" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}">
+            <Flyout x:Name="VelibFlyout"   FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}">
 
                 <StackPanel>
                     <Button HorizontalAlignment="Stretch" Click="FlyoutButtonDriveTo_Click" Style="{StaticResource ButtonStyleLeftAlign}">
@@ -648,7 +648,7 @@
                     <Button HorizontalAlignment="Stretch" Click="FlyoutButtonAddFavorit_Click" Style="{StaticResource ButtonStyleLeftAlign}" FontFamily="Global User Interface">
 
                         <Button.Flyout>
-                            <Flyout x:Name="FavoriteFlyout" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}" d:IsHidden="True">
+                            <Flyout x:Name="FavoriteFlyout" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle1}" >
 
                                 <StackPanel>
                                     <TextBlock
