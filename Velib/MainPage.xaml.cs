@@ -863,7 +863,7 @@ namespace Velib
             //}
             if (item == SearchLocationPoint )
             {
-                if (PreviousSelectedItem == SearchLocationPoint)
+                if (PreviousSelectedItem == SearchLocationPoint && !skipFlyout)
                     ShowFlyout(this);
                 LastSearchGeopoint = SearchLocationPoint.GetValue(MapControl.LocationProperty) as Geopoint;
                 ReverseGeocode(true);

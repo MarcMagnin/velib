@@ -1,0 +1,3 @@
+1.43 : Added Charlie picture, change the touch behavior on a searched location, added privacy and localization Policy with localization settings
+
+1.43 : Ajout de l'image Charlie, changement du comportement tactile sur les adresses recherchées, ajout de la privacy Policy et d'une page de settings pour activer/désactiver la localisation
