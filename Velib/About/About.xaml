@@ -48,10 +48,17 @@
 								<Hyperlink NavigateUri="mailto:easybike@outlook.fr"  Foreground="{ThemeResource PhoneAccentBrush}">
 									<Run Text="easybike@outlook.fr"/>
 								</Hyperlink>
-								<LineBreak/>
 								
 							</Paragraph>
-						</RichTextBlock>
+                    <Paragraph FontSize="18.333">
+                        <Run  Text="Twitter : "/>
+                        <Hyperlink NavigateUri="https://twitter.com/EasyBike_"  Foreground="{ThemeResource PhoneAccentBrush}">
+                            <Run Text="https://twitter.com/EasyBike_"/>
+                        </Hyperlink>
+                 
+
+                    </Paragraph>
+                </RichTextBlock>
      		<Button Click="mailButton_Click" VerticalAlignment="Stretch" Style="{StaticResource SimpleButton}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,1,0,0" Visibility="Collapsed">
      			<StackPanel Orientation="Horizontal" Margin="5,0,0,0">
 				

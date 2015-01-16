@@ -948,7 +948,7 @@ namespace Velib
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States", Id= "73"},
            new BixxiMinneapolisContract{Name = "Seattle, WA",
-               ApiUrl = "https://secure.prontocycleshare.com/data2/stations.json",
+               ApiUrl = "https://secure.prontocycleshare.com/data/stations.json",
                ServiceProvider = "Pronto Cycle Share, Alta Bicycle Share, Bixi",
                PaysImage = paysImagesRootPath+ "/US.png",
                Pays = "United States"}, 
