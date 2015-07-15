@@ -29,14 +29,30 @@ using Velib.Contracts.Models.CallABike;
 using Velib.Contracts.Models.MVG;
 using Velib.Contracts.Models.PL;
 using Velib.Contracts.Models.EasyBike;
+using Velib.Contracts.Models.Velo;
+using Velib.Contracts.Models.SP;
+using Velib.Contracts.Models.China;
 namespace Velib
 {
     public class ContractsViewModel
     {
-        public static  ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        public static ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         //static  Windows.Storage.StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
         static Windows.Storage.StorageFolder installedLocation = ApplicationData.Current.LocalFolder;
-        
+
+        static ContractsViewModel()
+        {
+            //var test = new HuiminOperateContract
+            //{
+            //    Name = "Huizhou",
+            //    PaysImage = paysImagesRootPath + "/CN.png",
+            //    Pays = "China"
+            //};
+                    
+                 //   test.DownloadContract();
+
+        }
+
         private static string paysImagesRootPath = "ms-appx:///Assets/Pays";
         private static List<string> downloadedContract;
         private static List<Contract> contracts = new List<Contract>()
@@ -178,6 +194,92 @@ namespace Velib
                Pays = "Chile", Id= "68"},
           #endregion
 
+#region CN china
+               
+              
+
+                        new PublicBicycleContract{Name = "Anqiu",
+                      ApiUrl="http://218.93.33.59:85/map/wfmap/aqibikestation.asp",
+                       AvailabilityUrl = "http://218.93.33.59:85/map/wfmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+                    
+                        new PublicBicycleContract{Name = "Bin Zhou",
+                      ApiUrl="http://map.crsud.cn/bz/map/ibikestation.asp",
+                          AvailabilityUrl = "http://map.crsud.cn/bz/map/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+                       new PublicBicycleContract{Name = "Dangtu",
+                      ApiUrl="http://218.93.33.59:85/map/maanshanmap/ibikestation.asp?a=1&k=c48c55db2864f9580ad4891487cc1f1b",
+                       AvailabilityUrl = "http://218.93.33.59:85/map/maanshanmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+                         new PublicBicycleContract{Name = "Fuyang",
+                      ApiUrl="http://218.93.33.59:85/map/fuyangmap/ibikestation.asp",
+                       AvailabilityUrl = "http://218.93.33.59:85/map/fuyangmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+                             new PublicBicycleContract{Name = "Guilin",
+                      ApiUrl="http://218.93.33.59:85/map/guilinmap/ibikestation.asp",
+                       AvailabilityUrl = "http://218.93.33.59:85/map/guilinmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+
+
+                     new PublicBicycleContract{Name = "Heihe",
+                      ApiUrl="http://www.heihebike.com/hhmap/ibikestation.asp",
+                       AvailabilityUrl = "http://www.heihebike.com/hhmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+                    new PublicBicycleContract2{Name = "HeZe",
+                      ApiUrl="http://map.crsud.cn/hz/map/ibikestation.asp",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+
+                    new PublicBicycleContract{Name = "Huaian",
+                    ApiUrl = "http://218.93.33.59:85/map/huaianmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/huaianmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+
+                    new PublicBicycleContract{Name = "Huaibei",
+                    ApiUrl = "http://218.93.33.59:85/map/suiximap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/suiximap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+
+                    new HuiminOperateContract{Name = "Huizhou",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+                    
+
+
+                   
+
+                       new ShanghaiContract{Name = "Shanghai and districts",
+               PaysImage = paysImagesRootPath+ "/CN.png",
+               Pays = "China"},
+
+                
+                    
+                      new PublicBicycleContract{Name = "Yichun",
+                      ApiUrl="http://218.93.33.59:85/map/yichunmap/ibikestation.asp",
+                      AvailabilityUrl = "http://218.93.33.59:85/map/yichunmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+               
+#endregion
+
           #region HR
           new NextBikeContract{Name = "Šibenik",
                PaysImage = paysImagesRootPath+ "/HR.png",
@@ -185,6 +287,14 @@ namespace Velib
                new NextBikeContract{Name = "Zagreb",
                PaysImage = paysImagesRootPath+ "/HR.png",
                Pays = "Croatia", Id= "220"},
+          #endregion
+
+          #region HU
+          new NextBikeContract{Name = "Budapest",
+               PaysImage = paysImagesRootPath+ "/HU.png",
+               ServiceProvider= "Bubi, NextBike",
+               ApiUrl = "https://nextbike.net/maps/nextbike-live.xml?&domains=mb",
+               Pays = "Hungary"},
           #endregion
 
           #region CY
@@ -196,6 +306,9 @@ namespace Velib
           #region FR
           new ContractJCDecauxVelib{Name = "Amiens",
                ServiceProvider="Vélam', JCDecaux",
+               PaysImage = paysImagesRootPath+ "/FR.png",
+               Pays = "France"},
+                new VeloPlusContract{Name = "Orléans",
                PaysImage = paysImagesRootPath+ "/FR.png",
                Pays = "France"},
                new ContractJCDecauxVelib{Name = "Besancon",
@@ -757,6 +870,11 @@ namespace Velib
           #endregion
 
           #region ES
+            new BarceloneContract{Name = "Barcelona",
+               PaysImage = paysImagesRootPath+ "/ES.png",
+               ApiUrl = "https://www.bicing.cat/availability_map/getJsonObject",
+               Pays = "Spain"},
+
           new ContractJCDecauxVelib{Name = "Santander",
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
@@ -766,6 +884,9 @@ namespace Velib
                new ContractJCDecauxVelib{Name = "Valence",
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
+
+            
+
           #endregion
 
           #region TW
@@ -795,6 +916,11 @@ namespace Velib
           #endregion
 
           #region GB
+            new NextBikeContract{Name = "Belfast",
+               PaysImage = paysImagesRootPath+ "/GB.png",
+               ServiceProvider = "Coca-Cola Zero Belfast Bikes, NextBike",
+               Pays = "United Kingdom", Id= "238"},
+
           new NextBikeContract{Name = "Bath",
                PaysImage = paysImagesRootPath+ "/GB.png",
                Pays = "United Kingdom", Id= "236"},
@@ -811,10 +937,11 @@ namespace Velib
           #endregion
 
           #region US
-
-        new PhiladelphiaTempContract{Name = "Philadelphia, PA",
-               ServiceProvider= "Under construction, available on April 2015",
+               
+       		new PhiladelphiaTempContract{Name = "Philadelphia, PA",
+               ServiceProvider= "Philly Indego, B-cycle",
                PaysImage = paysImagesRootPath+ "/US.png",
+               ApiUrl = "https://api.phila.gov/bike-share-stations/v1",
                Pays = "United States"},
 
 		  new BCycleContract{Name = "Ann Arbor, MI",
@@ -1158,7 +1285,7 @@ namespace Velib
             Pays = "Switzerland"},
           #endregion CH
 
-
+        
 
         };
 
@@ -1169,31 +1296,34 @@ namespace Velib
                 return contracts;
             }
         }
-    
+
         public static async void DownloadAndSaveContract(Contract contract)
         {
-            
-                await contract.DownloadContract();
-                if (contract.Downloaded)
-                {
-                    StoreContractsInAppSetting(contract);
-                    await writeJsonAsync(contract);
-                }
-            
+
+            await contract.DownloadContract();
+            if (contract.Downloaded)
+            {
+                StoreContractsInAppSetting(contract);
+                await writeJsonAsync(contract);
+            }
+
         }
 
 
-        public static List<string> DownloadedContracts { get{
-            if (downloadedContract != null)
-                return downloadedContract;
-            var jsonContractNames = (localSettings.Values["DownloadedContracts"] as string);
-            if (jsonContractNames != null)
-                downloadedContract = jsonContractNames.FromJsonString<List<string>>();
-            else
-                downloadedContract = new List<string>();
-            return
-                downloadedContract;
-        }
+        public static List<string> DownloadedContracts
+        {
+            get
+            {
+                if (downloadedContract != null)
+                    return downloadedContract;
+                var jsonContractNames = (localSettings.Values["DownloadedContracts"] as string);
+                if (jsonContractNames != null)
+                    downloadedContract = jsonContractNames.FromJsonString<List<string>>();
+                else
+                    downloadedContract = new List<string>();
+                return
+                    downloadedContract;
+            }
         }
         private static async Task writeJsonAsync(Contract contract)
         {
@@ -1201,20 +1331,20 @@ namespace Velib
             try
             {
                 StorageFile file = await installedLocation.CreateFileAsync(contract.StorageName, CreationCollisionOption.ReplaceExisting);
-                
-            using (StorageStreamTransaction transaction = await file.OpenTransactedWriteAsync())
-            {
-                using (DataWriter dataWriter = new DataWriter(transaction.Stream))
+
+                using (StorageStreamTransaction transaction = await file.OpenTransactedWriteAsync())
                 {
-                    dataWriter.WriteString(contract.ToJson());
-                    transaction.Stream.Size = await dataWriter.StoreAsync(); // reset stream size to override the file
-                    await transaction.CommitAsync();
+                    using (DataWriter dataWriter = new DataWriter(transaction.Stream))
+                    {
+                        dataWriter.WriteString(contract.ToJson());
+                        transaction.Stream.Size = await dataWriter.StoreAsync(); // reset stream size to override the file
+                        await transaction.CommitAsync();
+                    }
                 }
-            }
             }
             catch (Exception e)
             {
-                var dialog = new MessageDialog("Unable to save city to you storage : "+ e.Message + e.InnerException+ e.ToString());
+                var dialog = new MessageDialog("Unable to save city to you storage : " + e.Message + e.InnerException + e.ToString());
                 dialog.ShowAsync();
             }
         }
@@ -1226,8 +1356,8 @@ namespace Velib
             foreach (var contract in Contracts.Where(c => DownloadedContracts.Contains(c.StorageName)).ToList())
             {
                 var loadedContract = await GetContractFromFile(contract);
-                 Contracts[Contracts.IndexOf(contract)] = loadedContract;
-                 if (loadedContract.Velibs != null)
+                Contracts[Contracts.IndexOf(contract)] = loadedContract;
+                if (loadedContract.Velibs != null)
                 {
                     VelibDataSource.StaticVelibs.AddRange(loadedContract.Velibs);
                     if (loadedContract.DirectDownloadAvailability)
@@ -1235,7 +1365,7 @@ namespace Velib
                         loadedContract.GetAvailableBikes(null, MainPage.dispatcher);
                     }
                 }
-                
+
             }
             return true;
         }
@@ -1244,9 +1374,11 @@ namespace Velib
         {
             if (localSettings.Values[contract.StorageName] == null)
                 return contract;
-            try {
+            try
+            {
                 StorageFile file = await installedLocation.GetFileAsync(contract.StorageName);
-                if (file != null) {
+                if (file != null)
+                {
                     using (IRandomAccessStream readStream = await file.OpenAsync(FileAccessMode.Read))
                     {
                         using (DataReader dataReader = new DataReader(readStream))
@@ -1267,7 +1399,7 @@ namespace Velib
                                             Longitude = velib.Longitude
                                         });
                                         velib.AvailableBikes = -1;
-                                        if(velib.AvailableBikeStands.HasValue)
+                                        if (velib.AvailableBikeStands.HasValue)
                                             velib.AvailableBikeStands = -1;
                                         velib.Contract = contract;
                                     }
@@ -1276,8 +1408,10 @@ namespace Velib
                         }
                     }
                 }
-            }catch(Exception e){
-    
+            }
+            catch (Exception e)
+            {
+
             }
             return contract;
         }
@@ -1291,7 +1425,7 @@ namespace Velib
                 StorageFile file = await installedLocation.GetFileAsync(contract.StorageName);
                 contract.Downloaded = false;
                 // remove from static velibs
-                VelibDataSource.StaticVelibs.RemoveAll(t=> contract.Velibs.Any(v=>v.Longitude == t.Longitude && v.Latitude == t.Latitude));
+                VelibDataSource.StaticVelibs.RemoveAll(t => contract.Velibs.Any(v => v.Longitude == t.Longitude && v.Latitude == t.Latitude));
                 contract.Velibs.Clear();
                 await file.DeleteAsync();
                 RemoveContractsInAppSetting(contract);

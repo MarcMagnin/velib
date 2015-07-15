@@ -26,7 +26,54 @@ namespace Velib.Contracts.Models.BCycle
 
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
         {
-            // TODO on april 2015
+            if (Updater != null)
+                return;
+            Updater = new Task(async () =>
+            {
+                while (true)
+                {
+                    var httpClient = new HttpClient();
+
+                    try
+                    {
+                        HttpResponseMessage response = await httpClient.GetAsync(new Uri(ApiUrl+"?" + Guid.NewGuid().ToString()));
+                        var responseBodyAsText = await response.Content.ReadAsStringAsync();
+                        // require Velib.Common
+                        var model = responseBodyAsText.FromJsonString<PhiladelphiaTempModel>();
+                        foreach (var station in model.Features)
+                        {
+                            foreach (var velibModel in Velibs)
+                            {
+                                if (velibModel.Latitude == station.Geometry.Location[1] && velibModel.Longitude == station.Geometry.Location[0])
+                                {
+                                    if (MainPage.BikeMode && velibModel.AvailableBikes != station.Properties.AvailableBikes)
+                                    {
+                                        velibModel.Reload = true;
+                                    }
+                                    if (!MainPage.BikeMode && velibModel.AvailableBikeStands != station.Properties.AvailableBikeStands)
+                                    {
+                                        velibModel.Reload = true;
+                                    }
+                                    velibModel.AvailableBikes = station.Properties.AvailableBikes;
+                                    velibModel.AvailableBikeStands = station.Properties.AvailableBikeStands;
+                                    velibModel.Loaded = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    finally
+                    {
+                        httpClient.Dispose();
+                    }
+                    await Task.Delay(RefreshTimer);
+                }
+
+            });
+            Updater.Start();
         }
 
         public override async Task InnerDownloadContract()
@@ -55,11 +102,11 @@ namespace Velib.Contracts.Models.BCycle
                     Loaded = true
                 };
 
+                if (MainPage.BikeMode)
+                    stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
+                else
+                    stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
 
-                //if (MainPage.BikeMode)
-                //    stationModel.AvailableStr = stationModel.AvailableBikes.ToString();
-                //else
-                //    stationModel.AvailableStr = stationModel.AvailableBikeStands.ToString();
 
                 Velibs.Add(stationModel);
             }
@@ -70,12 +117,12 @@ namespace Velib.Contracts.Models.BCycle
 
         public override Contract GetSimpleContract()
         {
-            return (BCycleContract)base.GetSimpleContract();
+            return (PhiladelphiaTempContract)base.GetSimpleContract();
         }
 
         protected override Contract GetInstanceForSimpleClone()
         {
-            return new BCycleContract();
+            return new PhiladelphiaTempContract();
         }
     }
 }

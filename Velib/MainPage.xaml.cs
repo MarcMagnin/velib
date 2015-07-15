@@ -78,9 +78,14 @@ namespace Velib
         Storyboard AccuracyStoryboard;
         DoubleAnimation AccuracyScaleX;
         DoubleAnimation AccuracyScaleY;
+
+        public static Image PreviewImgBikeAvailability;
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            PreviewImgBikeAvailability = this.PreviewImage;
             //MapService.ServiceToken = "AkVm6BZviS25-7mLQNpXUKvwcY3PxZsY7drDLo_QHRUao3xwbyEUsH2T7sOhXdWo";
             
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;

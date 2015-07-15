@@ -22,7 +22,7 @@
         </Grid.ChildrenTransitions>
 
             <TextBlock Grid.Row="0" 
-     		Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="About"/>
+     		Style="{StaticResource HeaderTextBlockStyle}" FontFamily="Global User Interface" Text="About this app" FontSize="48"/>
 
      	<StackPanel x:Name="stackPanel" Grid.Row="1" Margin="0">
                 <StackPanel.ChildrenTransitions>
@@ -78,12 +78,12 @@
 				
 			</Button>
 			<RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,2,0,18" Opacity="0.7">
-						<Paragraph FontSize="18.333">
+						<Paragraph FontSize="16.333">
 							<Run Text="Easy Bike do not collect any personal informations belonging to its users."/>
 							<LineBreak/><LineBreak/>
 								<Run Text="Country flags copyright :"/>
 							</Paragraph>
-							<Paragraph FontSize="18.333">
+							<Paragraph FontSize="16.333">
 								<Run Text="Free Country Flags ("/>
 								<Hyperlink NavigateUri="http://www.free-country-flags.com/"  Foreground="{ThemeResource PhoneAccentBrush}">
 									<Run Text="Gang of the Coconuts"/>
@@ -94,7 +94,7 @@
 								</Hyperlink>
 								
 							</Paragraph>
-								<Paragraph FontSize="18.333">
+								<Paragraph FontSize="16.333">
 								<Run Text="Powered by B-cycle. To sign up, go to "/>
 								<Hyperlink NavigateUri="www.bcycle.com"  Foreground="{ThemeResource PhoneAccentBrush}">
 									<Run Text="www.bcycle.com"/>
@@ -114,7 +114,23 @@
 				</StackPanel>
 				
 			</Button>
-     	</StackPanel>
+               
+                <RichTextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,18">
+                    <Paragraph FontSize="18.333">
+                        <Run FontFamily="Segoe UI Symbol" Text="&#xE0A5;" Foreground="#FFFF2CD9"/>
+                        <Run Text=" Like this app ?"/>
+                        
+                    </Paragraph>
+                  
+                    <Paragraph FontSize="18.333">
+                        <Run  Text="Help me and take part of the adventure by making a "/>
+                        <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=marc%2emagnin%40gmail%2ecom&amp;lc=FR&amp;item_name=Marc%20Magnin&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"  Foreground="{ThemeResource PhoneAccentBrush}">
+                            <Run Text="donation"/>
+                        </Hyperlink>
+
+                    </Paragraph>
+                </RichTextBlock>
+            </StackPanel>
 			
 
 

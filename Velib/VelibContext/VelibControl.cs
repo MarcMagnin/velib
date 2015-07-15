@@ -32,14 +32,14 @@ namespace Velib.VelibContext
             this.Tapped += VelibControl_Tapped;
             this.Holding += VelibControl_Holding;
             this.ManipulationMode = Windows.UI.Xaml.Input.ManipulationModes.All;
-            
+
         }
 
         void VelibControl_Holding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
         {
             try
             {
-                if (Velibs.Count <2)
+                if (Velibs.Count < 2)
                 {
                     Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                     {
@@ -60,30 +60,33 @@ namespace Velib.VelibContext
             ClusterTextBlock = GetTemplateChild("textBlockClusterNumber") as TextBlock;
             StationPath = GetTemplateChild("path") as Path;
         }
-        
+
         private static VelibControl previousVelibTapped;
         void VelibControl_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            try { 
+            try
+            {
 
-            if (Velibs.Count > 1)
-            {
-                if(MainPage.mainPage.compassMode){
-                    MainPage.mainPage.StopCompassAndUserLocationTracking();
-                }
-                    map.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(Velibs.Select(s => s.Location).ToList()), new Thickness(20, 20, 20, 20), MapAnimationKind.Default);
-                
-            }
-            else
-            {
-                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                if (Velibs.Count > 1)
                 {
-                    MainPage.mainPage.SelectItem(this, false);
-                });
+                    if (MainPage.mainPage.compassMode)
+                    {
+                        MainPage.mainPage.StopCompassAndUserLocationTracking();
+                    }
+                    map.TrySetViewBoundsAsync(MapExtensions.GetAreaFromLocations(Velibs.Select(s => s.Location).ToList()), new Thickness(20, 20, 20, 20), MapAnimationKind.Default);
 
+                }
+                else
+                {
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                    {
+                        MainPage.mainPage.SelectItem(this, false);
+                    });
+
+                }
             }
-            }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
             }
 
         }
@@ -98,18 +101,18 @@ namespace Velib.VelibContext
             NeedRefresh = true;
 
         }
-       
+
 
         public void FinaliseUiCycle(CoreDispatcher dispatcher, Geopoint location, CancellationToken token)
         {
             if (token.IsCancellationRequested)
                 return;
-           
+
 
             var station = Velibs.FirstOrDefault();
             this.SetValue(MapControl.LocationProperty, location);
             this.DataContext = station;
-                
+
             if (Velibs.Count == 1)
             {
                 SwitchModeVelibParking(station);
@@ -132,13 +135,27 @@ namespace Velib.VelibContext
                 station.Reload = false;
                 if (MainPage.BikeMode)
                 {
-                    station.AvailableStr = station.AvailableBikes.ToString();
-                    ShowColor(station.AvailableBikes);
+                    if (station.ImageAvailable != null)
+                    {
+                        station.ImageNumber = station.ImageAvailable;
+                    }
+                    else
+                    {
+                        station.AvailableStr = station.AvailableBikes.ToString();
+                        ShowColor(station.AvailableBikes);
+                    }
                 }
                 else
                 {
-                    station.AvailableStr = station.AvailableBikeStands.HasValue ? station.AvailableBikeStands.ToString() : "?";
-                    ShowColor(station.AvailableBikeStands);
+                    if (station.ImageDocks != null)
+                    {
+                        station.ImageNumber = station.ImageDocks;
+                    }
+                    else
+                    {
+                        station.AvailableStr = station.AvailableBikeStands.HasValue ? station.AvailableBikeStands.ToString() : "?";
+                        ShowColor(station.AvailableBikeStands);
+                    }
                 }
             }
         }
@@ -148,6 +165,13 @@ namespace Velib.VelibContext
         {
             NeedRefresh = true;
             velib.VelibControl = null;
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                velib.ImageNumber = null;
+                velib.ImageAvailable = null;
+                velib.ImageDocks = null;
+            });
+         
             Velibs.Remove(velib);
         }
 
@@ -165,8 +189,8 @@ namespace Velib.VelibContext
         {
             VisualStateManager.GoToState(this, "Normal", false);
             VisualStateManager.GoToState(this, "ShowCluster", false);
-           // VisualStateManager.GoToState(this, "Clear", false);
-           // VisualStateManager.GoToState(this, "Loaded", false);
+            // VisualStateManager.GoToState(this, "Clear", false);
+            // VisualStateManager.GoToState(this, "Loaded", false);
             this.Opacity = 1;
             this.IsHitTestVisible = true;
         }
@@ -174,23 +198,29 @@ namespace Velib.VelibContext
         {
             VisualStateManager.GoToState(this, "Normal", false);
             VisualStateManager.GoToState(this, "ShowStation", false);
-           // VisualStateManager.GoToState(this, "Clear", false);
-          //  VisualStateManager.GoToState(this, "Loaded", false);
+
+            var station = Velibs.FirstOrDefault();
+            if (station.ImageAvailable != null)
+            {
+                VisualStateManager.GoToState(this, "ShowNumberImage", false);
+            }
+            // VisualStateManager.GoToState(this, "Clear", false);
+            //  VisualStateManager.GoToState(this, "Loaded", false);
             StationPath.Fill = emptyColorBrush;
             this.Opacity = 1;
             this.IsHitTestVisible = true;
-          
+
             //if(velib!= null && velib.Selected)
             //    VisualStateManager.GoToState(this, "ShowSelected", true);
             //else
             //    VisualStateManager.GoToState(this, "HideSelected", true);
-         
-                
+
+
         }
         public void ShowStationColor()
         {
             var station = Velibs.FirstOrDefault();
-            
+
             if (MainPage.BikeMode)
             {
                 station.AvailableStr = station.AvailableBikes.ToString();
@@ -204,18 +234,20 @@ namespace Velib.VelibContext
         }
 
 
-   
+
         private void ShowColor(int? velibNumber)
         {
             if (Velibs.Count != 1)
                 return;
 
-            if (velibNumber == -1 || !velibNumber.HasValue){
+            if (velibNumber == -1 || !velibNumber.HasValue)
+            {
                 //CurrentVisualStateColor = VelibControl.VisualStateColor.notLoaded;
                 //VisualStateManager.GoToState(this, "Normal", false);
                 StationPath.Fill = emptyColorBrush;
             }
-            else{
+            else
+            {
 
                 if (velibNumber == 0)
                     StationPath.Fill = redColorBrush;
@@ -225,17 +257,17 @@ namespace Velib.VelibContext
                 //VisualStateManager.GoToState(this, "ShowOrangeVelib", false);
                 else if (velibNumber >= 5)
                     StationPath.Fill = greenColorBrush;
-                    //VisualStateManager.GoToState(this, "ShowGreenVelib", false);
+                //VisualStateManager.GoToState(this, "ShowGreenVelib", false);
             }
-            
+
         }
 
         public void Hide()
         {
             this.Opacity = 0;
             this.IsHitTestVisible = false;
-        
-           //VisualStateManager.GoToState(this, "Hide", false);
+
+            //VisualStateManager.GoToState(this, "Hide", false);
         }
 
 
@@ -244,16 +276,16 @@ namespace Velib.VelibContext
         internal Geopoint GetLocation()
         {
             if (Velibs.Count == 1)
-                return Location= Velibs[0].Location;
+                return Location = Velibs[0].Location;
 
-                double x = 0;
-                double y = 0;
-                foreach (var velib in Velibs)
-                {
-                    x += velib.Location.Position.Latitude;
-                    y += velib.Location.Position.Longitude;
-                }
-                Location = new Geopoint(new BasicGeoposition { Latitude = x / Velibs.Count, Longitude = y / Velibs.Count });
+            double x = 0;
+            double y = 0;
+            foreach (var velib in Velibs)
+            {
+                x += velib.Location.Position.Latitude;
+                y += velib.Location.Position.Longitude;
+            }
+            Location = new Geopoint(new BasicGeoposition { Latitude = x / Velibs.Count, Longitude = y / Velibs.Count });
             return Location;
         }
 
@@ -261,11 +293,11 @@ namespace Velib.VelibContext
         public Point OffsetLocation;
         public Point GetOffsetLocation(MapControl _map)
         {
-            if(OffsetLocation.X==0)
-            _map.GetOffsetFromLocation(this.GetLocation(), out OffsetLocation);
+            if (OffsetLocation.X == 0)
+                _map.GetOffsetFromLocation(this.GetLocation(), out OffsetLocation);
             return OffsetLocation;
         }
-        public Point GetOffsetLocation2( BasicGeoposition origin, double zoomLevel)
+        public Point GetOffsetLocation2(BasicGeoposition origin, double zoomLevel)
         {
             if (OffsetLocation.X == 0)
                 OffsetLocation = origin.GetOffsetedLocation(this.GetLocation().Position, zoomLevel);

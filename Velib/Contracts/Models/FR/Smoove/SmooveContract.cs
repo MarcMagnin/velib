@@ -62,9 +62,9 @@ namespace Velib.Contracts.Models.Smoove
                         foreach (var station in models)
                         {
                             double latitutde, longitude = 0;
-                            if (!double.TryParse(station.Latitude, out latitutde))
+                            if (!double.TryParse(station.Latitude, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out latitutde))
                                 continue;
-                            double.TryParse(station.Longitude, out longitude);
+                            double.TryParse(station.Longitude, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out longitude);
 
                             foreach (var velibModel in Velibs)
                             {
@@ -135,9 +135,9 @@ namespace Velib.Contracts.Models.Smoove
             {
 
                 double latitutde, longitude = 0;
-                if (!double.TryParse(station.Latitude, out latitutde))
+                if (!double.TryParse(station.Latitude, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out latitutde))
                     continue;
-                double.TryParse(station.Longitude, out longitude);
+                double.TryParse(station.Longitude, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out longitude);
 
                 var stationModel = new VelibModel()
                 {

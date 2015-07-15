@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Core;
 using Velib;
 using Velib.Contracts;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace VelibContext
 {
@@ -50,7 +51,30 @@ namespace VelibContext
 
         [IgnoreDataMember]
         public bool DownloadingAvailability{get;set;}
-       
+
+
+        /// <summary>
+        /// specific for China
+        /// </summary>
+        private BitmapImage imageNumber;
+         [IgnoreDataMember]
+        public BitmapImage ImageNumber
+        {
+            get { return imageNumber; }
+            set
+            {
+                if (value != this.imageNumber)
+                {
+                    this.imageNumber = value;
+                    NotifyPropertyChanged("ImageNumber");
+                }
+            }
+        }
+
+        [IgnoreDataMember]
+        public BitmapImage ImageDocks{get;set;}
+        [IgnoreDataMember]
+        public BitmapImage ImageAvailable { get; set; }
 
         public bool Loaded { get; set; }
 

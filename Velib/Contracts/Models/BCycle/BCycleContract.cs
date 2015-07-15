@@ -19,6 +19,8 @@ namespace Velib.Contracts.Models.BCycle
         [IgnoreDataMember]
         private Task Updater;
         private string ApiKey = "A231E49A-920B-4C20-8752-E1B650ED1A49";
+
+        //// Lister les programs de BCycle : https://publicapi.bcycle.com/api/1.0/ListPrograms
         public BCycleContract()
         {
             this.ServiceProvider = "B-cycle";
