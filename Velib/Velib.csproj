@@ -115,6 +115,7 @@
     <Compile Include="Contracts\Models\c-bike\CBikeModel.cs" />
     <Compile Include="Contracts\Models\CallABike\CallABikeContract.cs" />
     <Compile Include="Contracts\Models\CallABike\CallABikeModel.cs" />
+    <Compile Include="Contracts\Models\China\DangtuContract.cs" />
     <Compile Include="Contracts\Models\China\HuiminOperateContract.cs" />
     <Compile Include="Contracts\Models\China\HuiminOperateModel.cs" />
     <Compile Include="Contracts\Models\China\PublicBicycleContract.cs" />

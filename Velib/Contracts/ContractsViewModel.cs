@@ -42,14 +42,15 @@ namespace Velib
 
         static ContractsViewModel()
         {
-            //var test = new HuiminOperateContract
+            //var test = new DangtuContract
             //{
-            //    Name = "Huizhou",
+            //    Name = "Dangtu",
+            //    ApiUrl = "http://218.93.33.59:85/map/maanshanmap/ibikestation.asp",
             //    PaysImage = paysImagesRootPath + "/CN.png",
             //    Pays = "China"
             //};
                     
-                 //   test.DownloadContract();
+            //        test.DownloadContract();
 
         }
 
@@ -196,49 +197,52 @@ namespace Velib
 
 #region CN china
                
-              
+              // liste des cartes chinoises : http://www.publicbike.net/en/c/param-qual.aspx?param=17
 
-                        new PublicBicycleContract{Name = "Anqiu",
-                      ApiUrl="http://218.93.33.59:85/map/wfmap/aqibikestation.asp",
-                       AvailabilityUrl = "http://218.93.33.59:85/map/wfmap/ibikegif.asp?id={0}&flag={1}",
+
+
+                    new PublicBicycleContract{Name = "Anqiu",
+                    ApiUrl="http://218.93.33.59:85/map/wfmap/aqibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/wfmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                     
                     
-                        new PublicBicycleContract{Name = "Bin Zhou",
-                      ApiUrl="http://map.crsud.cn/bz/map/ibikestation.asp",
-                          AvailabilityUrl = "http://map.crsud.cn/bz/map/ibikegif.asp?id={0}&flag={1}",
+                    new PublicBicycleContract{Name = "Bin Zhou",
+                    ApiUrl="http://map.crsud.cn/bz/map/ibikestation.asp",
+                    AvailabilityUrl = "http://map.crsud.cn/bz/map/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
 
-                       new PublicBicycleContract{Name = "Dangtu",
-                      ApiUrl="http://218.93.33.59:85/map/maanshanmap/ibikestation.asp?a=1&k=c48c55db2864f9580ad4891487cc1f1b",
-                       AvailabilityUrl = "http://218.93.33.59:85/map/maanshanmap/ibikegif.asp?id={0}&flag={1}",
+                    /// http://www.bike0555.com/index.asp    
+                    new DangtuContract{Name = "Dangtu",
+                    ApiUrl="http://218.93.33.59:85/map/maanshanmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/maanshanmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
 
-                         new PublicBicycleContract{Name = "Fuyang",
-                      ApiUrl="http://218.93.33.59:85/map/fuyangmap/ibikestation.asp",
-                       AvailabilityUrl = "http://218.93.33.59:85/map/fuyangmap/ibikegif.asp?id={0}&flag={1}",
+                    new PublicBicycleContract{Name = "Fuyang",
+                    ApiUrl="http://218.93.33.59:85/map/fuyangmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/fuyangmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
 
-                             new PublicBicycleContract{Name = "Guilin",
-                      ApiUrl="http://218.93.33.59:85/map/guilinmap/ibikestation.asp",
-                       AvailabilityUrl = "http://218.93.33.59:85/map/guilinmap/ibikegif.asp?id={0}&flag={1}",
+                    new PublicBicycleContract{Name = "Guilin",
+                    ApiUrl="http://218.93.33.59:85/map/guilinmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/guilinmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                     
 
 
-                     new PublicBicycleContract{Name = "Heihe",
-                      ApiUrl="http://www.heihebike.com/hhmap/ibikestation.asp",
-                       AvailabilityUrl = "http://www.heihebike.com/hhmap/ibikegif.asp?id={0}&flag={1}",
+                    new PublicBicycleContract{Name = "Heihe",
+                    ApiUrl="http://www.heihebike.com/hhmap/ibikestation.asp",
+                    AvailabilityUrl = "http://www.heihebike.com/hhmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                     
                     new PublicBicycleContract2{Name = "HeZe",
-                      ApiUrl="http://map.crsud.cn/hz/map/ibikestation.asp",
+                    ApiUrl="http://map.crsud.cn/hz/map/ibikestation.asp",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
 
@@ -258,6 +262,7 @@ namespace Velib
                     
 
                     new HuiminOperateContract{Name = "Huizhou",
+                        ServiceProvider="Guangzhou Huimin Operation System Management",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                     
@@ -266,15 +271,15 @@ namespace Velib
 
                    
 
-                       new ShanghaiContract{Name = "Shanghai and districts",
-               PaysImage = paysImagesRootPath+ "/CN.png",
-               Pays = "China"},
+                    new ShanghaiContract{Name = "Shanghai and districts",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
 
                 
                     
-                      new PublicBicycleContract{Name = "Yichun",
-                      ApiUrl="http://218.93.33.59:85/map/yichunmap/ibikestation.asp",
-                      AvailabilityUrl = "http://218.93.33.59:85/map/yichunmap/ibikegif.asp?id={0}&flag={1}",
+                    new PublicBicycleContract{Name = "Yichun",
+                    ApiUrl="http://218.93.33.59:85/map/yichunmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/yichunmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                
