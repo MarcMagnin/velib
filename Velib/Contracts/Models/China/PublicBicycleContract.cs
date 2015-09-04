@@ -17,6 +17,11 @@ using System.IO;
 
 namespace Velib.Contracts.Models.China
 {
+    /// <summary>
+    /// http://www.ibike668.com/
+    /// http://www.ibike668.com/CaseMap.asp
+    /// http://ws.uibike.com/cityjson.php
+    /// </summary>
     public class PublicBicycleContract : Contract
     {
         public string AvailabilityUrl;

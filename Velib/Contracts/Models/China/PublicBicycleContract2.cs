@@ -103,7 +103,7 @@ namespace Velib.Contracts.Models.China
                             Contract = this,
                             Number = station.Id,
                             AvailableBikes = station.AvailableBikes,
-                            AvailableBikeStands = station.Capacity - station.AvailableBikes,
+                           // AvailableBikeStands = station.Capacity - station.AvailableBikes,
                             Location = new Windows.Devices.Geolocation.Geopoint(new BasicGeoposition()
                             {
                                 Latitude = station.Latitude,

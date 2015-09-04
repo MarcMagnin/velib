@@ -29,8 +29,8 @@ namespace Velib.Contracts.Models.China
         private Task Updater;
         public HuiminOperateContract()
         {
+            ServiceProvider = "Guangzhou Huimin Operation System Management";
             DirectDownloadAvailability = true;
-            ApiUrl = "http://hz.2773456.com/zdfb/sz_station.php";
         }
 
         public override async void GetAvailableBikes(VelibModel unused, CoreDispatcher dispatcher)
@@ -66,8 +66,8 @@ namespace Velib.Contracts.Models.China
                                         continue;
                                     double.TryParse(station.Value["lat"].Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out latitude);
 
-                                    latitude = latitude - 0.005689;
-                                    longitude = longitude - 0.00652;
+                                    latitude = latitude - 0.005983;
+                                    longitude = longitude - 0.00645;
 
                                     foreach (var velibModel in Velibs)
                                     {
@@ -121,10 +121,6 @@ namespace Velib.Contracts.Models.China
                     Velibs = new List<VelibModel>();
                     foreach (var station in stations)
                     {
-                        if (station.Value["FDZBZ"].Value == null)
-                            continue;
-
-                        var location = station.Value["FDZBZ"].Value.Split(',');
                         double latitude, longitude;
                         if (!double.TryParse(station.Value["lng"].Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-US"), out longitude))
                             continue;

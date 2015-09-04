@@ -34,6 +34,9 @@ using Velib.Contracts.Models.SP;
 using Velib.Contracts.Models.China;
 namespace Velib
 {
+    /// <summary>
+    /// https://anubis.iseclab.org/
+    /// </summary>
     public class ContractsViewModel
     {
         public static ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
@@ -207,7 +210,6 @@ namespace Velib
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                     
-                    
                     new PublicBicycleContract{Name = "Bin Zhou",
                     ApiUrl="http://map.crsud.cn/bz/map/ibikestation.asp",
                     AvailabilityUrl = "http://map.crsud.cn/bz/map/ibikegif.asp?id={0}&flag={1}",
@@ -232,11 +234,14 @@ namespace Velib
                     AvailabilityUrl = "http://218.93.33.59:85/map/guilinmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
-                    
+//                    #	Result	Protocol	Host	URL	Body	Caching	Content-Type	Process	Comments	Custom	RequestMethod	
+//739	200	HTTP	ws.uibike.com	/map.php?location=127.5347550,50.2511620&city=%E9%BB%91%E6%B2%B3%E5%B8%82	4,185		text/html;charset=utf-8	chrome:6420			GET	
 
 
-                    new PublicBicycleContract{Name = "Heihe",
-                    ApiUrl="http://www.heihebike.com/hhmap/ibikestation.asp",
+          //ApiUrl = "http://www.heihebike.com/hhmap/ibikestation.asp",
+          //http://ws.uibike.com/wx.station.php?myloc=127.5347550,50.2511620&e=1&k=74f609d5ae49cefb0c99a90ea6326a5b&d=2
+                    new PublicBicycleContract2{Name = "Heihe",
+                    ApiUrl="http://ws.uibike.com/wx.station.php?myloc=127.5347550,50.2511620&e=1&k=74f609d5ae49cefb0c99a90ea6326a5b&d=2",
                     AvailabilityUrl = "http://www.heihebike.com/hhmap/ibikegif.asp?id={0}&flag={1}",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
@@ -262,20 +267,91 @@ namespace Velib
                     
 
                     new HuiminOperateContract{Name = "Huizhou",
-                        ServiceProvider="Guangzhou Huimin Operation System Management",
+                    ApiUrl = "http://hz.2773456.com/zdfb/sz_station.php",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+                    new HuiminOperateContract{Name = "Huizhou (Zhong Kai district)",
+                    ApiUrl = "http://zk.2773456.com/zdfb/sz_station.php",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
                     
                     
 
 
+                    new HuiminOperateContract{Name = "Huizhou (Huiyang district)",
+                    ApiUrl = "http://hy.2773456.com/zdfb/sz_station.php",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+                    
+                    new HuiminOperateContract{Name = "Huizhou (Longgang district)",
+                    ApiUrl = "http://sz.2773456.com/zdfb/sz_station.php",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+
+                    
+                    new HuiminOperateContract{Name = "Huizhou (Luohu district)",
+                    ApiUrl = "http://www.lhggzxc.com/zdfb/sz_station.php",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+
+
+                    new PublicBicycleContract2{Name = "Longwan",
+                    ApiUrl = "http://218.93.33.59:85/map/wzmap/ibikestation.asp",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+                    ///ApiUrl = "http://ws.uibike.com/wx.station.php?myloc=116.3480570,39.7324840&e=1&k=74f609d5ae49cefb0c99a90ea6326a5b&d=2",
+                    ///ApiUrl = "http://www.1km0g.com/api/ibikeJSInterface.asp",
+                    new PublicBicycleContract2{Name = "Daxing",
+                   ApiUrl = "http://ws.uibike.com/wx.station.php?myloc=116.3480570,39.7324840&e=1&k=74f609d5ae49cefb0c99a90ea6326a5b&d=4",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                  
+                    new PublicBicycleContract{Name = "Siyang",
+                    ApiUrl = "http://218.93.33.59:85/map/siyangmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/siyangmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+
+                    new PublicBicycleContract{Name = "Suzhou",
+                    ApiUrl = "http://218.93.33.59:85/map/szmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/szmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
                    
+                    new PublicBicycleContract{Name = "Taizhou",
+                    ApiUrl = "http://www.zjtzpb.com/tzmap/ibikestation.asp",
+                    AvailabilityUrl = "http://www.zjtzpb.com/tzmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
 
                     new ShanghaiContract{Name = "Shanghai and districts",
                     PaysImage = paysImagesRootPath+ "/CN.png",
                     Pays = "China"},
 
-                
+                    new PublicBicycleContract{Name = "Weifang",
+                    ApiUrl = "http://218.93.33.59:85/map/wfmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/wfmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+
+
+                    new PublicBicycleContract{Name = "Shenmu",
+                    ApiUrl = "http://www.bike912.com/smmap/ibikestation.asp",
+                    AvailabilityUrl = "http://www.bike912.com/smmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
+                    
+                    new PublicBicycleContract{Name = "Yangzhong",
+                    ApiUrl="http://218.93.33.59:85/map/zjmap/ibikestation.asp",
+                    AvailabilityUrl = "http://218.93.33.59:85/map/zjmap/ibikegif.asp?id={0}&flag={1}",
+                    PaysImage = paysImagesRootPath+ "/CN.png",
+                    Pays = "China"},
                     
                     new PublicBicycleContract{Name = "Yichun",
                     ApiUrl="http://218.93.33.59:85/map/yichunmap/ibikestation.asp",
