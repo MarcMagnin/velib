@@ -145,6 +145,8 @@
     <Compile Include="Contracts\Models\PL\SzczecinModel.cs" />
     <Compile Include="Contracts\Models\SP\BarceloneContract.cs" />
     <Compile Include="Contracts\Models\SP\BarceloneModel.cs" />
+    <Compile Include="Contracts\Models\SP\BicimadContract.cs" />
+    <Compile Include="Contracts\Models\SP\BicimadModel.cs" />
     <Compile Include="Contracts\Models\UK\ContractTFLLondon.cs" />
     <Compile Include="Contracts\Models\UK\TFLModel.cs" />
     <Compile Include="Contracts\Models\US\New York\CitiBikeContract.cs" />

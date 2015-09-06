@@ -956,6 +956,10 @@ namespace Velib
                ApiUrl = "https://www.bicing.cat/availability_map/getJsonObject",
                Pays = "Spain"},
 
+             new BicimadContract{Name = "Madrid",
+               PaysImage = paysImagesRootPath+ "/ES.png",
+               Pays = "Spain"},
+
           new ContractJCDecauxVelib{Name = "Santander",
                PaysImage = paysImagesRootPath+ "/ES.png",
                Pays = "Spain"},
