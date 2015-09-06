@@ -1,5 +1,5 @@
-MainPackage=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2054_Bundle\Velib_2015.713.905.2054_AnyCPU.appx
-SymbolPackage=C:\projets\Velib\Velib\AppPackages\Velib_2015.713.905.2054_Test\Velib_2015.713.905.2054_AnyCPU.appxsym
-ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2054_Bundle\Velib_2015.713.905.2054_language-fr.appx
-ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2054_Bundle\Velib_2015.713.905.2054_scale-100.appx
-ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2054_Bundle\Velib_2015.713.905.2054_scale-140.appx
+MainPackage=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2056_AnyCPU.appx
+SymbolPackage=C:\projets\Velib\Velib\AppPackages\Velib_2015.713.905.2056_Test\Velib_2015.713.905.2056_AnyCPU.appxsym
+ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2056_language-fr.appx
+ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2056_scale-100.appx
+ResourcePack=C:\projets\Velib\Velib\bin\Release\Velib_2015.713.905.2056_scale-140.appx
